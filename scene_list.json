@@ -1,0 +1,104 @@
+{
+  "adaptation": {
+    "description": "In-domain adaptation (movie-specific checkpoints)",
+    "scenes": [
+      {
+        "name": "zhenhuan-dance2",
+        "path": "examples/movie/zhenhuan/dance2.mov",
+        "ckpt_path": "training/logs/zhenhuan_random_995_frcam/ckpts/checkpoint_11.pt",
+        "frame_start_idx": 0,
+        "frame_end_idx": -1,
+        "target_fps": 10
+      },
+      {
+        "name": "zhenhuan-street3",
+        "path": "examples/movie/zhenhuan/street3.mov",
+        "ckpt_path": "training/logs/zhenhuan_random_995_frcam/ckpts/checkpoint_11.pt",
+        "frame_start_idx": 0,
+        "frame_end_idx": -1,
+        "target_fps": 10
+      },
+      {
+        "name": "toystory-start",
+        "path": "examples/movie/toystory/start.mov",
+        "ckpt_path": "training/logs/toystory_random_995_frcam/ckpts/checkpoint_11.pt",
+        "frame_start_idx": 0,
+        "frame_end_idx": -1,
+        "target_fps": 10
+      },
+      {
+        "name": "toystory-run4",
+        "path": "examples/movie/toystory/run4.mov",
+        "ckpt_path": "training/logs/toystory_random_995_frcam/ckpts/checkpoint_11.pt",
+        "frame_start_idx": 0,
+        "frame_end_idx": -1,
+        "target_fps": 10
+      },
+      {
+        "name": "dragon-fly2",
+        "path": "examples/movie/dragon/fly2.mov",
+        "ckpt_path": "training/logs/dragon_random_995_frcam/ckpts/checkpoint_3.pt",
+        "frame_start_idx": 0,
+        "frame_end_idx": -1,
+        "target_fps": 10
+      },
+      {
+        "name": "dragon-meet3",
+        "path": "examples/movie/dragon/meet3.mov",
+        "ckpt_path": "training/logs/dragon_random_995_frcam/ckpts/checkpoint_3.pt",
+        "frame_start_idx": 0,
+        "frame_end_idx": -1,
+        "target_fps": 10
+      },
+      {
+        "name": "dragon-battle2",
+        "path": "examples/movie/dragon/battle2.mov",
+        "ckpt_path": "training/logs/dragon_random_995_frcam/ckpts/checkpoint_3.pt",
+        "frame_start_idx": 0,
+        "frame_end_idx": -1,
+        "target_fps": 10
+      }
+    ]
+  },
+  "generalization": {
+    "description": "Cross-domain generalization (game-trained checkpoint)",
+    "ckpt_path": "training/logs/random_995_frcam/ckpts/checkpoint_11.pt",
+    "scenes": [
+      {
+        "name": "history-1",
+        "path": "examples/movie/history/1",
+        "frame_start_idx": 0,
+        "frame_end_idx": -1,
+        "target_fps": 10
+      },
+      {
+        "name": "tom-1",
+        "path": "examples/movie/tom/1.mov",
+        "frame_start_idx": 0,
+        "frame_end_idx": -1,
+        "target_fps": 10
+      },
+      {
+        "name": "wild-dive20",
+        "path": "examples/wild/dive20.mp4",
+        "frame_start_idx": 0,
+        "frame_end_idx": -1,
+        "target_fps": 10
+      },
+      {
+        "name": "wild-sport",
+        "path": "examples/wild/sport.mp4",
+        "frame_start_idx": 0,
+        "frame_end_idx": -1,
+        "target_fps": 10
+      },
+      {
+        "name": "wild-penguin",
+        "path": "examples/wild/penguin.mp4",
+        "frame_start_idx": 0,
+        "frame_end_idx": -1,
+        "target_fps": 10
+      }
+    ]
+  }
+}

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="SelfEvo: Self-Improving 4D Perception via Self-Distillation">
+  <meta name="keywords" content="SelfEvo, VGGT, self-distillation, 3D reconstruction, multi-view">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SelfEvo</title>
+
+  <link rel="icon" type="image/png" href="static/images/favicon.png">
+
+  <meta property="og:title" content="SelfEvo: Self-Improving 4D Perception via Self-Distillation">
+  <meta property="og:description" content="A self-improving framework for multi-view reconstruction via self-distillation without requiring any labeled data.">
+  <meta property="og:image" content="static/images/og-image.png">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/main.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+</head>
+<body>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">
+            <span class="selfevo-self">Self</span><span class="selfevo-evo">Evo</span>
+          </h1>
+          <h3 class="title is-3 publication-title">
+            Self-Improving 4D Perception via Self-Distillation
+          </h3>
+        </div>
+      </div>
+
+      <div class="columns is-centered">
+        <div class="column is-four-fifths has-text-centered">
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><a href="https://nnanhuang.github.io/" target="_blank">Nan Huang</a><sup>1,*</sup>,&nbsp;</span>
+            <span class="author-block"><a href="https://github.com/yupengchengg147" target="_blank">Pengcheng Yu</a><sup>2,*</sup>,&nbsp;</span>
+            <span class="author-block"><a href="https://fantasticoven2.github.io/" target="_blank">Weijia Zeng</a><sup>3</sup>,&nbsp;</span>
+            <span class="author-block"><a href="https://rehg.org/" target="_blank">James M. Rehg</a><sup>1</sup>,&nbsp;</span>
+            <span class="author-block"><a href="https://people.eecs.berkeley.edu/~kanazawa/" target="_blank">Angjoo Kanazawa</a><sup>4</sup>,&nbsp;</span>
+            <span class="author-block"><a href="https://havenfeng.github.io/" target="_blank">Haiwen Feng</a><sup>4,2</sup>,&nbsp;</span>
+            <span class="author-block"><a href="https://qianqianwang68.github.io/" target="_blank">Qianqian Wang</a><sup>5</sup></span>
+          </div>
+          <div class="is-size-6 publication-authors" style="margin-top:0.5rem;color:#666">
+            <span class="author-block"><sup>1</sup>UIUC&nbsp;&nbsp;</span>
+            <span class="author-block"><sup>2</sup>The Impossible Inc.&nbsp;&nbsp;</span>
+            <span class="author-block"><sup>3</sup>UBC&nbsp;&nbsp;</span>
+            <span class="author-block"><sup>4</sup>UC Berkeley&nbsp;&nbsp;</span>
+            <span class="author-block"><sup>5</sup>Harvard&nbsp;&nbsp;</span>
+          </div>
+          <div class="is-size-6 publication-authors" style="margin-top:0.5rem;color:#666">
+            <span class="author-block"><sup>*</sup>Equal contribution</span>
+          </div>
+          <h1 style="font-size:20px;font-weight:500;color:#555;margin-top:0.5rem">arXiv Preprint</h1>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>PDF</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#bibtex" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-quote-right"></i></span>
+                  <span>BibTeX</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TL;DR ==================== -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body" style="padding-top:0">
+      <div class="columns is-centered">
+        <div class="column is-full">
+          <div class="tldr-banner">
+            <strong>TL;DR</strong>: SelfEvo improves multi-view 3D models like VGGT using only unlabeled videos &mdash; no ground truth annotations needed. Up to 36.5% depth improvement and 20.1% camera estimation gains.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TEASER VIDEO ==================== -->
+<section class="section" style="padding-top:0">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full">
+        <video id="teaser" autoplay muted loop playsinline width="100%" style="border-radius:10px">
+          <source src="static/videos/teaser.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== ABSTRACT ==================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Large-scale feedforward multi-view reconstruction models have made remarkable progress, but existing approaches still rely on fully supervised training with 3D annotations. Such annotations are expensive and particularly scarce for dynamic scenes, limiting scalability. We propose <strong>SelfEvo</strong>, a self-improving framework that continually improves pretrained multi-view reconstruction models using unlabeled videos. SelfEvo introduces a self-distillation scheme using spatiotemporal context asymmetry, enabling self-improvement for learning-based 4D perception without external supervision. We systematically study design choices that make self-improvement effective, including loss signals, forms of asymmetry, and other training strategies. Across eight benchmarks spanning diverse datasets and domains, SelfEvo consistently improves pretrained baselines and generalizes across base models (e.g., VGGT and &pi;<sup>3</sup>), with significant gains on dynamic scenes. Overall, SelfEvo achieves up to 36.5% relative improvement in video depth estimation and 20.1% in camera estimation, without using any labeled data.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== METHOD OVERVIEW ==================== -->
+<section class="section" style="padding-top:0">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Method</h2>
+        <div class="content">
+          <img src="static/images/teaser_3.png" alt="SelfEvo method overview" style="width:100%;border-radius:8px">
+          <p class="has-text-justified" style="margin-top:1rem">
+            Starting from a pretrained model, we create a teacher (EMA of student) and a student. The teacher receives all frames; the student receives a randomly dropped subset. The teacher's predictions serve as pseudo targets via stop-gradient, forming an online self-improving loop that continuously bootstraps better 4D predictions from unlabeled videos.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== ADAPTATION RESULTS ==================== -->
+<section class="section section-alt" id="adaptation">
+  <div class="container is-max-widescreen">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-three-fifths">
+        <h2 class="title is-3">In-Domain Adaptation</h2>
+        <p class="subtitle is-6" style="margin-bottom:1.5rem">
+          Self-improved on movie videos. Pick a scene below to explore in 3D!<br>
+          Press Space to play/pause, click and drag to change viewpoint.
+        </p>
+      </div>
+    </div>
+
+    <!-- Side-by-side viewers -->
+    <div class="columns is-centered viewer-row">
+      <!-- Pretrained -->
+      <div class="column has-text-centered">
+        <div class="viewer-label pretrained-label">Pretrained VGGT</div>
+        <div class="viewer-container">
+          <canvas id="adapt-pre-canvas" width="512" height="288"></canvas>
+          <div class="viewer-overlay" id="adapt-pre-glfailed">[Requires WebGL2 support]</div>
+          <div class="viewer-overlay viewer-loading" id="adapt-pre-loading">Loading...</div>
+          <div class="viewer-buttons">
+            <button onclick="viewers['adaptation-pre'] && viewers['adaptation-pre'].togglePoints()">Show all points</button><br>
+            <button onclick="viewers['adaptation-pre'] && viewers['adaptation-pre'].toggleFrusta()">Show all frusta</button>
+          </div>
+        </div>
+      </div>
+      <!-- SelfEvo -->
+      <div class="column has-text-centered">
+        <div class="viewer-label selfevo-label">SelfEvo (Ours)</div>
+        <div class="viewer-container">
+          <canvas id="adapt-evo-canvas" width="512" height="288"></canvas>
+          <div class="viewer-overlay" id="adapt-evo-glfailed">[Requires WebGL2 support]</div>
+          <div class="viewer-overlay viewer-loading" id="adapt-evo-loading">Loading...</div>
+          <div class="viewer-buttons">
+            <button onclick="viewers['adaptation-evo'] && viewers['adaptation-evo'].togglePoints()">Show all points</button><br>
+            <button onclick="viewers['adaptation-evo'] && viewers['adaptation-evo'].toggleFrusta()">Show all frusta</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <div style="font-size:11px;color:#888;margin-top:4px">
+          Scene geometry is downsampled for faster loading.
+        </div>
+        <div class="scene-selector" id="adapt-scenes"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== GENERALIZATION RESULTS ==================== -->
+<section class="section" id="generalization">
+  <div class="container is-max-widescreen">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-three-fifths">
+        <h2 class="title is-3">Cross-Domain Generalization</h2>
+        <p class="subtitle is-6" style="margin-bottom:1.5rem">
+          Trained on game data, tested on unseen in-the-wild videos.<br>
+          The improvement transfers beyond the adaptation domain!
+        </p>
+      </div>
+    </div>
+
+    <!-- Side-by-side viewers -->
+    <div class="columns is-centered viewer-row">
+      <!-- Pretrained -->
+      <div class="column has-text-centered">
+        <div class="viewer-label pretrained-label">Pretrained VGGT</div>
+        <div class="viewer-container">
+          <canvas id="gen-pre-canvas" width="512" height="288"></canvas>
+          <div class="viewer-overlay" id="gen-pre-glfailed">[Requires WebGL2 support]</div>
+          <div class="viewer-overlay viewer-loading" id="gen-pre-loading">Loading...</div>
+          <div class="viewer-buttons">
+            <button onclick="viewers['generalization-pre'] && viewers['generalization-pre'].togglePoints()">Show all points</button><br>
+            <button onclick="viewers['generalization-pre'] && viewers['generalization-pre'].toggleFrusta()">Show all frusta</button>
+          </div>
+        </div>
+      </div>
+      <!-- SelfEvo -->
+      <div class="column has-text-centered">
+        <div class="viewer-label selfevo-label">SelfEvo (Ours)</div>
+        <div class="viewer-container">
+          <canvas id="gen-evo-canvas" width="512" height="288"></canvas>
+          <div class="viewer-overlay" id="gen-evo-glfailed">[Requires WebGL2 support]</div>
+          <div class="viewer-overlay viewer-loading" id="gen-evo-loading">Loading...</div>
+          <div class="viewer-buttons">
+            <button onclick="viewers['generalization-evo'] && viewers['generalization-evo'].togglePoints()">Show all points</button><br>
+            <button onclick="viewers['generalization-evo'] && viewers['generalization-evo'].toggleFrusta()">Show all frusta</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <div style="font-size:11px;color:#888;margin-top:4px">
+          Scene geometry is downsampled for faster loading.
+        </div>
+        <div class="scene-selector" id="gen-scenes"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== BIBTEX ==================== -->
+<section class="section" id="bibtex">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{selfevo2026,
+  title     = {{SelfEvo}: Self-Improving 4D Perception via Self-Distillation},
+  author    = {Anonymous},
+  journal   = {arXiv preprint},
+  year      = {2026}
+}</code></pre>
+  </div>
+</section>
+
+<!-- ==================== ACKNOWLEDGEMENTS ==================== -->
+<section class="section" style="padding-top:0">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-half has-text-centered">
+        <h2 class="title is-4">Acknowledgements</h2>
+        <div class="content has-text-justified">
+          <p>
+            <!-- Add acknowledgements here -->
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <div class="container has-text-centered">
+    <div class="content">
+      Website template adapted from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>
+      and <a href="https://mega-sam.github.io">MegaSaM</a>.
+    </div>
+  </div>
+</footer>
+
+<!-- Scene configuration (embedded for the viewer) -->
+<script>
+const SCENE_CONFIG = {
+  adaptation: [
+    { name: "zhenhuan-dance2", label: "Zhenhuan: Dance" },
+    { name: "zhenhuan-street3", label: "Zhenhuan: Street" },
+    { name: "zhenhuan-1", label: "Zhenhuan: 1" },
+    { name: "zhenhuan-2", label: "Zhenhuan: 2" },
+    { name: "zhenhuan-3", label: "Zhenhuan: 3" },
+    { name: "toystory-start", label: "Toy Story: Start" },
+    { name: "toystory-run4", label: "Toy Story: Run" },
+    { name: "dragon-fly2", label: "Dragon: Fly" },
+    { name: "dragon-meet3", label: "Dragon: Meet" },
+    { name: "dragon-battle2", label: "Dragon: Battle" },
+    { name: "dragon2-battle3", label: "Dragon2: Battle 3" },
+    { name: "dragon2-battle4", label: "Dragon2: Battle 4" },
+    { name: "dragon2-clip1", label: "Dragon2: Clip 1" },
+    { name: "dragon2-clip2", label: "Dragon2: Clip 2" },
+    { name: "dragon2-clip3", label: "Dragon2: Clip 3" },
+    { name: "dragon2-clip4", label: "Dragon2: Clip 4" },
+    { name: "dragon2-clip5", label: "Dragon2: Clip 5" },
+    { name: "dragon2-clip6", label: "Dragon2: Clip 6" },
+    { name: "dragon2-draw2", label: "Dragon2: Draw 2" },
+    { name: "dragon2-draw3", label: "Dragon2: Draw 3" },
+    { name: "dragon2-meet2", label: "Dragon2: Meet 2" },
+    { name: "toystory2-clip1", label: "Toy Story 2: Clip 1" },
+    { name: "toystory2-clip2", label: "Toy Story 2: Clip 2" },
+    { name: "toystory2-clip3", label: "Toy Story 2: Clip 3" },
+    { name: "toystory2-clip4", label: "Toy Story 2: Clip 4" },
+    { name: "toystory2-clip5", label: "Toy Story 2: Clip 5" },
+    { name: "toystory2-clip6", label: "Toy Story 2: Clip 6" },
+    { name: "toystory2-clip7", label: "Toy Story 2: Clip 7" },
+    { name: "toystory2-clip8", label: "Toy Story 2: Clip 8" },
+    { name: "toystory2-clip9", label: "Toy Story 2: Clip 9" },
+    { name: "toystory2-clip10", label: "Toy Story 2: Clip 10" },
+    { name: "toystory2-clip11", label: "Toy Story 2: Clip 11" },
+    { name: "toystory2-clip12", label: "Toy Story 2: Clip 12" },
+    { name: "toystory2-clip13", label: "Toy Story 2: Clip 13" },
+    { name: "toystory2-clip14", label: "Toy Story 2: Clip 14" },
+    { name: "toystory2-clip15", label: "Toy Story 2: Clip 15" },
+    { name: "toystory2-clip16", label: "Toy Story 2: Clip 16" },
+    { name: "toystory2-clip17", label: "Toy Story 2: Clip 17" },
+    { name: "toystory2-clip18", label: "Toy Story 2: Clip 18" },
+    { name: "toystory2-clip19", label: "Toy Story 2: Clip 19" },
+  ],
+  generalization: [
+    // DAVIS
+    { name: "davis-bear", label: "Bear" },
+    { name: "davis-bike-packing", label: "Bike Packing" },
+    { name: "davis-blackswan", label: "Black Swan" },
+    { name: "davis-bmx-bumps", label: "BMX Bumps" },
+    { name: "davis-bmx-trees", label: "BMX Trees" },
+    { name: "davis-boat", label: "Boat" },
+    { name: "davis-boxing-fisheye", label: "Boxing" },
+    { name: "davis-breakdance", label: "Breakdance" },
+    { name: "davis-breakdance-flare", label: "Breakdance Flare" },
+    { name: "davis-bus", label: "Bus" },
+    { name: "davis-camel", label: "Camel" },
+    { name: "davis-car-roundabout", label: "Car Roundabout" },
+    { name: "davis-car-shadow", label: "Car Shadow" },
+    { name: "davis-car-turn", label: "Car Turn" },
+    { name: "davis-cat-girl", label: "Cat Girl" },
+    { name: "davis-classic-car", label: "Classic Car" },
+    { name: "davis-color-run", label: "Color Run" },
+    { name: "davis-cows", label: "Cows" },
+    { name: "davis-crossing", label: "Crossing" },
+    { name: "davis-dance-jump", label: "Dance Jump" },
+    { name: "davis-dance-twirl", label: "Dance Twirl" },
+    { name: "davis-dancing", label: "Dancing" },
+    { name: "davis-disc-jockey", label: "Disc Jockey" },
+    { name: "davis-dog", label: "Dog" },
+    { name: "davis-dog-agility", label: "Dog Agility" },
+    { name: "davis-dog-gooses", label: "Dog Gooses" },
+    { name: "davis-dogs-jump", label: "Dogs Jump" },
+    { name: "davis-dogs-scale", label: "Dogs Scale" },
+    { name: "davis-drift-chicane", label: "Drift Chicane" },
+    { name: "davis-drift-straight", label: "Drift Straight" },
+    { name: "davis-drift-turn", label: "Drift Turn" },
+    { name: "davis-drone", label: "Drone" },
+    { name: "davis-elephant", label: "Elephant" },
+    { name: "davis-flamingo", label: "Flamingo" },
+    { name: "davis-goat", label: "Goat" },
+    { name: "davis-gold-fish", label: "Gold Fish" },
+    { name: "davis-hike", label: "Hike" },
+    { name: "davis-hockey", label: "Hockey" },
+    { name: "davis-horsejump-high", label: "Horsejump High" },
+    { name: "davis-horsejump-low", label: "Horsejump Low" },
+    { name: "davis-india", label: "India" },
+    { name: "davis-judo", label: "Judo" },
+    { name: "davis-kid-football", label: "Kid Football" },
+    { name: "davis-kite-surf", label: "Kite Surf" },
+    { name: "davis-kite-walk", label: "Kite Walk" },
+    { name: "davis-koala", label: "Koala" },
+    { name: "davis-lab-coat", label: "Lab Coat" },
+    { name: "davis-lady-running", label: "Lady Running" },
+    { name: "davis-libby", label: "Libby" },
+    { name: "davis-lindy-hop", label: "Lindy Hop" },
+    { name: "davis-loading", label: "Loading" },
+    { name: "davis-longboard", label: "Longboard" },
+    { name: "davis-lucia", label: "Lucia" },
+    { name: "davis-mallard-fly", label: "Mallard Fly" },
+    { name: "davis-mallard-water", label: "Mallard Water" },
+    { name: "davis-mbike-trick", label: "Mbike Trick" },
+    { name: "davis-miami-surf", label: "Miami Surf" },
+    { name: "davis-motocross-bumps", label: "Motocross Bumps" },
+    { name: "davis-motocross-jump", label: "Motocross Jump" },
+    { name: "davis-motorbike", label: "Motorbike" },
+    { name: "davis-night-race", label: "Night Race" },
+    { name: "davis-paragliding", label: "Paragliding" },
+    { name: "davis-paragliding-launch", label: "Paragliding Launch" },
+    { name: "davis-parkour", label: "Parkour" },
+    { name: "davis-pigs", label: "Pigs" },
+    { name: "davis-planes-water", label: "Planes Water" },
+    { name: "davis-rallye", label: "Rallye" },
+    { name: "davis-rhino", label: "Rhino" },
+    { name: "davis-rollerblade", label: "Rollerblade" },
+    { name: "davis-schoolgirls", label: "Schoolgirls" },
+    { name: "davis-scooter-black", label: "Scooter Black" },
+    { name: "davis-scooter-board", label: "Scooter Board" },
+    { name: "davis-scooter-gray", label: "Scooter Gray" },
+    { name: "davis-sheep", label: "Sheep" },
+    { name: "davis-shooting", label: "Shooting" },
+    { name: "davis-skate-park", label: "Skate Park" },
+    { name: "davis-snowboard", label: "Snowboard" },
+    { name: "davis-soapbox", label: "Soapbox" },
+    { name: "davis-soccerball", label: "Soccerball" },
+    { name: "davis-stroller", label: "Stroller" },
+    { name: "davis-stunt", label: "Stunt" },
+    { name: "davis-surf", label: "Surf" },
+    { name: "davis-swing", label: "Swing" },
+    { name: "davis-tennis", label: "Tennis" },
+    { name: "davis-tractor-sand", label: "Tractor Sand" },
+    { name: "davis-train", label: "Train" },
+    { name: "davis-tuk-tuk", label: "Tuk Tuk" },
+    { name: "davis-upside-down", label: "Upside Down" },
+    { name: "davis-varanus-cage", label: "Varanus Cage" },
+    { name: "davis-walking", label: "Walking" },
+    // wild
+    { name: "wild-15416627_3840_2160_30fps", label: "Wild: Clip 1" },
+    { name: "wild-4158842-uhd_3840_2160_24fps", label: "Wild: Clip 2" },
+    { name: "wild-5039487-uhd_4096_2160_25fps", label: "Wild: Clip 3" },
+    { name: "wild-5207050-uhd_3840_2160_25fps", label: "Wild: Clip 4" },
+    { name: "wild-6470850-2", label: "Wild: Clip 5" },
+    { name: "wild-6539141-hd_1920_1080_25fps", label: "Wild: Clip 6" },
+    { name: "wild-6539141-hd_1920_1080_25fps2", label: "Wild: Clip 7" },
+    { name: "wild-clip01", label: "Wild: Clip 8" },
+    { name: "wild-clip_05", label: "Wild: Clip 9" },
+    { name: "wild-drift-straight", label: "Wild: Drift" },
+    { name: "wild-horsejump-high", label: "Wild: Horse Jump" },
+    { name: "wild-penguin", label: "Wild: Penguin" },
+    { name: "wild-skating", label: "Wild: Skating" },
+    { name: "wild-sport", label: "Wild: Sport" },
+    { name: "wild-tom1", label: "Wild: Tom" },
+    // wild2
+    { name: "wild2-anemone", label: "Anemone" },
+    { name: "wild2-boat-lake", label: "Boat Lake" },
+    { name: "wild2-cat-piano", label: "Cat Piano" },
+    { name: "wild2-cat-walk-left", label: "Cat Walk Left" },
+    { name: "wild2-cat-walk-right", label: "Cat Walk Right" },
+    { name: "wild2-cat-walking", label: "Cat Walking" },
+    { name: "wild2-catepillar-1", label: "Caterpillar" },
+    { name: "wild2-corgi-snow-2", label: "Corgi Snow 2" },
+    { name: "wild2-corgi-snow-3", label: "Corgi Snow 3" },
+    { name: "wild2-corgi-snow", label: "Corgi Snow" },
+    { name: "wild2-cow-walking", label: "Cow Walking" },
+    { name: "wild2-dog-rotation-vase", label: "Dog Rotation" },
+    { name: "wild2-elephant", label: "Elephant" },
+    { name: "wild2-horses-rotation", label: "Horses Rotation" },
+    { name: "wild2-kitten", label: "Kitten" },
+    { name: "wild2-lady-birds", label: "Lady Birds" },
+    { name: "wild2-lion", label: "Lion" },
+    { name: "wild2-monkey", label: "Monkey" },
+    { name: "wild2-penguin", label: "Penguin" },
+    { name: "wild2-pigeon", label: "Pigeon" },
+    { name: "wild2-pigeons", label: "Pigeons" },
+    { name: "wild2-sea-lion", label: "Sea Lion" },
+    { name: "wild2-turtle", label: "Turtle" },
+  ]
+};
+</script>
+
+<script src="./static/js/viewer.js?v=5"></script>
+<script src="./static/js/main.js?v=5"></script>
+
+</body>
+</html>

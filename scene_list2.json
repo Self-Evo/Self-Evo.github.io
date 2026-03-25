@@ -1,0 +1,23 @@
+{
+  "adaptation": {
+    "description": "In-domain adaptation (movie-specific checkpoints)",
+    "scenes": [
+      {
+        "name": "dragon-fly2",
+        "path": "examples/movie/dragon/fly2.mov",
+        "ckpt_path": "training/logs/dragon_random_995_frcam/ckpts/checkpoint_3.pt",
+        "frame_start_idx": 0,
+        "frame_end_idx": 7,
+        "target_fps": 10
+      },
+      {
+        "name": "dragon-battle2",
+        "path": "examples/movie/dragon/battle2.mov",
+        "ckpt_path": "training/logs/dragon_random_995_frcam/ckpts/checkpoint_3.pt",
+        "frame_start_idx": 0,
+        "frame_end_idx": 9,
+        "target_fps": 10
+      }
+    ]
+  }
+}
