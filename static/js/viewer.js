@@ -352,6 +352,8 @@ function createViewer(config) {
   let remaining_to_load = 0;
   let total_to_load = 0;
   let frame_time = Date.now();
+  let lastNotifiedFrame = -1;
+  let frameChangeCallback = null;
 
   // Dual data: pretrained and selfevo
   const sceneData = { pretrained: null, selfevo: null };
@@ -510,11 +512,16 @@ function createViewer(config) {
     const d = JSON.parse(textContent);
     d.rgb = [];
     d.depth = [];
+    d.rgbBlobs = [];   // raw blobs for input frame display
+    d.rgbUrls  = [];   // lazy object URL cache
     d.depth_scale = d.depth_scale || 20;
     d.path = buildPathBuffer(d.poses);
 
     for (let i = 0; i < d.poses.length; i++) {
-      d.rgb[i] = loadTexture(packed_data[`rgb_${pad5(i+1)}.png`]);
+      const blob = packed_data[`rgb_${pad5(i+1)}.png`];
+      d.rgbBlobs.push(blob);
+      d.rgbUrls.push(null);
+      d.rgb[i] = loadTexture(blob);
       d.depth[i] = loadDepth(packed_data[`depthrgb_${pad5(i+1)}.png`]);
     }
     return d;
@@ -871,6 +878,10 @@ function createViewer(config) {
     window.requestAnimationFrame(tick);
     if (remaining_to_load > 0) return;
     if (state.playing) update();
+    if (state.frame !== lastNotifiedFrame) {
+      lastNotifiedFrame = state.frame;
+      if (frameChangeCallback) frameChangeCallback(state.frame);
+    }
     if (dirty) {
       dirty = false;
       const data = getData();
@@ -997,11 +1008,27 @@ function createViewer(config) {
   window.addEventListener('resize', resize);
   window.requestAnimationFrame(tick);
 
+  function onFrameChange(cb) { frameChangeCallback = cb; }
+
+  function getFrameUrl(i) {
+    // Use selfevo data if available, else pretrained (input frames are the same)
+    const data = sceneData.selfevo || sceneData.pretrained;
+    if (!data || !data.rgbBlobs) return null;
+    const idx = (i !== undefined) ? i : state.frame;
+    if (idx < 0 || idx >= data.rgbBlobs.length) return null;
+    if (!data.rgbUrls[idx]) {
+      data.rgbUrls[idx] = URL.createObjectURL(data.rgbBlobs[idx]);
+    }
+    return data.rgbUrls[idx];
+  }
+
   return {
     loadScene,
     setVersion,
     togglePoints,
     toggleFrusta,
+    onFrameChange,
+    getFrameUrl,
     get currentVersion() { return currentVersion; },
     get currentScene() { return currentSceneName; },
     get state() { return state; },

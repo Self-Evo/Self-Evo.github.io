@@ -5,7 +5,7 @@ const viewers = {};
 
 function initSection(sectionKey, preCanvasId, preLoadingId, preGlfailedId,
                                   evoCanvasId, evoLoadingId, evoGlfailedId,
-                                  scenesId) {
+                                  scenesId, inputImgId) {
   let preViewer = null, evoViewer = null;
   try {
     preViewer = createViewer({
@@ -54,6 +54,16 @@ function initSection(sectionKey, preCanvasId, preLoadingId, preGlfailedId,
       scenesContainer.appendChild(thumb);
     });
 
+    // Wire up input frame display (driven by evo viewer)
+    const inputImgEl = inputImgId ? document.getElementById(inputImgId) : null;
+    const driverViewer = evoViewer || preViewer;
+    if (inputImgEl && driverViewer) {
+      driverViewer.onFrameChange((frame) => {
+        const url = driverViewer.getFrameUrl(frame);
+        if (url) inputImgEl.src = url;
+      });
+    }
+
     // Load first scene in both viewers
     if (scenes.length > 0) {
       if (preViewer) preViewer.loadScene(scenes[0].name);
@@ -77,9 +87,9 @@ window.addEventListener('load', () => {
   initSection('adaptation',
     'adapt-pre-canvas', 'adapt-pre-loading', 'adapt-pre-glfailed',
     'adapt-evo-canvas', 'adapt-evo-loading', 'adapt-evo-glfailed',
-    'adapt-scenes');
+    'adapt-scenes', 'adapt-input-frame');
   initSection('generalization',
     'gen-pre-canvas', 'gen-pre-loading', 'gen-pre-glfailed',
     'gen-evo-canvas', 'gen-evo-loading', 'gen-evo-glfailed',
-    'gen-scenes');
+    'gen-scenes', 'gen-input-frame');
 });

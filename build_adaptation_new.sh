@@ -31,14 +31,14 @@ $BATCH \
   --video_dir examples/movie/dragon2 \
   --output_root $EXPORTS/pretrained \
   --prefix dragon2- \
-  --target_fps 10 \
+  --target_fps 10 --frame_stride 10 \
   --mask_sky
 
 $BATCH \
   --video_dir examples/movie/toystory2 \
   --output_root $EXPORTS/pretrained \
   --prefix toystory2- \
-  --target_fps 10 \
+  --target_fps 10 --frame_stride 10 \
   --mask_sky
 
 # ============================================================
@@ -50,7 +50,7 @@ $BATCH \
   --output_root $EXPORTS/selfevo \
   --prefix dragon2- \
   --ckpt_path $CKPT_DRAGON \
-  --target_fps 10 \
+  --target_fps 10 --frame_stride 10 \
   --mask_sky
 
 # ============================================================
@@ -62,7 +62,7 @@ $BATCH \
   --output_root $EXPORTS/selfevo \
   --prefix toystory2- \
   --ckpt_path $CKPT_TOYSTORY \
-  --target_fps 10 \
+  --target_fps 10 --frame_stride 10 \
   --mask_sky
 
 # ============================================================

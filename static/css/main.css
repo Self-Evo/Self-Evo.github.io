@@ -105,7 +105,7 @@ body {
   border: none;
 }
 
-/* --- Side-by-side viewer row --- */
+/* --- Three-column viewer row --- */
 .viewer-row {
   align-items: flex-start;
   gap: 12px;
@@ -113,6 +113,24 @@ body {
 .viewer-row .viewer-container {
   width: 100%;
   max-width: 100%;
+}
+
+/* --- Input frame panel --- */
+.input-frame-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background: #111;
+}
+.input-frame-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 /* --- WebGL Viewer Container --- */

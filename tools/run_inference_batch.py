@@ -252,6 +252,8 @@ def main():
     parser.add_argument("--skyseg_onnx", type=str, default="skyseg.onnx",
                         help="Path to skyseg.onnx model file")
     # Misc
+    parser.add_argument("--frame_stride", type=int, default=1,
+                        help="After extracting frames, keep every Nth frame (default: 1 = keep all)")
     parser.add_argument("--skip_existing", action="store_true", default=True)
     args = parser.parse_args()
 
@@ -301,7 +303,11 @@ def main():
             print("  SKIP (no images found)")
             continue
 
-        print(f"  {len(image_names)} frames")
+        if args.frame_stride > 1:
+            image_names = image_names[::args.frame_stride]
+            print(f"  stride={args.frame_stride} → {len(image_names)} frames")
+        else:
+            print(f"  {len(image_names)} frames")
         try:
             pred = run_inference(model, image_names, device, dtype)
 
