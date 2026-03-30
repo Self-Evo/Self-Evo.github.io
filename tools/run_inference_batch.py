@@ -255,6 +255,7 @@ def main():
     parser.add_argument("--frame_stride", type=int, default=1,
                         help="After extracting frames, keep every Nth frame (default: 1 = keep all)")
     parser.add_argument("--skip_existing", action="store_true", default=True)
+    parser.add_argument("--no_skip_existing", dest="skip_existing", action="store_false")
     args = parser.parse_args()
 
     if args.input_root is None and args.video_dir is None:

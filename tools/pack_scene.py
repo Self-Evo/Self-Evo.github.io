@@ -134,7 +134,8 @@ def build_packed(data_json: dict, files: dict) -> bytes:
 
 
 def pack_from_npz(npz_path: str, output_path: str, target_width: int = 512,
-                  depth_scale: float = 20.0, frame_start: int = 0, frame_end: int = -1):
+                  depth_scale: float = 20.0, frame_start: int = 0, frame_end: int = -1,
+                  apply_conf_mask: bool = True):
     """
     Pack a VGGT prediction cache (.npz) into .packed format.
     """
@@ -165,6 +166,17 @@ def pack_from_npz(npz_path: str, output_path: str, target_width: int = 512,
     # depth: ensure (S, H, W)
     if depth.ndim == 4:
         depth = depth.squeeze(-1)
+
+    # Apply confidence mask: zero out sky/low-confidence pixels so the WebGL
+    # shader discards them (z=0 → gl_PointSize=0 → invisible point).
+    if apply_conf_mask:
+        for conf_key in ("depth_conf", "world_points_conf"):
+            if conf_key in cache:
+                conf = cache[conf_key][frame_start:frame_end]
+                if conf.ndim == 4:
+                    conf = conf.squeeze(-1)
+                depth = np.where(conf > 0, depth, 0.0)
+                break
 
     # images: (S, 3, H, W) -> (S, H, W, 3), convert to uint8
     imgs_hwc = np.transpose(images, (0, 2, 3, 1))  # (S, H, W, 3)
@@ -335,6 +347,8 @@ def main():
     parser.add_argument("--thumbnail", action="store_true", help="Also generate thumbnail")
     parser.add_argument("--thumb_dir", type=str, default="static/images/thumbs",
                         help="Thumbnail output directory")
+    parser.add_argument("--no_conf_mask", action="store_true",
+                        help="Skip confidence masking (show all pixels including sky)")
 
     args = parser.parse_args()
 
@@ -342,7 +356,8 @@ def main():
         pack_from_config(args.config, args.output_dir, args.width, args.depth_scale)
     elif args.npz_path and args.output:
         pack_from_npz(args.npz_path, args.output, args.width, args.depth_scale,
-                      args.frame_start, args.frame_end)
+                      args.frame_start, args.frame_end,
+                      apply_conf_mask=not args.no_conf_mask)
         if args.thumbnail:
             name = Path(args.output).stem
             thumb_path = os.path.join(args.thumb_dir, f"{name}.jpg")

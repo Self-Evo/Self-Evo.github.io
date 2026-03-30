@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="SelfEvo — Scene Gallery">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SelfEvo Gallery</title>
+
+  <link rel="icon" type="image/png" href="static/images/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="./static/css/main.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+</head>
+<body>
+
+<!-- ==================== NAV ==================== -->
+<section class="hero" style="padding-bottom:0">
+  <div class="hero-body" style="padding:1.2rem 1.5rem">
+    <div class="container is-max-widescreen">
+      <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap">
+        <a href="index.html" style="font-size:1.1rem;font-weight:700;color:#222;text-decoration:none">
+          <span class="selfevo-self">Self</span><span class="selfevo-evo">Evo</span>
+        </a>
+        <a href="index.html" style="font-size:13px;color:#3273dc">&larr; Back to main page</a>
+        <span style="font-size:1rem;font-weight:600;color:#444;margin-left:auto">Scene Gallery</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== VIEWER ==================== -->
+<section class="section" id="gallery">
+  <div class="container is-max-widescreen">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-three-fifths">
+        <h2 class="title is-3">More Generalization Scenes</h2>
+        <p class="subtitle is-6" style="margin-bottom:1.5rem">
+          SelfEvo generalizes across diverse in-the-wild videos.<br>
+          Click a thumbnail to explore any scene in 3D. Press Space to play/pause, drag to orbit.
+        </p>
+      </div>
+    </div>
+
+    <!-- Input frame -->
+    <div class="columns is-centered">
+      <div class="column is-one-third has-text-centered">
+        <div class="viewer-label" style="background:#555;color:#fff">Input</div>
+        <div class="input-frame-container">
+          <img id="gallery-input-frame" class="input-frame-img" alt="Input frame">
+        </div>
+      </div>
+    </div>
+
+    <!-- Dual viewer -->
+    <div class="columns is-centered viewer-row">
+      <div class="column has-text-centered">
+        <div class="viewer-label pretrained-label">Pretrained VGGT</div>
+        <div class="viewer-container">
+          <canvas id="gallery-pre-canvas" width="512" height="288"></canvas>
+          <div class="viewer-overlay" id="gallery-pre-glfailed">[Requires WebGL2 support]</div>
+          <div class="viewer-overlay viewer-loading" id="gallery-pre-loading">Loading...</div>
+        </div>
+      </div>
+      <div class="column has-text-centered">
+        <div class="viewer-label selfevo-label">SelfEvo (VGGT)</div>
+        <div class="viewer-container">
+          <canvas id="gallery-evo-canvas" width="512" height="288"></canvas>
+          <div class="viewer-overlay" id="gallery-evo-glfailed">[Requires WebGL2 support]</div>
+          <div class="viewer-overlay viewer-loading" id="gallery-evo-loading">Loading...</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <div class="shared-viewer-controls">
+          <button id="gallery-btn-points" onclick="toggleBothViewers('gallery', 'points', this)">Show All Points</button>
+          <button id="gallery-btn-frusta" onclick="toggleBothViewers('gallery', 'frusta', this)">Show All Frusta</button>
+        </div>
+        <div style="font-size:11px;color:#888;margin-top:8px">
+          Scene geometry is downsampled for faster loading. Sky masking applied for visualization only.
+        </div>
+        <div class="scene-selector" id="gallery-scenes"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <div class="container has-text-centered">
+    <div class="content">
+      Website template adapted from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>
+      and <a href="https://mega-sam.github.io">MegaSaM</a>.
+    </div>
+  </div>
+</footer>
+
+<!-- Gallery scene configuration -->
+<script>
+const SCENE_CONFIG = {
+  gallery: [
+    // Wild
+    { name: "wild-5039487-uhd_4096_2160_25fps", label: "Wild: Clip 3" },
+    { name: "wild-6470850-2",                   label: "Wild: Clip 5" },
+    { name: "wild-6539141-hd_1920_1080_25fps",  label: "Wild: Clip 6" },
+    { name: "wild-skating",                     label: "Wild: Skating" },
+    // Wild2
+    { name: "wild2-cat-piano",                  label: "Cat Piano" },
+    { name: "wild2-cat-walk-right",             label: "Cat Walk Right" },
+    { name: "wild2-cat-walking",                label: "Cat Walking" },
+    { name: "wild2-corgi-snow",                 label: "Corgi Snow" },
+    { name: "wild2-corgi-snow-3",               label: "Corgi Snow 3" },
+    { name: "wild2-cow-walking",                label: "Cow Walking" },
+    { name: "wild2-horses-rotation",            label: "Horses Rotation" },
+    { name: "wild2-kitten",                     label: "Kitten" },
+    // DAVIS
+    { name: "davis-bear",                       label: "Bear" },
+    { name: "davis-blackswan",                  label: "Black Swan" },
+    { name: "davis-boat",                       label: "Boat" },
+    { name: "davis-breakdance",                 label: "Breakdance" },
+    { name: "davis-breakdance-flare",           label: "Breakdance Flare" },
+    { name: "davis-car-shadow",                 label: "Car Shadow" },
+    { name: "davis-crossing",                   label: "Crossing" },
+    { name: "davis-drift-chicane",              label: "Drift Chicane" },
+    { name: "davis-horsejump-high",             label: "Horsejump High" },
+    { name: "davis-india",                      label: "India" },
+    { name: "davis-kite-surf",                  label: "Kite Surf" },
+    { name: "davis-lab-coat",                   label: "Lab Coat" },
+    { name: "davis-paragliding-launch",         label: "Paragliding Launch" },
+    { name: "davis-soapbox",                    label: "Soapbox" },
+    { name: "davis-stunt",                      label: "Stunt" },
+  ],
+};
+</script>
+
+<script src="./static/js/viewer.js?v=8"></script>
+<script src="./static/js/main.js?v=8"></script>
+
+<script>
+window.addEventListener('load', () => {
+  initSection('gallery',
+    'gallery-pre-canvas', 'gallery-pre-loading', 'gallery-pre-glfailed',
+    'gallery-evo-canvas', 'gallery-evo-loading', 'gallery-evo-glfailed',
+    'gallery-scenes', 'gallery-input-frame');
+});
+</script>
+
+</body>
+</html>

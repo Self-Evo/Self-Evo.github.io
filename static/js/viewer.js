@@ -352,6 +352,7 @@ function createViewer(config) {
   let remaining_to_load = 0;
   let total_to_load = 0;
   let frame_time = Date.now();
+  let loop_pause_until = 0;
   let lastNotifiedFrame = -1;
   let frameChangeCallback = null;
 
@@ -528,7 +529,7 @@ function createViewer(config) {
   }
 
   // --- Scene Loading ---
-  async function loadScene(sceneName) {
+  async function loadScene(sceneName, cameraOverride) {
     if (currentSceneName === sceneName) return;
     currentSceneName = sceneName;
     showLoading();
@@ -538,6 +539,7 @@ function createViewer(config) {
     // Reset state but keep camera for smooth scene switching
     state.frame = 0;
     state.playing = true;
+    loop_pause_until = 0;
 
     // Load only needed versions (fixedVersion loads one; otherwise load both)
     const loadPretrained = !config.fixedVersion || config.fixedVersion === 'pretrained';
@@ -564,8 +566,9 @@ function createViewer(config) {
       sceneData.selfevo = null;
     }
 
-    // Reset camera for new scene
+    // Reset camera for new scene, applying per-scene overrides if provided
     Object.assign(camera, cloneDefaults(defaultCamera));
+    if (cameraOverride) Object.assign(camera, cameraOverride);
     dirty = true;
   }
 
@@ -864,12 +867,29 @@ function createViewer(config) {
   // --- Animation ---
   function update() {
     const time = Date.now();
+    // Hold on the last frame briefly before looping back to frame 0
+    if (loop_pause_until > 0) {
+      if (time < loop_pause_until) return;
+      loop_pause_until = 0;
+      const data = getData();
+      if (state.playing && data && data.poses && data.poses.length) {
+        state.frame = 0;
+        frame_time = time;
+        dirty = true;
+      }
+      return;
+    }
     const period = 1000.0 / state.fps;
     if (time - frame_time <= period) return;
     frame_time = time;
     const data = getData();
     if (state.playing && data && data.poses && data.poses.length) {
-      state.frame = (state.frame + 1) % data.poses.length;
+      const next = (state.frame + 1) % data.poses.length;
+      if (next === 0) {
+        loop_pause_until = time + 350; // 350 ms pause at loop boundary
+        return;
+      }
+      state.frame = next;
       dirty = true;
     }
   }

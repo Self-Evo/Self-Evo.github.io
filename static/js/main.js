@@ -50,7 +50,7 @@ function initSection(sectionKey, preCanvasId, preLoadingId, preGlfailedId,
         this.replaceWith(pill);
       };
 
-      thumb.addEventListener('click', () => selectScene(sectionKey, scene.name, scenesContainer));
+      thumb.addEventListener('click', () => selectScene(sectionKey, scene.name, scenesContainer, scene.camera));
       scenesContainer.appendChild(thumb);
     });
 
@@ -66,20 +66,36 @@ function initSection(sectionKey, preCanvasId, preLoadingId, preGlfailedId,
 
     // Load first scene in both viewers
     if (scenes.length > 0) {
-      if (preViewer) preViewer.loadScene(scenes[0].name);
-      if (evoViewer) evoViewer.loadScene(scenes[0].name);
+      if (preViewer) preViewer.loadScene(scenes[0].name, scenes[0].camera);
+      if (evoViewer) evoViewer.loadScene(scenes[0].name, scenes[0].camera);
     }
   }
 }
 
-function selectScene(sectionKey, sceneName, container) {
+function selectScene(sectionKey, sceneName, container, cameraOverride) {
   container.querySelectorAll('.scene-thumb, .scene-pill').forEach(el => {
     el.classList.toggle('active', el.dataset.scene === sceneName);
   });
   const pre = viewers[sectionKey + '-pre'];
   const evo = viewers[sectionKey + '-evo'];
-  if (pre) pre.loadScene(sceneName);
-  if (evo) evo.loadScene(sceneName);
+  if (pre) pre.loadScene(sceneName, cameraOverride);
+  if (evo) evo.loadScene(sceneName, cameraOverride);
+}
+
+function toggleBothViewers(sectionKey, type, btnEl) {
+  const pre = viewers[sectionKey + '-pre'];
+  const evo = viewers[sectionKey + '-evo'];
+  if (type === 'points') {
+    if (pre) pre.togglePoints();
+    if (evo) evo.togglePoints();
+    const v = pre || evo;
+    btnEl.classList.toggle('active', !!(v && v.state.other_points === 'points'));
+  } else {
+    if (pre) pre.toggleFrusta();
+    if (evo) evo.toggleFrusta();
+    const v = pre || evo;
+    btnEl.classList.toggle('active', !!(v && v.state.other_frusta));
+  }
 }
 
 // --- Initialize on page load ---

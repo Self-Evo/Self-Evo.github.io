@@ -30,12 +30,68 @@ import cv2
 import numpy as np
 import torch
 
+try:
+    import onnxruntime
+except ImportError:
+    onnxruntime = None
+
 # Allow running from the repo root: PYTHONPATH=~/code/vggt python website/selfevo/tools/run_inference.py
 sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 
 from vggt.models.vggt import VGGT
 from vggt.utils.load_fn import load_and_preprocess_images
 from vggt.utils.pose_enc import pose_encoding_to_extri_intri
+
+
+# ─────────────────────────────────────────────
+# Sky segmentation (mirrors run_inference_batch.py)
+# ─────────────────────────────────────────────
+
+SKYSEG_URL = "https://huggingface.co/JianyuanWang/skyseg/resolve/main/skyseg.onnx"
+
+
+def _ensure_skyseg_onnx(onnx_path: str):
+    if not os.path.exists(onnx_path):
+        print("[sky] Downloading skyseg.onnx ...")
+        from visual_util import download_file_from_url
+        download_file_from_url(SKYSEG_URL, onnx_path)
+
+
+def apply_sky_segmentation(conf: np.ndarray, image_folder: str,
+                            onnx_path: str = "skyseg.onnx") -> np.ndarray:
+    if onnxruntime is None:
+        print("  [sky] WARNING: onnxruntime not installed, skipping sky masking")
+        return conf
+
+    _ensure_skyseg_onnx(onnx_path)
+    from visual_util import segment_sky
+
+    S, H, W = conf.shape
+    sky_masks_dir = image_folder.rstrip("/") + "_sky_masks"
+    os.makedirs(sky_masks_dir, exist_ok=True)
+
+    session = onnxruntime.InferenceSession(onnx_path)
+    image_files = sort_by_index(
+        glob.glob(os.path.join(image_folder, "*.jpg")) +
+        glob.glob(os.path.join(image_folder, "*.jpeg")) +
+        glob.glob(os.path.join(image_folder, "*.png"))
+    )
+
+    sky_mask_list = []
+    for image_path in image_files[:S]:
+        mask_path = os.path.join(sky_masks_dir, os.path.basename(image_path))
+        if os.path.exists(mask_path):
+            sky_mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
+        else:
+            sky_mask = segment_sky(image_path, session, mask_path)
+        if sky_mask.shape[0] != H or sky_mask.shape[1] != W:
+            sky_mask = cv2.resize(sky_mask, (W, H), interpolation=cv2.INTER_NEAREST)
+        sky_mask_list.append(sky_mask)
+
+    sky_arr = np.array(sky_mask_list, dtype=np.float32)
+    conf = conf * (sky_arr > 0.1).astype(np.float32)
+    print(f"  [sky] sky segmentation applied ({S} frames)")
+    return conf
 
 
 def sort_by_index(paths: List[str]) -> List[str]:
@@ -150,6 +206,10 @@ def main():
                         help="Target FPS for frame sampling (video input only)")
     parser.add_argument("--output", type=str, required=True,
                         help="Output .npz path, e.g. exports/pretrained/zhenhuan-dance2/cache.npz")
+    parser.add_argument("--mask_sky", action="store_true",
+                        help="Apply sky segmentation (zeros out sky confidence)")
+    parser.add_argument("--skyseg_onnx", type=str, default="skyseg.onnx",
+                        help="Path to skyseg.onnx model file")
     args = parser.parse_args()
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -172,6 +232,13 @@ def main():
 
     model = load_model(args.ckpt_path, device)
     pred = run_inference(model, image_names, device)
+
+    if args.mask_sky:
+        image_folder = frames_dir if args.video_path else args.image_folder
+        for conf_key in ("world_points_conf", "depth_conf"):
+            if conf_key in pred:
+                pred[conf_key] = apply_sky_segmentation(
+                    pred[conf_key], image_folder, args.skyseg_onnx)
 
     out_dir = os.path.dirname(args.output)
     if out_dir:
