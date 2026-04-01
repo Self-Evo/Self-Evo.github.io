@@ -58,7 +58,7 @@
             <span class="author-block"><sup>1</sup>UIUC&nbsp;&nbsp;</span>
             <span class="author-block"><sup>2</sup>Impossible Inc.&nbsp;&nbsp;</span>
             <span class="author-block"><sup>3</sup>Harvard&nbsp;&nbsp;</span>
-            <span class="author-block"><sup>4</sup>Max Plank Institute&nbsp;&nbsp;</span>
+            <span class="author-block"><sup>4</sup>MPI for Intelligent Systems&nbsp;&nbsp;</span>
             <span class="author-block"><sup>5</sup>UC Berkeley&nbsp;&nbsp;</span>
             <span class="author-block"><sup>6</sup>UBC&nbsp;&nbsp;</span>
           </div>
@@ -117,60 +117,6 @@
   </div>
 </section>
 
-<!-- ==================== TEASER VIDEO ==================== -->
-<section class="section" style="padding-bottom:0">
-  <div class="container is-max-desktop">
-    <div class="teaser-carousel" id="teaser-carousel">
-      <div class="teaser-slides" id="teaser-slides">
-        <div class="teaser-slide">
-          <video autoplay muted playsinline style="width:100%;height:100%;object-fit:contain;display:block">
-            <source src="static/videos/video1.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="teaser-slide">
-          <video muted playsinline style="width:100%;height:100%;object-fit:contain;display:block">
-            <source src="static/videos/video2.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="teaser-slide">
-          <video muted playsinline style="width:100%;height:100%;object-fit:contain;display:block">
-            <source src="static/videos/video3.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="teaser-slide">
-          <video muted playsinline style="width:100%;height:100%;object-fit:contain;display:block">
-            <source src="static/videos/video4.mp4" type="video/mp4">
-          </video>
-        </div>
-      </div>
-      <button class="teaser-btn teaser-btn-prev" id="teaser-prev">&#8249;</button>
-      <button class="teaser-btn teaser-btn-next" id="teaser-next">&#8250;</button>
-      <div class="teaser-dots" id="teaser-dots">
-        <span class="teaser-dot active" data-index="0"></span>
-        <span class="teaser-dot" data-index="1"></span>
-        <span class="teaser-dot" data-index="2"></span>
-        <span class="teaser-dot" data-index="3"></span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ==================== ABSTRACT ==================== -->
-<section class="section section-alt">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract</h2>
-        <div class="content has-text-justified">
-          <p>
-            Large-scale feedforward multi-view reconstruction models have made remarkable progress, but existing approaches still rely on fully supervised training with 3D annotations. Such annotations are expensive and particularly scarce for dynamic scenes, limiting scalability. We propose <strong>SelfEvo</strong>, a self-improving framework that continually improves pretrained multi-view reconstruction models using unlabeled videos. SelfEvo introduces a self-distillation scheme using spatiotemporal context asymmetry, enabling self-improvement for learning-based 4D perception without external supervision. We systematically study design choices that make self-improvement effective, including loss signals, forms of asymmetry, and other training strategies. Across eight benchmarks spanning diverse datasets and domains, SelfEvo consistently improves pretrained baselines and generalizes across base models (e.g., VGGT and &pi;<sup>3</sup>), with significant gains on dynamic scenes. Overall, SelfEvo achieves up to 36.5% relative improvement in video depth estimation and 20.1% in camera estimation, without using any labeled data.
-          </p>
-        </div>
-        <img src="static/images/teaser_3.png" alt="SelfEvo teaser" style="width:100%;border-radius:8px;margin-top:1.5rem">
-      </div>
-    </div>
-  </div>
-</section>
 
 
 <!-- ==================== GENERALIZATION RESULTS ==================== -->
@@ -178,7 +124,7 @@
   <div class="container is-max-widescreen">
     <div class="columns is-centered has-text-centered">
       <div class="column is-three-fifths">
-        <h2 class="title is-3">Cross-Domain Generalization</h2>
+        <h2 class="title is-3">Interactive Results</h2>
         <p class="subtitle is-6" style="margin-bottom:1.5rem">
           Trained on OmniWorldGame data without annotation, tested on in-the-wild videos.<br>
           The improvement transfers beyond the adaptation domain!
@@ -223,6 +169,13 @@
           <button id="gen-btn-points" onclick="toggleBothViewers('generalization', 'points', this)">Show All Points</button>
           <button id="gen-btn-frusta" onclick="toggleBothViewers('generalization', 'frusta', this)">Show All Frusta</button>
         </div>
+        <div class="viewer-controls-legend">
+          <span class="ctrl-item"><kbd>Drag</kbd> Rotate</span>
+          <span class="ctrl-item"><kbd>Scroll</kbd> Zoom</span>
+          <span class="ctrl-item"><kbd>W</kbd><kbd>S</kbd> Forward / Backward</span>
+          <span class="ctrl-item"><kbd>A</kbd><kbd>D</kbd> Left / Right</span>
+          <span class="ctrl-item"><kbd>Q</kbd><kbd>E</kbd> Up / Down</span>
+        </div>
         <div style="font-size:11px;color:#888;margin-top:8px">
           Scene geometry is downsampled for faster loading. Sky masking applied for visualization only.
         </div>
@@ -235,60 +188,119 @@
   </div>
 </section>
 
-<!-- ==================== ADAPTATION RESULTS ==================== -->
-<section class="section section-alt" id="adaptation">
+<!-- ==================== TIMELINE DEMO ==================== -->
+<section class="section" id="timeline">
   <div class="container is-max-widescreen">
     <div class="columns is-centered has-text-centered">
       <div class="column is-three-fifths">
-        <h2 class="title is-3">In-Domain Adaptation</h2>
+        <h2 class="title is-3">How Does the Model Evolve?</h2>
         <p class="subtitle is-6" style="margin-bottom:1.5rem">
-          Self-improved on movie videos. Pick a scene below to explore in 3D!<br>
-          Press Space to play/pause, click and drag to change viewpoint.
+          Watch how 3D reconstruction quality improves across SelfEvo training checkpoints.<br>
+          The same scene — from pretrained all the way to checkpoint 12.
         </p>
       </div>
     </div>
 
-    <!-- Input frame on top -->
     <div class="columns is-centered">
-      <div class="column is-one-third has-text-centered">
-        <div class="viewer-label" style="background:#555;color:#fff">Input</div>
-        <div class="input-frame-container">
-          <img id="adapt-input-frame" class="input-frame-img" alt="Input frame">
-        </div>
-      </div>
-    </div>
-    <!-- Two viewers side by side -->
-    <div class="columns is-centered viewer-row">
-      <!-- Pretrained -->
       <div class="column has-text-centered">
-        <div class="viewer-label pretrained-label">Pretrained VGGT</div>
-        <div class="viewer-container">
-          <canvas id="adapt-pre-canvas" width="512" height="288"></canvas>
-          <div class="viewer-overlay" id="adapt-pre-glfailed">[Requires WebGL2 support]</div>
-          <div class="viewer-overlay viewer-loading" id="adapt-pre-loading">Loading...</div>
+        <!-- Top: Input frame + version label, above viewer -->
+        <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:10px;gap:6px">
+          <p class="viewer-label pretrained-label" style="margin:0">Input</p>
+          <div class="input-frame-container" style="width:180px">
+            <img id="tl-input-frame" class="input-frame-img" alt="Input frame">
+          </div>
+          <p id="tl-version-label" class="viewer-label selfevo-label" style="margin:0">Pretrained</p>
         </div>
-      </div>
-      <!-- SelfEvo -->
-      <div class="column has-text-centered">
-        <div class="viewer-label selfevo-label">SelfEvo (VGGT)</div>
-        <div class="viewer-container">
-          <canvas id="adapt-evo-canvas" width="512" height="288"></canvas>
-          <div class="viewer-overlay" id="adapt-evo-glfailed">[Requires WebGL2 support]</div>
-          <div class="viewer-overlay viewer-loading" id="adapt-evo-loading">Loading...</div>
+        <!-- WebGL viewer -->
+        <div class="viewer-container" style="width:100%;max-width:640px;display:block;margin:0 auto">
+          <canvas id="tl-canvas" width="512" height="288"></canvas>
+          <div class="viewer-overlay" id="tl-glfailed" style="display:none;color:#f88;background:black;align-items:center;justify-content:center">[WebGL2 required]</div>
+          <div class="viewer-overlay viewer-loading" id="tl-loading" style="display:none">Loading…</div>
+          <div class="viewer-buttons">
+            <button onclick="tlCam()">Get Camera</button>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- Timeline scrubber -->
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="timeline-controls">
+          <button class="tl-play-btn" id="tl-play-btn" title="Play / Pause">
+            <svg class="tl-morph-icon" viewBox="0 0 14 14" fill="currentColor" width="14" height="14">
+              <path class="icon-play"  d="M1,1 L13,7 L1,13 Z"/>
+              <g   class="icon-pause">
+                <rect x="1" y="1" width="4" height="12" rx="0.5"/>
+                <rect x="9" y="1" width="4" height="12" rx="0.5"/>
+              </g>
+            </svg>
+          </button>
+          <div class="timeline-track-wrapper">
+            <input type="range" class="timeline-slider" id="tl-slider"
+                   min="0" max="13" value="0" step="1">
+            <div class="timeline-labels" id="tl-labels"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls + scene selector -->
     <div class="columns is-centered">
       <div class="column has-text-centered">
-        <div class="shared-viewer-controls">
-          <button id="adapt-btn-points" onclick="toggleBothViewers('adaptation', 'points', this)">Show All Points</button>
-          <button id="adapt-btn-frusta" onclick="toggleBothViewers('adaptation', 'frusta', this)">Show All Frusta</button>
+        <div class="shared-viewer-controls" id="tl-shared-controls">
+          <button id="tl-btn-points" onclick="tlToggle('points',this)">Show All Points</button>
+          <button id="tl-btn-frusta" onclick="tlToggle('frusta',this)">Show All Frusta</button>
         </div>
-        <div style="font-size:11px;color:#888;margin-top:8px">
-          Scene geometry is downsampled for faster loading.
+        <div class="viewer-controls-legend" style="margin-top:8px">
+          <span class="ctrl-item"><kbd>Drag</kbd> Rotate</span>
+          <span class="ctrl-item"><kbd>Scroll</kbd> Zoom</span>
+          <span class="ctrl-item"><kbd>W</kbd><kbd>S</kbd> Fwd / Back</span>
+          <span class="ctrl-item"><kbd>A</kbd><kbd>D</kbd> Pan</span>
+          <span class="ctrl-item"><kbd>Q</kbd><kbd>E</kbd> Up / Down</span>
         </div>
-        <div class="scene-selector" id="adapt-scenes"></div>
+        <div class="scene-selector" id="tl-scenes" style="margin-top:14px"></div>
+      </div>
+    </div>
+
+    <!-- Quantitative metrics across checkpoints -->
+    <div class="columns is-centered" style="margin-top:2.5rem">
+      <div class="column is-four-fifths">
+        <h3 class="title is-5 has-text-centered" style="margin-bottom:1.2rem">Quantitative Metrics Across Checkpoints</h3>
+        <div class="columns">
+          <div class="column">
+            <p class="chart-subtitle">Depth Abs Rel ↓ <span class="dir-hint">(↓ better)</span></p>
+            <p class="chart-note">Scale alignment, 7 datasets</p>
+            <div class="chart-wrap"><canvas id="tl-chart-absrel"></canvas></div>
+          </div>
+          <div class="column">
+            <p class="chart-subtitle">Depth δ&lt;1.25 ↑ <span class="dir-hint">(↑ better)</span></p>
+            <p class="chart-note">Scale alignment, 7 datasets</p>
+            <div class="chart-wrap"><canvas id="tl-chart-d125"></canvas></div>
+          </div>
+          <div class="column">
+            <p class="chart-subtitle">Camera AUC@30 ↑ <span class="dir-hint">(↑ better)</span></p>
+            <p class="chart-note">4 datasets</p>
+            <div class="chart-wrap"><canvas id="tl-chart-cam30"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== ABSTRACT ==================== -->
+<section class="section section-alt">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Large-scale feedforward multi-view reconstruction models have made remarkable progress, but existing approaches still rely on fully supervised training with 3D annotations. Such annotations are expensive and particularly scarce for dynamic scenes, limiting scalability. We propose <strong>SelfEvo</strong>, a self-improving framework that continually improves pretrained multi-view reconstruction models using unlabeled videos. SelfEvo introduces a self-distillation scheme using spatiotemporal context asymmetry, enabling self-improvement for learning-based 4D perception without external supervision. We systematically study design choices that make self-improvement effective, including loss signals, forms of asymmetry, and other training strategies. Across eight benchmarks spanning diverse datasets and domains, SelfEvo consistently improves pretrained baselines and generalizes across base models (e.g., VGGT and &pi;<sup>3</sup>), with significant gains on dynamic scenes. Overall, SelfEvo achieves up to 36.5% relative improvement in video depth estimation and 20.1% in camera estimation, without using any labeled data.
+          </p>
+        </div>
+        <!-- <img src="static/images/teaser_3.png" alt="SelfEvo teaser" style="width:100%;border-radius:8px;margin-top:1.5rem"> -->
       </div>
     </div>
   </div>
@@ -338,37 +350,18 @@
     <div class="exp-block">
       <h3 class="exp-heading">Self-Improvement Results</h3>
       <p class="exp-desc">SelfEvo (VGGT) consistently outperforms pretrained VGGT across all eight benchmarks — including new-domain, old-domain, and out-of-distribution settings — without using any labeled data.</p>
-      <p class="chart-group-head">Depth — Scale Alignment</p>
       <div class="columns">
         <div class="column">
-          <p class="chart-subtitle">Abs Rel ↓</p>
-          <div class="chart-wrap" style="height:250px"><canvas id="exp-scale-absrel"></canvas></div>
+          <p class="chart-subtitle">Depth Scale — Abs Rel ↓</p>
+          <div class="chart-wrap" style="height:265px"><canvas id="exp-c-absrel"></canvas></div>
         </div>
         <div class="column">
-          <p class="chart-subtitle">δ &lt; 1.25 ↑</p>
-          <div class="chart-wrap" style="height:250px"><canvas id="exp-scale-d125"></canvas></div>
-        </div>
-      </div>
-      <p class="chart-group-head">Depth — Scale &amp; Shift Alignment</p>
-      <div class="columns">
-        <div class="column">
-          <p class="chart-subtitle">Abs Rel ↓</p>
-          <div class="chart-wrap" style="height:250px"><canvas id="exp-ss-absrel"></canvas></div>
+          <p class="chart-subtitle">Depth Scale — δ &lt; 1.25 ↑</p>
+          <div class="chart-wrap" style="height:265px"><canvas id="exp-c-d125"></canvas></div>
         </div>
         <div class="column">
-          <p class="chart-subtitle">δ &lt; 1.25 ↑</p>
-          <div class="chart-wrap" style="height:250px"><canvas id="exp-ss-d125"></canvas></div>
-        </div>
-      </div>
-      <p class="chart-group-head">Camera Estimation</p>
-      <div class="columns">
-        <div class="column">
-          <p class="chart-subtitle">AUC@15 ↑</p>
-          <div class="chart-wrap" style="height:250px"><canvas id="exp-cam-auc15"></canvas></div>
-        </div>
-        <div class="column">
-          <p class="chart-subtitle">AUC@30 ↑</p>
-          <div class="chart-wrap" style="height:250px"><canvas id="exp-cam-auc30"></canvas></div>
+          <p class="chart-subtitle">Camera — AUC@30 ↑</p>
+          <div class="chart-wrap" style="height:265px"><canvas id="exp-c-cam"></canvas></div>
         </div>
       </div>
     </div>
@@ -377,37 +370,18 @@
     <div class="exp-block">
       <h3 class="exp-heading">Generality Across Models &amp; Domains</h3>
       <p class="exp-desc">The gains are not tied to a specific base model or dataset. SelfEvo improves both VGGT and π³ when self-improved on DROID (depth) and BEDLAM2.0 (depth &amp; camera). Gray bars show the pretrained baseline; colored bars show the SelfEvo improvement. <span style="display:inline-flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:rgba(59,130,246,0.88);display:inline-block"></span>VGGT</span>&nbsp;&nbsp;<span style="display:inline-flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:rgba(217,119,6,0.88);display:inline-block"></span>π³</span></p>
-      <p class="chart-group-head">Depth — Scale Alignment</p>
       <div class="columns">
         <div class="column">
-          <p class="chart-subtitle">Abs Rel ↓</p>
-          <div class="chart-wrap" style="height:250px"><canvas id="exp-gen-scale-absrel"></canvas></div>
+          <p class="chart-subtitle">Depth Scale — Abs Rel ↓</p>
+          <div class="chart-wrap" style="height:265px"><canvas id="exp-gc-absrel"></canvas></div>
         </div>
         <div class="column">
-          <p class="chart-subtitle">δ &lt; 1.25 ↑</p>
-          <div class="chart-wrap" style="height:250px"><canvas id="exp-gen-scale-d125"></canvas></div>
-        </div>
-      </div>
-      <p class="chart-group-head">Depth — Scale &amp; Shift Alignment</p>
-      <div class="columns">
-        <div class="column">
-          <p class="chart-subtitle">Abs Rel ↓</p>
-          <div class="chart-wrap" style="height:250px"><canvas id="exp-gen-ss-absrel"></canvas></div>
+          <p class="chart-subtitle">Depth Scale — δ &lt; 1.25 ↑</p>
+          <div class="chart-wrap" style="height:265px"><canvas id="exp-gc-d125"></canvas></div>
         </div>
         <div class="column">
-          <p class="chart-subtitle">δ &lt; 1.25 ↑</p>
-          <div class="chart-wrap" style="height:250px"><canvas id="exp-gen-ss-d125"></canvas></div>
-        </div>
-      </div>
-      <p class="chart-group-head">Camera Estimation</p>
-      <div class="columns">
-        <div class="column">
-          <p class="chart-subtitle">AUC@15 ↑</p>
-          <div class="chart-wrap" style="height:250px"><canvas id="exp-gen-cam-auc15"></canvas></div>
-        </div>
-        <div class="column">
-          <p class="chart-subtitle">AUC@30 ↑</p>
-          <div class="chart-wrap" style="height:250px"><canvas id="exp-gen-cam-auc30"></canvas></div>
+          <p class="chart-subtitle">Camera — AUC@30 ↑</p>
+          <div class="chart-wrap" style="height:265px"><canvas id="exp-gc-cam"></canvas></div>
         </div>
       </div>
     </div>
@@ -425,46 +399,25 @@
         <h2 class="title is-3">Analysis</h2>
       </div>
     </div>
-    <div class="columns is-centered has-text-centered" style="margin-bottom:1.5rem">
+    <div class="columns is-centered" style="margin-bottom:1.5rem">
       <div class="column is-four-fifths">
-        <!-- <h3 class="exp-heading" style="font-size:1.25rem">Analysis</h3> -->
-        <p class="exp-desc">We ablate five design axes on Omniworld-Game. Each subsection shows three scatter plots. ★ denotes our default choice.</p>
-        <div style="display:inline-flex;gap:24px;margin-top:6px;font-size:12px;color:#555;align-items:center;flex-wrap:wrap;justify-content:center">
-          <span style="display:flex;align-items:center;gap:7px">
-            <span style="display:inline-flex;flex-shrink:0;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#0891b2,#7c3aed);align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(124,58,237,0.38)">
-              <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M11 11 L3 3 M3 3 L3 7 M3 3 L7 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            <span><strong>Top-left best</strong> — lower Abs Rel &amp; higher δ&lt;1.25 (depth plots)</span>
-          </span>
-          <span style="display:flex;align-items:center;gap:7px">
-            <span style="display:inline-flex;flex-shrink:0;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#0891b2,#7c3aed);align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(124,58,237,0.38)">
-              <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M3 11 L11 3 M11 3 L11 7 M11 3 L7 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            <span><strong>Top-right best</strong> — higher AUC@15 &amp; AUC@30 (camera plots)</span>
-          </span>
-        </div>
+        <p class="exp-desc">We ablate four design axes on Omniworld-Game. Each subsection shows two scatter plots — depth (scale) and camera. ★ denotes our default choice.</p>
       </div>
     </div>
 
     <!-- §5.1 Asymmetry Mechanism -->
     <div class="exp-block">
       <h4 class="exp-heading">§5.1 &mdash; Asymmetry Mechanism</h4>
-      <p class="exp-desc" style="text-align:center;max-width:700px;margin:0 auto 1rem">Frame dropping (★) lands in the top-left of both depth plots and top-right of the camera plot — the optimal region in every case. Spatiotemporal context asymmetry forces the student to reconstruct geometry from fewer views, creating a far stronger signal than appearance perturbations.</p>
+      <p class="exp-desc">Frame dropping (★) lands in the optimal region in every case. Spatiotemporal context asymmetry forces the student to reconstruct geometry from fewer views, creating a far stronger signal than appearance perturbations.</p>
       <div class="columns">
         <div class="column">
-          <p class="chart-subtitle">Depth — Scale</p>
+          <p class="chart-subtitle">Depth — Scale <span class="dir-hint">↖ best</span></p>
           <div class="chart-wrap" style="height:220px">
             <canvas id="abl-asym-scale"></canvas>
           </div>
         </div>
         <div class="column">
-          <p class="chart-subtitle">Depth — Scale+Shift</p>
-          <div class="chart-wrap" style="height:220px">
-            <canvas id="abl-asym-ss"></canvas>
-          </div>
-        </div>
-        <div class="column">
-          <p class="chart-subtitle">Camera</p>
+          <p class="chart-subtitle">Camera <span class="dir-hint">↗ best</span></p>
           <div class="chart-wrap" style="height:220px">
             <canvas id="abl-asym-cam"></canvas>
           </div>
@@ -475,22 +428,16 @@
     <!-- §5.2 Frame Selection Strategy -->
     <div class="exp-block">
       <h4 class="exp-heading">§5.2 &mdash; Frame Selection Strategy</h4>
-      <p class="exp-desc" style="text-align:center;max-width:700px;margin:0 auto 1rem">Random sampling (★) reaches the top-left corner on both depth plots and the top-right on camera. Attention-guided selection offers no benefit — any diverse subset creates sufficient reconstruction challenge.</p>
+      <p class="exp-desc">Random sampling (★) reaches the optimal corner in both plots. Attention-guided selection offers no benefit — any diverse subset creates sufficient reconstruction challenge.</p>
       <div class="columns">
         <div class="column">
-          <p class="chart-subtitle">Depth — Scale</p>
+          <p class="chart-subtitle">Depth — Scale <span class="dir-hint">↖ best</span></p>
           <div class="chart-wrap" style="height:220px">
             <canvas id="abl-sel-scale"></canvas>
           </div>
         </div>
         <div class="column">
-          <p class="chart-subtitle">Depth — Scale+Shift</p>
-          <div class="chart-wrap" style="height:220px">
-            <canvas id="abl-sel-ss"></canvas>
-          </div>
-        </div>
-        <div class="column">
-          <p class="chart-subtitle">Camera</p>
+          <p class="chart-subtitle">Camera <span class="dir-hint">↗ best</span></p>
           <div class="chart-wrap" style="height:220px">
             <canvas id="abl-sel-cam"></canvas>
           </div>
@@ -501,22 +448,16 @@
     <!-- §5.3 Online vs Offline Teacher -->
     <div class="exp-block">
       <h4 class="exp-heading">§5.3 &mdash; Online vs. Offline Teacher</h4>
-      <p class="exp-desc" style="text-align:center;max-width:700px;margin:0 auto 1rem">Online EMA (★) shows a large shift toward the optimal corner in all three plots. A fixed teacher becomes stale as the student evolves; the co-evolving EMA continuously corrects pseudo-label errors throughout training.</p>
+      <p class="exp-desc">Online EMA (★) shows a large shift toward the optimal corner in both plots. A fixed teacher becomes stale as the student evolves; the co-evolving EMA continuously corrects pseudo-label errors throughout training.</p>
       <div class="columns">
         <div class="column">
-          <p class="chart-subtitle">Depth — Scale</p>
+          <p class="chart-subtitle">Depth — Scale <span class="dir-hint">↖ best</span></p>
           <div class="chart-wrap" style="height:220px">
             <canvas id="abl-online-scale"></canvas>
           </div>
         </div>
         <div class="column">
-          <p class="chart-subtitle">Depth — Scale+Shift</p>
-          <div class="chart-wrap" style="height:220px">
-            <canvas id="abl-online-ss"></canvas>
-          </div>
-        </div>
-        <div class="column">
-          <p class="chart-subtitle">Camera</p>
+          <p class="chart-subtitle">Camera <span class="dir-hint">↗ best</span></p>
           <div class="chart-wrap" style="height:220px">
             <canvas id="abl-online-cam"></canvas>
           </div>
@@ -527,22 +468,16 @@
     <!-- §5.4 Training Recipe -->
     <div class="exp-block">
       <h4 class="exp-heading">§5.4 &mdash; Training Recipe</h4>
-      <p class="exp-desc" style="text-align:center;max-width:700px;margin:0 auto 1rem">Freeze-C (★) occupies the best corner in all three plots. Freeze-A is a clear outlier on camera (bottom-left), confirming backbone adaptation is critical for pose learning. Freezing the camera decoder anchors pose quality while the backbone and depth decoder continue to improve.</p>
+      <p class="exp-desc">Freeze-C (★) occupies the best corner in both plots. Freeze-A is a clear outlier on camera (bottom-left), confirming backbone adaptation is critical for pose learning. Freezing the camera decoder anchors pose quality while the backbone and depth decoder continue to improve.</p>
       <div class="columns">
         <div class="column">
-          <p class="chart-subtitle">Depth — Scale</p>
+          <p class="chart-subtitle">Depth — Scale <span class="dir-hint">↖ best</span></p>
           <div class="chart-wrap" style="height:220px">
             <canvas id="abl-recipe-scale"></canvas>
           </div>
         </div>
         <div class="column">
-          <p class="chart-subtitle">Depth — Scale+Shift</p>
-          <div class="chart-wrap" style="height:220px">
-            <canvas id="abl-recipe-ss"></canvas>
-          </div>
-        </div>
-        <div class="column">
-          <p class="chart-subtitle">Camera</p>
+          <p class="chart-subtitle">Camera <span class="dir-hint">↗ best</span></p>
           <div class="chart-wrap" style="height:220px">
             <canvas id="abl-recipe-cam"></canvas>
           </div>
@@ -550,32 +485,83 @@
       </div>
     </div>
 
-    <!-- §5.5 Supervision Form -->
-    <div class="exp-block">
-      <h4 class="exp-heading">§5.5 &mdash; Supervision Form</h4>
-      <p class="exp-desc" style="text-align:center;max-width:700px;margin:0 auto 1rem">The two points nearly overlap across all three plots — adding L<sub>feat</sub> provides essentially no benefit. Output-level distillation alone is a sufficient learning signal; feature alignment adds no value under spatiotemporal asymmetry.</p>
-      <div class="columns">
-        <div class="column">
-          <p class="chart-subtitle">Depth — Scale</p>
-          <div class="chart-wrap" style="height:220px">
-            <canvas id="abl-sup-scale"></canvas>
-          </div>
-        </div>
-        <div class="column">
-          <p class="chart-subtitle">Depth — Scale+Shift</p>
-          <div class="chart-wrap" style="height:220px">
-            <canvas id="abl-sup-ss"></canvas>
-          </div>
-        </div>
-        <div class="column">
-          <p class="chart-subtitle">Camera</p>
-          <div class="chart-wrap" style="height:220px">
-            <canvas id="abl-sup-cam"></canvas>
-          </div>
+  </div>
+</section>
+
+<!-- ==================== ADAPTATION RESULTS ==================== -->
+<section class="section section-alt" id="adaptation">
+  <div class="container is-max-widescreen">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-three-fifths">
+        <h2 class="title is-3">What if we train even on one movie video?</h2>
+        <p class="subtitle is-6" style="margin-bottom:1.5rem">
+          (Just for fun!)
+          <!-- <span style="font-size:0.85em;color:#888;display:block;margin-top:0.3rem">(Just for fun!)</span> -->
+        </p>
+      </div>
+    </div>
+
+    <!-- Movie pagination -->
+    <div class="columns is-centered" style="margin-bottom:0.5rem">
+      <div class="column has-text-centered">
+        <div class="movie-pagination" id="adapt-movie-pagination">
+          <button class="movie-btn active" data-movie="1" onclick="selectAdaptMovie(1, this)">Movie 1</button>
+          <button class="movie-btn" data-movie="2" onclick="selectAdaptMovie(2, this)">Movie 2</button>
+          <button class="movie-btn" data-movie="3" onclick="selectAdaptMovie(3, this)">Movie 3</button>
         </div>
       </div>
     </div>
 
+    <!-- Input frame on top -->
+    <div class="columns is-centered">
+      <div class="column is-one-third has-text-centered">
+        <div class="viewer-label" style="background:#555;color:#fff">Input</div>
+        <div class="input-frame-container">
+          <img id="adapt-input-frame" class="input-frame-img" alt="Input frame">
+        </div>
+      </div>
+    </div>
+    <!-- Two viewers side by side -->
+    <div class="columns is-centered viewer-row">
+      <!-- Pretrained -->
+      <div class="column has-text-centered">
+        <div class="viewer-label pretrained-label">Pretrained VGGT</div>
+        <div class="viewer-container">
+          <canvas id="adapt-pre-canvas" width="512" height="288"></canvas>
+          <div class="viewer-overlay" id="adapt-pre-glfailed">[Requires WebGL2 support]</div>
+          <div class="viewer-overlay viewer-loading" id="adapt-pre-loading">Loading...</div>
+        </div>
+      </div>
+      <!-- SelfEvo -->
+      <div class="column has-text-centered">
+        <div class="viewer-label selfevo-label">SelfEvo (VGGT)</div>
+        <div class="viewer-container">
+          <canvas id="adapt-evo-canvas" width="512" height="288"></canvas>
+          <div class="viewer-overlay" id="adapt-evo-glfailed">[Requires WebGL2 support]</div>
+          <div class="viewer-overlay viewer-loading" id="adapt-evo-loading">Loading...</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <div class="shared-viewer-controls">
+          <button id="adapt-btn-points" onclick="toggleBothViewers('adaptation', 'points', this)">Show All Points</button>
+          <button id="adapt-btn-frusta" onclick="toggleBothViewers('adaptation', 'frusta', this)">Show All Frusta</button>
+        </div>
+        <div class="viewer-controls-legend">
+          <span class="ctrl-item"><kbd>Drag</kbd> Rotate</span>
+          <span class="ctrl-item"><kbd>Scroll</kbd> Zoom</span>
+          <span class="ctrl-item"><kbd>W</kbd><kbd>S</kbd> Forward / Backward</span>
+          <span class="ctrl-item"><kbd>A</kbd><kbd>D</kbd> Left / Right</span>
+          <span class="ctrl-item"><kbd>Q</kbd><kbd>E</kbd> Up / Down</span>
+        </div>
+        <div style="font-size:11px;color:#888;margin-top:8px">
+          Scene geometry is downsampled for faster loading.
+        </div>
+        <div class="scene-selector" id="adapt-scenes"></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -608,49 +594,349 @@
 <script>
 const SCENE_CONFIG = {
   adaptation: [
-    { name: "toystory-start", label: "Toy Story: Start" },
-    { name: "toystory2-clip14", label: "Toy Story 2: Clip 14" },
-    { name: "toystory2-clip17", label: "Toy Story 2: Clip 17" },
-    { name: "zhenhuan-dance2", label: "Zhenhuan: Dance" },
-    { name: "zhenhuan-street3", label: "Zhenhuan: Street" },
-    { name: "zhenhuan-1", label: "Zhenhuan: 1" },
-    { name: "zhenhuan-2", label: "Zhenhuan: 2" },
-    { name: "dragon-fly2", label: "Dragon: Fly" },
-    { name: "dragon-meet3", label: "Dragon: Meet" },
-    { name: "dragon-battle2", label: "Dragon: Battle" },
+    { name: "toystory-start", label: "Toy Story: Start", movie: 1 },
+    { name: "toystory2-clip14", label: "Toy Story 2: Clip 14", movie: 1 },
+    { name: "toystory2-clip17", label: "Toy Story 2: Clip 17", movie: 1 },
+    { name: "zhenhuan-dance2", label: "Zhenhuan: Dance", movie: 2 },
+    { name: "zhenhuan-street3", label: "Zhenhuan: Street", movie: 2 },
+    { name: "zhenhuan-1", label: "Zhenhuan: 1", movie: 2 },
+    { name: "zhenhuan-2", label: "Zhenhuan: 2", movie: 2 },
+    { name: "dragon-fly2", label: "Dragon: Fly", movie: 3 },
+    { name: "dragon-meet3", label: "Dragon: Meet", movie: 3 },
+    { name: "dragon-battle2", label: "Dragon: Battle", movie: 3 },
   ],
   generalization: [
     // wild
-    { name: "wild-15416627_3840_2160_30fps", label: "Wild: Clip 1" },
-    { name: "wild-5207050-uhd_3840_2160_25fps", label: "Wild: Clip 4" },
-    { name: "wild-6539141-hd_1920_1080_25fps2", label: "Wild: Clip 7" },
-    { name: "wild-clip_05", label: "Wild: Clip 9" },
-    { name: "wild-penguin", label: "Wild: Penguin" },
-    { name: "wild-sport", label: "Wild: Sport" },
-    { name: "wild-tom1", label: "Wild: Tom" },
-    { name: "history-1", label: "History" },
+    { name: "davis-kid-football", label: "Kid Football", state: { every_nth: 1, other_frusta: true } },
+    { name: "wild-15416627_3840_2160_30fps", label: "Wild: Clip 1", camera: { distance: 0.885, rx: 0.2597, ry: 0.0678 }, state: { every_nth: 1, other_points: "points" } },
+    { name: "wild-5207050-uhd_3840_2160_25fps", label: "Wild: Clip 4", camera: { distance: 3.51, rx: 0.4461, ry: 0.0088, ty: 1.053 }, state: { every_nth: 1, other_frusta: true, other_points: "points" } },
+    { name: "wild-6539141-hd_1920_1080_25fps2", label: "Wild: Clip 7", camera: { distance: 0.535, rx: 0.3296, ry: 0.4632, ty: -0.2408 }, state: { every_nth: 1, other_frusta: true } },
+    { name: "wild-clip_05", label: "Wild: Clip 9", camera: { distance: 1.185 } },
+    { name: "wild-penguin", label: "Wild: Penguin", state: { every_nth: 1, other_frusta: true, other_points: "points" } },
+    { name: "wild-sport", label: "Wild: Sport", camera: { distance: 0.187, rx: 0.2768, ry: 0.0850, ty: -0.0841 }, state: { every_nth: 1, other_points: "points" } },
+    { name: "wild-tom1", label: "Wild: Tom", camera: { distance: 0.367, tx: -0.3681, ty: -0.1805 }, state: { every_nth: 1, other_points: "points" } },
+    { name: "history-1", label: "History", camera: { distance: 0.447, rx: 0.5095, ry: 0.0037, ty: -0.2012 } },
     // wild2
-    { name: "wild2-corgi-snow-2", label: "Corgi Snow 2" },
-    { name: "wild2-dog-rotation-vase", label: "Dog Rotation" },
+    { name: "wild2-corgi-snow-2", label: "Corgi Snow 2", camera: { rx: 0.3291, ry: -0.0085, ty: -0.18 }, state: { every_nth: 1, other_frusta: true, other_points: "points" } },
     // DAVIS
-    { name: "davis-car-roundabout", label: "Car Roundabout" },
-    { name: "davis-dance-twirl", label: "Dance Twirl" },
-    { name: "davis-drift-straight", label: "Drift Straight" },
-    { name: "davis-drift-turn", label: "Drift Turn" },
-    { name: "davis-kid-football", label: "Kid Football" },
-    { name: "davis-mallard-water", label: "Mallard Water" },
-    { name: "davis-motocross-bumps", label: "Motocross Bumps" },
-    { name: "davis-parkour", label: "Parkour" },
-    { name: "davis-snowboard", label: "Snowboard" },
-    { name: "davis-walking", label: "Walking" },
+    { name: "davis-car-roundabout", label: "Car Roundabout", camera: { rx: 0.1978, ry: -0.3512, ty: -0.18 }, state: { every_nth: 1, other_points: "points" } },
+    { name: "davis-drift-straight", label: "Drift Straight", camera: { distance: 0.807, rx: 0.3006, ry: 0.7446, ty: -0.1211 }, state: { every_nth: 1, other_points: "points" } },
+    { name: "davis-drift-turn", label: "Drift Turn", camera: { distance: 0.509, rx: 0.3756, ry: -0.4448 }, state: { every_nth: 1, other_frusta: true, other_points: "points" } },
+    { name: "davis-snowboard", label: "Snowboard", camera: { distance: 0.396, rx: 0.2781, ry: -0.3174, ty: -0.18 }, state: { every_nth: 1, other_points: "points" } },
+    { name: "davis-blackswan", label: "Black Swan", state: { every_nth: 1, other_points: "points" } },
+    { name: "davis-walking", label: "Walking", camera: { distance: 2.968, rx: 0.1062, ry: -0.2638 }, state: { every_nth: 1, other_frusta: true, other_points: "points" } },
   ]
 };
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
-<script src="./static/js/viewer.js?v=8"></script>
-<script src="./static/js/main.js?v=8"></script>
+<script src="./static/js/viewer.js?v=9"></script>
+<script src="./static/js/main.js?v=9"></script>
+<script>
+// ==================== TIMELINE CONTROLLER ====================
+(function () {
+  const VERSIONS = [
+    { key: 'timeline/pretrain', label: 'Pretrained' },
+    { key: 'timeline/ckpt_00',  label: 'Ckpt 0'    },
+    { key: 'timeline/ckpt_01',  label: 'Ckpt 1'    },
+    { key: 'timeline/ckpt_02',  label: 'Ckpt 2'    },
+    { key: 'timeline/ckpt_03',  label: 'Ckpt 3'    },
+    { key: 'timeline/ckpt_04',  label: 'Ckpt 4'    },
+    { key: 'timeline/ckpt_05',  label: 'Ckpt 5'    },
+    { key: 'timeline/ckpt_06',  label: 'Ckpt 6'    },
+    { key: 'timeline/ckpt_07',  label: 'Ckpt 7'    },
+    { key: 'timeline/ckpt_08',  label: 'Ckpt 8'    },
+    { key: 'timeline/ckpt_09',  label: 'Ckpt 9'    },
+    { key: 'timeline/ckpt_10',  label: 'Ckpt 10'   },
+    { key: 'timeline/ckpt_11',  label: 'Ckpt 11'   },
+    { key: 'timeline/ckpt_12',  label: 'Ckpt 12'   },
+  ];
+
+  const TL_SCENES = [
+    { name: 'davis-kid-football',
+      label: 'Kid Football',
+      state: { every_nth: 1, other_frusta: true } },
+  ];
+
+  const PLAY_MS = 1500; // ms per checkpoint during auto-play
+
+  let tlViewer  = null;
+  let tlScene   = TL_SCENES[0];
+  let tlIdx     = 0;         // current version index
+  let tlPlaying = false;
+  let tlPlayTimer = null;
+
+  // ── Init ──────────────────────────────────────────────────────────────
+  function init() {
+    try {
+      tlViewer = createViewer({
+        canvasId:   'tl-canvas',
+        loadingId:  'tl-loading',
+        glfailedId: 'tl-glfailed',
+        sectionKey: 'timeline',
+      });
+    } catch(e) {
+      console.error('[timeline] viewer init failed:', e);
+      return;
+    }
+
+    buildLabels();
+    buildScenes();
+
+    document.getElementById('tl-slider').addEventListener('input', function(e) {
+      goTo(parseInt(e.target.value, 10));
+    });
+    document.getElementById('tl-play-btn').addEventListener('click', togglePlay);
+
+    tlViewer.onFrameChange(function(frame) {
+      const url = tlViewer.getFrameUrl(frame);
+      const img = document.getElementById('tl-input-frame');
+      if (url && img) img.src = url;
+    });
+
+    loadVersion(0, tlScene.camera, tlScene.state);
+  }
+
+  // ── Build timeline tick labels ─────────────────────────────────────
+  function buildLabels() {
+    const container = document.getElementById('tl-labels');
+    VERSIONS.forEach(function(v, i) {
+      const span = document.createElement('span');
+      span.textContent = v.label;
+      if (i === 0) span.className = 'tl-active';
+      span.addEventListener('click', function() { goTo(i); });
+      container.appendChild(span);
+    });
+  }
+
+  // ── Build scene selector thumbnails ───────────────────────────────
+  function buildScenes() {
+    const container = document.getElementById('tl-scenes');
+    TL_SCENES.forEach(function(scene, idx) {
+      const thumb = document.createElement('img');
+      thumb.className = 'scene-thumb' + (idx === 0 ? ' active' : '');
+      thumb.src = 'static/images/thumbs/' + scene.name + '.jpg';
+      thumb.alt = scene.label;
+      thumb.title = scene.label;
+      thumb.dataset.scene = scene.name;
+
+      thumb.onerror = function() {
+        const pill = document.createElement('button');
+        pill.className = 'scene-pill' + (idx === 0 ? ' active' : '');
+        pill.textContent = scene.label;
+        pill.dataset.scene = scene.name;
+        pill.addEventListener('click', function() { selectScene(scene); });
+        this.replaceWith(pill);
+      };
+
+      thumb.addEventListener('click', function() { selectScene(scene); });
+      container.appendChild(thumb);
+    });
+  }
+
+  // ── Select a scene (resets to pretrained) ─────────────────────────
+  function selectScene(scene) {
+    tlScene = scene;
+    document.querySelectorAll('#tl-scenes .scene-thumb, #tl-scenes .scene-pill')
+      .forEach(function(el) {
+        el.classList.toggle('active', el.dataset.scene === scene.name);
+      });
+    stopPlay();
+    loadVersion(0, scene.camera, scene.state);
+    syncButtons(scene.state);
+  }
+
+  // ── Load a version (fetches if not cached, else instant switch) ────
+  async function loadVersion(idx, camOverride, stateOverride) {
+    tlIdx = idx;
+    updateUI(idx);
+    const v = VERSIONS[idx];
+    await tlViewer.loadSceneVersion(
+      tlScene.name, v.key,
+      camOverride  !== undefined ? camOverride  : null,
+      stateOverride !== undefined ? stateOverride : null
+    );
+    schedulePreload(idx);
+  }
+
+  // ── Go to a version index (preserves camera after first load) ─────
+  function goTo(idx) {
+    if (idx === tlIdx) return;
+    tlIdx = idx;
+    updateUI(idx);
+    const v = VERSIONS[idx];
+    // Pass null overrides to preserve camera when user is just scrubbing
+    tlViewer.loadSceneVersion(tlScene.name, v.key, null, null).then(function() {
+      schedulePreload(idx);
+    });
+  }
+
+  // ── Preload adjacent versions ─────────────────────────────────────
+  function schedulePreload(idx) {
+    [idx + 1, idx + 2].forEach(function(i) {
+      if (i >= 0 && i < VERSIONS.length) {
+        tlViewer.preloadVersion(tlScene.name, VERSIONS[i].key);
+      }
+    });
+  }
+
+  // ── Play / Pause ──────────────────────────────────────────────────
+  function togglePlay() {
+    if (tlPlaying) { stopPlay(); } else { startPlay(); }
+  }
+
+  function startPlay() {
+    tlPlaying = true;
+    document.getElementById('tl-play-btn').classList.add('playing');
+    // If at end, restart
+    if (tlIdx >= VERSIONS.length - 1) {
+      loadVersion(0, tlScene.camera, tlScene.state).then(step);
+    } else {
+      step();
+    }
+  }
+
+  function stopPlay() {
+    tlPlaying = false;
+    clearTimeout(tlPlayTimer);
+    tlPlayTimer = null;
+    document.getElementById('tl-play-btn').classList.remove('playing');
+  }
+
+  function step() {
+    if (!tlPlaying) return;
+    tlPlayTimer = setTimeout(function() {
+      if (!tlPlaying) return;
+      const next = tlIdx + 1;
+      if (next >= VERSIONS.length) { stopPlay(); return; }
+      goTo(next);
+      schedulePreload(next);
+      step();
+    }, PLAY_MS);
+  }
+
+  // ── Update slider + labels ────────────────────────────────────────
+  function updateUI(idx) {
+    document.getElementById('tl-slider').value = idx;
+    document.querySelectorAll('#tl-labels span').forEach(function(el, i) {
+      el.classList.toggle('tl-active', i === idx);
+    });
+    const lbl = document.getElementById('tl-version-label');
+    if (lbl) lbl.textContent = VERSIONS[idx].label;
+  }
+
+  // ── Sync viewer control buttons ───────────────────────────────────
+  function syncButtons(stateOverride) {
+    const s = stateOverride || {};
+    const pBtn = document.getElementById('tl-btn-points');
+    const fBtn = document.getElementById('tl-btn-frusta');
+    if (pBtn) pBtn.classList.toggle('active', s.other_points === 'points');
+    if (fBtn) fBtn.classList.toggle('active', !!s.other_frusta);
+  }
+
+  // ── Global helpers for onclick attributes ─────────────────────────
+  window.tlToggle = function(type, btnEl) {
+    if (!tlViewer) return;
+    if (type === 'points') {
+      tlViewer.togglePoints();
+      btnEl.classList.toggle('active', tlViewer.state.other_points === 'points');
+    } else {
+      tlViewer.toggleFrusta();
+      btnEl.classList.toggle('active', tlViewer.state.other_frusta);
+    }
+  };
+
+  window.tlCam = function() {
+    if (tlViewer) tlViewer.getCameraParams();
+  };
+
+  window.addEventListener('load', init);
+})();
+</script>
+
+<script>
+// ==================== TIMELINE QUANTITATIVE CHARTS ====================
+(function () {
+  const TL_LABELS = ['Pre','0','1','2','3','4','5','6','7','8','9','10','11','12'];
+
+  // Shared Chart.js defaults for compact line charts
+  const BASE_OPT = {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: { duration: 600 },
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { position: 'top', labels: { font: { size: 10 }, boxWidth: 12, padding: 6 } },
+      tooltip: { bodyFont: { size: 10 }, titleFont: { size: 10 } },
+    },
+    scales: {
+      x: { ticks: { font: { size: 9 }, maxRotation: 0 }, grid: { display: false } },
+      y: { ticks: { font: { size: 9 }, maxTicksLimit: 6 }, grid: { color: 'rgba(0,0,0,0.06)' } },
+    },
+  };
+
+  function makeDataset(label, data, color) {
+    return {
+      label, data,
+      borderColor: color, backgroundColor: color,
+      borderWidth: 1.8, pointRadius: 2.5, pointHoverRadius: 4,
+      tension: 0.3, fill: false,
+    };
+  }
+
+  // ── Depth Abs Rel ↓ ─────────────────────────────────────────────────
+  new Chart(document.getElementById('tl-chart-absrel'), {
+    type: 'line',
+    data: {
+      labels: TL_LABELS,
+      datasets: [
+        makeDataset('Bonn',       [0.0548,0.0536,0.0506,0.0497,0.0487,0.0474,0.0476,0.0470,0.0467,0.0464,0.0460,0.0459,0.0464,0.0467], '#0891b2'),
+        makeDataset('Droid',      [0.2927,0.2755,0.2290,0.1913,0.1756,0.1688,0.1645,0.1617,0.1567,0.1548,0.1532,0.1525,0.1520,0.1514], '#7c3aed'),
+        makeDataset('GameGeo',    [0.3455,0.3391,0.3258,0.3314,0.3155,0.3088,0.3034,0.2922,0.2940,0.2949,0.2933,0.2874,0.2780,0.2838], '#db2777'),
+        makeDataset('GameVideo',  [0.2361,0.2379,0.2203,0.2083,0.2039,0.1997,0.1948,0.1925,0.1896,0.1866,0.1841,0.1831,0.1812,0.1814], '#d97706'),
+        makeDataset('HOI4D',      [0.0443,0.0443,0.0412,0.0371,0.0355,0.0343,0.0326,0.0311,0.0305,0.0302,0.0300,0.0302,0.0303,0.0303], '#16a34a'),
+        makeDataset('KITTI',      [0.0735,0.0711,0.0690,0.0640,0.0609,0.0578,0.0531,0.0505,0.0482,0.0473,0.0466,0.0467,0.0472,0.0480], '#dc2626'),
+        makeDataset('Sintel',     [0.3002,0.2912,0.2679,0.2694,0.2878,0.2917,0.2933,0.2943,0.2924,0.2889,0.2930,0.2850,0.2835,0.2812], '#9333ea'),
+      ],
+    },
+    options: BASE_OPT,
+  });
+
+  // ── Depth δ<1.25 ↑ ──────────────────────────────────────────────────
+  new Chart(document.getElementById('tl-chart-d125'), {
+    type: 'line',
+    data: {
+      labels: TL_LABELS,
+      datasets: [
+        makeDataset('Bonn',       [0.9708,0.9722,0.9741,0.9751,0.9747,0.9754,0.9758,0.9759,0.9761,0.9766,0.9768,0.9770,0.9771,0.9772], '#0891b2'),
+        makeDataset('Droid',      [0.5833,0.6099,0.6863,0.7413,0.7764,0.7866,0.7976,0.8035,0.8127,0.8151,0.8207,0.8200,0.8198,0.8216], '#7c3aed'),
+        makeDataset('GameGeo',    [0.5920,0.5993,0.6184,0.6373,0.6544,0.6603,0.6833,0.6883,0.6907,0.6933,0.6963,0.7000,0.7027,0.7031], '#db2777'),
+        makeDataset('GameVideo',  [0.7133,0.7092,0.7277,0.7459,0.7553,0.7690,0.7762,0.7790,0.7808,0.7845,0.7870,0.7884,0.7916,0.7899], '#d97706'),
+        makeDataset('HOI4D',      [0.9586,0.9581,0.9695,0.9816,0.9828,0.9841,0.9851,0.9863,0.9871,0.9875,0.9877,0.9877,0.9877,0.9877], '#16a34a'),
+        makeDataset('KITTI',      [0.9601,0.9647,0.9681,0.9716,0.9730,0.9748,0.9764,0.9777,0.9796,0.9808,0.9811,0.9807,0.9805,0.9804], '#dc2626'),
+        makeDataset('Sintel',     [0.6410,0.6609,0.7074,0.7285,0.7146,0.7249,0.7173,0.7135,0.7067,0.7050,0.7038,0.7081,0.7072,0.7031], '#9333ea'),
+      ],
+    },
+    options: BASE_OPT,
+  });
+
+  // ── Camera AUC@30 ↑ ─────────────────────────────────────────────────
+  new Chart(document.getElementById('tl-chart-cam30'), {
+    type: 'line',
+    data: {
+      labels: TL_LABELS,
+      datasets: [
+        makeDataset('HOI4D',      [63.15,96.99,96.997,96.98,96.978,96.975,96.973,96.984,96.987,96.987,96.976,96.963,96.943,96.945], '#16a34a'),
+        makeDataset('OmniGeo',    [72.65,73.33,74.72,78.84,81.77,83.59,85.16,85.73,85.67,85.99,86.47,86.65,87.29,87.64],           '#0891b2'),
+        makeDataset('OmniVideo',  [89.74,90.34,91.52,93.03,93.62,93.74,93.87,93.89,93.87,93.94,93.93,93.91,93.95,93.94],           '#d97706'),
+        makeDataset('Re10K',      [78.83,78.45,78.74,79.25,79.78,80.71,81.36,81.78,82.38,82.76,83.12,83.34,83.36,83.38],           '#db2777'),
+      ],
+    },
+    options: BASE_OPT,
+  });
+})();
+</script>
 
 <script>
 // ==================== EXPERIMENTS SECTION CHARTS ====================
@@ -732,33 +1018,90 @@ const SCENE_CONFIG = {
     { s:2, e:2, color:'rgba(200,150,50,0.07)', label:'old-domain' },
   ];
 
+  // ── Synced animation registry ─────────────────────────────────────
+  // Each entry: { chart, initCap, targetCap }
+  //   initCap   = cap values at rest / animation start
+  //   targetCap = cap values at animation end
+  // datasets[0] (gray base) is NEVER touched by the animation loop.
+  // Only datasets[1] (colored cap) animates.
+  const syncedCharts = [];
+  let syncLoopRunning = false;
+
+  function startSyncedLoop() {
+    syncLoopRunning = true;
+
+    // Phase 1 — reveal gain color and animate cap to target simultaneously
+    syncedCharts.forEach(function(e) {
+      e.chart.data.datasets[1].backgroundColor = e.gainBg;
+      e.chart.options.animation = { duration: 1800, easing: 'easeOutCubic' };
+      e.chart.data.datasets[1].data = e.targetCap.slice();
+      e.chart.update('active');
+    });
+
+    // Phase 2 — after animation + 2s hold, snap all back to resting state
+    setTimeout(function() {
+      syncedCharts.forEach(function(e) {
+        e.chart.options.animation = false;
+        e.chart.data.datasets[1].backgroundColor = e.initBg;
+        e.chart.data.datasets[1].data = e.initCap.slice();
+        e.chart.update('none');
+      });
+      setTimeout(startSyncedLoop, 500);
+    }, 1800 + 2000);
+  }
+
   // ── Stacked-bar factory ───────────────────────────────────────────
-  // base   = gray bottom segment values
-  // impr   = colored top segment values (always positive = improvement magnitude)
-  // sign   = '+' for ↑ metrics, '−' for ↓ (Abs Rel) to show reduction
-  // baseLeg = legend label for the gray segment
+  //
+  // Lower-better (sign '−', e.g. Abs Rel):
+  //   gray (datasets[0]) = SelfEvo value  — fixed, never moves
+  //   initCap  = impr  → bar starts at SelfEvo+impr = pretrained height (colored cap visible)
+  //   targetCap = zeros → cap shrinks to 0, bar decreases to SelfEvo height
+  //
+  // Higher-better (sign '+', e.g. δ<1.25, AUC):
+  //   gray (datasets[0]) = pretrained value — fixed, never moves
+  //   initCap  = zeros  → bar starts at pretrained height, no cap
+  //   targetCap = impr  → cap grows, bar increases to pretrained+impr = SelfEvo height
+  //
   function makeStackedChart(id, labels, base, impr, yLabel, yMin, gainColor, dp, padBottom, bands, baseLeg, sign) {
-    const labelColor = (gainColor === BLUE_GAIN) ? '#1e3a8a' : '#14532d';
-    new Chart(document.getElementById(id).getContext('2d'), {
+    const labelColor  = (gainColor === BLUE_GAIN) ? '#1e3a8a' : '#14532d';
+    const lowerBetter = (sign === '\u2212');
+
+    // Lower-better: cap starts at impr but colored GRAY (bar looks all-gray at pretrained height).
+    //   On animation: cap color switches to gainColor and shrinks to 0 → bar decreases.
+    // Higher-better: cap starts at 0 (invisible). On animation: cap grows to impr (gain color).
+    const initCap   = lowerBetter ? impr.slice()                    : impr.map(function() { return 0; });
+    const targetCap = lowerBetter ? impr.map(function() { return 0; }) : impr.slice();
+    const initBg    = lowerBetter ? GRAY_BASE : gainColor;   // resting cap color
+    const gainBg    = gainColor;                              // animation cap color
+
+    const chart = new Chart(document.getElementById(id).getContext('2d'), {
       type: 'bar',
       plugins: bands ? [makeBands(bands)] : [],
       data: {
         labels,
         datasets: [
-          { label: baseLeg, data: base, backgroundColor: GRAY_BASE, datalabels: { display: false } },
+          {
+            label: baseLeg,
+            data: base.slice(),           // gray base — never changes
+            backgroundColor: GRAY_BASE,
+            datalabels: { display: false },
+            barPercentage: 0.55, categoryPercentage: 0.7, maxBarThickness: 28
+          },
           {
             label: 'SelfEvo improvement',
-            data: impr,
-            backgroundColor: gainColor,
+            data: initCap.slice(),        // colored cap — animated only
+            backgroundColor: initBg,     // gray at rest for lower-better
+            barPercentage: 0.55, categoryPercentage: 0.7, maxBarThickness: 28,
             datalabels: {
               display: true, anchor: 'end', align: 'end', offset: 2,
-              formatter: v => (sign || '+') + (+v).toFixed(dp),
+              formatter: function(v) { return v > 0 ? (sign || '+') + (+v).toFixed(dp) : ''; },
               font: { size: 9, weight: '700' }, color: labelColor
             }
           }
         ]
       },
       options: {
+        animation: false,
         responsive: true, maintainAspectRatio: false,
         layout: { padding: { bottom: padBottom || 0, top: 22 } },
         plugins: {
@@ -767,13 +1110,15 @@ const SCENE_CONFIG = {
           tooltip: { mode: 'index', intersect: false }
         },
         scales: {
-          x: { stacked: true, grid: { display: false }, ticks: { font:{size:10}, maxRotation:30 } },
+          x: { stacked: true, grid: { display: false }, ticks: { font:{size:9}, maxRotation:0, minRotation:0 } },
           y: { stacked: true, min: yMin,
                title: { display: true, text: yLabel, font:{size:10} },
                ticks: { font:{size:10} } }
         }
       }
     });
+
+    syncedCharts.push({ chart: chart, initCap: initCap, targetCap: targetCap, initBg: initBg, gainBg: gainBg });
   }
 
   // ─────────────────────────────────────────────────────────────────────
@@ -782,64 +1127,45 @@ const SCENE_CONFIG = {
   //   → colored cap always = improvement magnitude; label sign reflects direction
   // ─────────────────────────────────────────────────────────────────────
 
-  // ── 1. SCALE — Abs Rel ↓ ───────────────────────────────────────────
-  makeStackedChart('exp-scale-absrel', DEPTH_LABELS,
-    [0.278,0.181,0.283,0.046,0.047,0.268,0.030],   // base = SelfEvo (remaining error)
-    [0.068,0.055,0.017,0.009,0.027,0.038,0.014],   // impr = error reduced
-    'Abs Rel', 0, BLUE_GAIN, 3, 36, DEPTH_BANDS, 'SelfEvo (VGGT)', '\u2212');
-
-  // ── 2. SCALE — δ<1.25 ↑ ────────────────────────────────────────────
-  makeStackedChart('exp-scale-d125', DEPTH_LABELS,
-    [0.592,0.713,0.641,0.971,0.960,0.597,0.957],   // base = VGGT pretrained
-    [0.111,0.079,0.066,0.006,0.021,0.062,0.031],   // impr = gain
-    'δ < 1.25', 0.55, BLUE_GAIN, 3, 36, DEPTH_BANDS, 'Pretrained (VGGT)', '+');
-
-  // ── 3. SCALE&SHIFT — Abs Rel ↓ ─────────────────────────────────────
-  makeStackedChart('exp-ss-absrel', DEPTH_LABELS,
-    [0.124,0.113,0.212,0.044,0.042,0.237,0.031],   // base = SelfEvo
-    [0.056,0.032,0.015,0.005,0.017,0.057,0.010],   // impr = error reduced
-    'Abs Rel', 0, BLUE_GAIN, 3, 36, DEPTH_BANDS, 'SelfEvo (VGGT)', '\u2212');
-
-  // ── 4. SCALE&SHIFT — δ<1.25 ↑ ──────────────────────────────────────
-  makeStackedChart('exp-ss-d125', DEPTH_LABELS,
-    [0.758,0.824,0.684,0.974,0.961,0.645,0.966],   // base = VGGT pretrained
-    [0.109,0.052,0.008,0.003,0.018,0.079,0.021],   // impr = gain
-    'δ < 1.25', 0.6, BLUE_GAIN, 3, 36, DEPTH_BANDS, 'Pretrained (VGGT)', '+');
-
-  // ── 5. CAMERA — AUC@15 ↑ ───────────────────────────────────────────
-  makeStackedChart('exp-cam-auc15', CAM_LABELS,
-    [64.659,83.468,66.404],    // base = VGGT pretrained
-    [14.375, 5.664, 6.920],    // impr = gain
-    'AUC@15', 60, GRNO_GAIN, 1, 36, CAM_BANDS, 'Pretrained (VGGT)', '+');
-
-  // ── 6. CAMERA — AUC@30 ↑ ───────────────────────────────────────────
-  makeStackedChart('exp-cam-auc30', CAM_LABELS,
-    [72.649,89.743,78.833],    // base = VGGT pretrained
-    [14.636, 4.202, 4.526],    // impr = gain
-    'AUC@30', 68, GRNO_GAIN, 1, 36, CAM_BANDS, 'Pretrained (VGGT)', '+');
+  // ── Charts 1–3 rendered by Canvas2D animation (see <script> below) ─
 
   // ── Generality chart factory (per-bar colors) ────────────────────────
   function makeGenChart(id, labels, base, impr, baseColors, gainColors, labelColors, yLabel, yMin, dp, sign) {
-    new Chart(document.getElementById(id).getContext('2d'), {
+    const lowerBetter = (sign === '\u2212');
+
+    const initCap   = lowerBetter ? impr.slice()                    : impr.map(function() { return 0; });
+    const targetCap = lowerBetter ? impr.map(function() { return 0; }) : impr.slice();
+    const initBg    = lowerBetter ? baseColors : gainColors;  // resting cap color
+    const gainBg    = gainColors;                             // animation cap color
+
+    const chart = new Chart(document.getElementById(id).getContext('2d'), {
       type: 'bar',
       data: {
         labels,
         datasets: [
-          { label: 'Pretrained', data: base, backgroundColor: baseColors, datalabels: { display: false } },
+          {
+            label: 'Pretrained',
+            data: base.slice(),           // gray base — never changes
+            backgroundColor: baseColors,
+            datalabels: { display: false },
+            barPercentage: 0.55, categoryPercentage: 0.7, maxBarThickness: 28
+          },
           {
             label: 'SelfEvo improvement',
-            data: impr,
-            backgroundColor: gainColors,
+            data: initCap.slice(),        // colored cap — animated only
+            backgroundColor: initBg,     // base color at rest for lower-better
+            barPercentage: 0.55, categoryPercentage: 0.7, maxBarThickness: 28,
             datalabels: {
               display: true, anchor: 'end', align: 'end', offset: 2,
-              formatter: v => (sign || '+') + (+v).toFixed(dp),
+              formatter: function(v) { return v > 0 ? (sign || '+') + (+v).toFixed(dp) : ''; },
               font: { size: 9, weight: '700' },
-              color: ctx => labelColors[ctx.dataIndex] || '#1e3a8a'
+              color: function(ctx) { return labelColors[ctx.dataIndex] || '#1e3a8a'; }
             }
           }
         ]
       },
       options: {
+        animation: false,
         responsive: true, maintainAspectRatio: false,
         layout: { padding: { bottom: 0, top: 22 } },
         plugins: {
@@ -848,71 +1174,58 @@ const SCENE_CONFIG = {
           tooltip: { mode: 'index', intersect: false }
         },
         scales: {
-          x: { stacked: true, grid: { display: false }, ticks: { font:{size:10}, maxRotation:30 } },
+          x: { stacked: true, grid: { display: false }, ticks: { font:{size:9}, maxRotation:0, minRotation:0 } },
           y: { stacked: true, min: yMin, title: { display:true, text: yLabel, font:{size:10} }, ticks: { font:{size:10} } }
         }
       }
     });
+
+    syncedCharts.push({ chart: chart, initCap: initCap, targetCap: targetCap, initBg: initBg, gainBg: gainBg });
   }
 
-  // Shared labels and per-bar color arrays for generality depth charts
-  const GEN_DEPTH_LABELS = [['VGGT','DROID'],['VGGT','BEDLAM2.0'],['π³','DROID'],['π³','BEDLAM2.0']];
-  const GEN_BASE_COLORS  = [GRAY_BASE, GRAY_BASE, AMBR_BASE, AMBR_BASE];
-  const GEN_GAIN_COLORS  = [BLUE_GAIN, BLUE_GAIN, ORAN_GAIN, ORAN_GAIN];
-  const GEN_LBL_COLORS   = ['#1e3a8a','#1e3a8a','#92400e','#92400e'];
+  // ── Charts 7–9 rendered by Canvas2D animation (see <script> below) ─
 
-  const GEN_CAM_LABELS      = [['VGGT','BEDLAM2.0'],['π³','BEDLAM2.0']];
-  const GEN_CAM_BASE_COLORS = [GRAY_BASE, AMBR_BASE];
-  const GEN_CAM_GAIN_COLORS = [BLUE_GAIN, ORAN_GAIN];
-  const GEN_CAM_LBL_COLORS  = ['#1e3a8a','#92400e'];
-
-  // ── 7a. GENERALITY Scale Abs Rel ↓ (base=SelfEvo remaining, impr=reduction)
-  makeGenChart('exp-gen-scale-absrel', GEN_DEPTH_LABELS,
-    [0.254, 0.072, 0.249, 0.032],   // SelfEvo values (remaining error)
-    [0.052, 0.038, 0.022, 0.002],   // reduction = VGGT − SelfEvo
-    GEN_BASE_COLORS, GEN_GAIN_COLORS, GEN_LBL_COLORS,
-    'Abs Rel', 0, 3, '\u2212');
-
-  // ── 7b. GENERALITY Scale δ<1.25 ↑ (base=pretrained, impr=gain)
-  makeGenChart('exp-gen-scale-d125', GEN_DEPTH_LABELS,
-    [0.597, 0.921, 0.670, 0.982],   // pretrained
-    [0.059, 0.033, 0.029, 0.001],   // gain
-    GEN_BASE_COLORS, GEN_GAIN_COLORS, GEN_LBL_COLORS,
-    'δ < 1.25', 0.55, 3, '+');
-
-  // ── 7c. GENERALITY Scale&Shift Abs Rel ↓
-  makeGenChart('exp-gen-ss-absrel', GEN_DEPTH_LABELS,
-    [0.223, 0.051, 0.234, 0.027],   // SelfEvo remaining
-    [0.071, 0.035, 0.018, 0.001],   // reduction
-    GEN_BASE_COLORS, GEN_GAIN_COLORS, GEN_LBL_COLORS,
-    'Abs Rel', 0, 3, '\u2212');
-
-  // ── 7d. GENERALITY Scale&Shift δ<1.25 ↑
-  makeGenChart('exp-gen-ss-d125', GEN_DEPTH_LABELS,
-    [0.645, 0.934, 0.709, 0.981],   // pretrained
-    [0.088, 0.025, 0.023, 0.001],   // gain
-    GEN_BASE_COLORS, GEN_GAIN_COLORS, GEN_LBL_COLORS,
-    'δ < 1.25', 0.6, 3, '+');
-
-  // ── 8a. GENERALITY Camera AUC@15 ↑
-  makeGenChart('exp-gen-cam-auc15', GEN_CAM_LABELS,
-    [91.79, 92.19],   // pretrained
-    [3.59,  1.28],    // gain
-    GEN_CAM_BASE_COLORS, GEN_CAM_GAIN_COLORS, GEN_CAM_LBL_COLORS,
-    'AUC@15 (%)', 88, 2, '+');
-
-  // ── 8b. GENERALITY Camera AUC@30 ↑
-  makeGenChart('exp-gen-cam-auc30', GEN_CAM_LABELS,
-    [95.84, 96.08],   // pretrained
-    [1.84,  0.64],    // gain
-    GEN_CAM_BASE_COLORS, GEN_CAM_GAIN_COLORS, GEN_CAM_LBL_COLORS,
-    'AUC@30 (%)', 93, 2, '+');
+  // ── Single master observer: starts all 6 charts together ─────────────
+  {
+    const masterObserver = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !syncLoopRunning) {
+        startSyncedLoop();
+        masterObserver.disconnect();
+      }
+    }, { threshold: 0.1 });
+    // Observe the first chart's wrap so animation fires when experiments scroll into view
+    const anchor = document.getElementById('exp-c-absrel');
+    if (anchor) masterObserver.observe(anchor.closest('.chart-wrap') || anchor);
+  }
 
   // ── Ablation scatter colours (last = ours, always blue star) ─────────
   const MC_O = ['#94a3b8', '#f59e0b', '#a78bfa', '#fb923c']; // slate/amber/violet/orange
   const MC_U = '#3b82f6';  // blue — always "ours"
 
+  // Solid filled 5-pointed star ★ as a canvas image for Chart.js pointStyle
+  function makeStarCanvas(color, size) {
+    const c = document.createElement('canvas');
+    c.width = c.height = size;
+    const ctx = c.getContext('2d');
+    const cx = size / 2, cy = size / 2;
+    const outerR = size / 2 - 1, innerR = outerR * 0.42;
+    ctx.beginPath();
+    for (let i = 0; i < 10; i++) {
+      const r = i % 2 === 0 ? outerR : innerR;
+      const angle = (i * Math.PI / 5) - Math.PI / 2;
+      ctx.lineTo(cx + r * Math.cos(angle), cy + r * Math.sin(angle));
+    }
+    ctx.closePath();
+    ctx.fillStyle = color;
+    ctx.fill();
+    return c;
+  }
+  const STAR_OURS = makeStarCanvas(MC_U, 20);
+
   // Build one scatter dataset (one point per method)
+  // Per-dataset datalabels.align spreads labels in different directions so
+  // clustered points don't pile their labels on top of each other.
+  const LABEL_ALIGNS = ['right', 'bottom', 'left', 'right'];
   function sd(label, x, y, idx, n) {
     const isOurs = (idx === n - 1);
     const c = isOurs ? MC_U : MC_O[idx % MC_O.length];
@@ -921,7 +1234,8 @@ const SCENE_CONFIG = {
       borderColor: c, backgroundColor: c,
       pointRadius: isOurs ? 9 : 6,
       pointHoverRadius: isOurs ? 11 : 8,
-      pointStyle: isOurs ? 'star' : 'circle',
+      pointStyle: isOurs ? STAR_OURS : 'circle',
+      datalabels: { align: isOurs ? 'top' : LABEL_ALIGNS[idx % LABEL_ALIGNS.length] },
     };
   }
 
@@ -929,17 +1243,17 @@ const SCENE_CONFIG = {
   function scatterOpts(xLabel, yLabel) {
     return {
       responsive: true, maintainAspectRatio: false,
-      layout: { padding: { top: 26, right: 18 } },
+      layout: { padding: { top: 40, right: 32, bottom: 10, left: 10 } },
       plugins: {
         legend: { display: true, position: 'bottom',
-          labels: { font:{size:9}, boxWidth:10, padding:4, usePointStyle:true } },
+          labels: { font:{size:9}, boxWidth:10, padding:14, usePointStyle:true } },
         tooltip: {
           callbacks: { label: ctx => `${ctx.dataset.label}: (${ctx.parsed.x}, ${ctx.parsed.y})` }
         },
         datalabels: {
           display: true,
           formatter: (val, ctx) => ctx.dataset.label,
-          anchor: 'end', align: 'top', offset: 3,
+          anchor: 'end', align: 'top', offset: 8,
           color: ctx => ctx.chart.data.datasets[ctx.datasetIndex].borderColor,
           font: ctx => ({ size: 9, weight: ctx.datasetIndex === ctx.chart.data.datasets.length - 1 ? 'bold' : 'normal' }),
         }
@@ -952,7 +1266,6 @@ const SCENE_CONFIG = {
   }
 
   const DEPTH_SCALE_OPTS = scatterOpts('Abs Rel ↓ (lower better)', 'δ<1.25 % ↑ (higher better)');
-  const DEPTH_SS_OPTS    = scatterOpts('Abs Rel ↓ (lower better)', 'δ<1.25 % ↑ (higher better)');
   const CAM_OPTS         = scatterOpts('AUC@15 ↑ (higher better)', 'AUC@30 ↑ (higher better)');
 
   // ── §5.1 Asymmetry (Table 6) — n=4 ───────────────────────────────
@@ -965,16 +1278,6 @@ const SCENE_CONFIG = {
       sd('dropping (ours)', 0.296, 68.2, 3, 4),
     ]},
     options: DEPTH_SCALE_OPTS
-  });
-  new Chart(document.getElementById('abl-asym-ss').getContext('2d'), {
-    type: 'scatter',
-    data: { datasets: [
-      sd('aug-stu',         0.148, 82.4, 0, 4),
-      sd('aug-all',         0.150, 82.0, 1, 4),
-      sd('cropping',        0.147, 82.9, 2, 4),
-      sd('dropping (ours)', 0.127, 86.2, 3, 4),
-    ]},
-    options: DEPTH_SS_OPTS
   });
   new Chart(document.getElementById('abl-asym-cam').getContext('2d'), {
     type: 'scatter',
@@ -997,15 +1300,6 @@ const SCENE_CONFIG = {
     ]},
     options: DEPTH_SCALE_OPTS
   });
-  new Chart(document.getElementById('abl-sel-ss').getContext('2d'), {
-    type: 'scatter',
-    data: { datasets: [
-      sd('keep-top',     0.148, 82.4, 0, 3),
-      sd('keep-bottom',  0.150, 82.0, 1, 3),
-      sd('random (ours)',0.124, 86.7, 2, 3),
-    ]},
-    options: DEPTH_SS_OPTS
-  });
   new Chart(document.getElementById('abl-sel-cam').getContext('2d'), {
     type: 'scatter',
     data: { datasets: [
@@ -1024,14 +1318,6 @@ const SCENE_CONFIG = {
       sd('Online (ours)', 0.278, 70.3, 1, 2),
     ]},
     options: DEPTH_SCALE_OPTS
-  });
-  new Chart(document.getElementById('abl-online-ss').getContext('2d'), {
-    type: 'scatter',
-    data: { datasets: [
-      sd('Offline',       0.150, 81.7, 0, 2),
-      sd('Online (ours)', 0.124, 86.7, 1, 2),
-    ]},
-    options: DEPTH_SS_OPTS
   });
   new Chart(document.getElementById('abl-online-cam').getContext('2d'), {
     type: 'scatter',
@@ -1054,17 +1340,6 @@ const SCENE_CONFIG = {
     ]},
     options: DEPTH_SCALE_OPTS
   });
-  new Chart(document.getElementById('abl-recipe-ss').getContext('2d'), {
-    type: 'scatter',
-    data: { datasets: [
-      sd('freeze-D',       0.134, 85.1, 0, 5),
-      sd('freeze-A',       0.162, 79.3, 1, 5),
-      sd('freeze-C&D',     0.133, 85.5, 2, 5),
-      sd('train-all',      0.125, 86.5, 3, 5),
-      sd('freeze-C (ours)',0.124, 86.7, 4, 5),
-    ]},
-    options: DEPTH_SS_OPTS
-  });
   new Chart(document.getElementById('abl-recipe-cam').getContext('2d'), {
     type: 'scatter',
     data: { datasets: [
@@ -1077,75 +1352,477 @@ const SCENE_CONFIG = {
     options: CAM_OPTS
   });
 
-  // ── Direction badges on scatter charts ───────────────────────────
-  (function() {
-    const BASE = [
-      'position:absolute',
-      'width:28px','height:28px',
-      'border-radius:50%',
-      'background:linear-gradient(135deg,#0891b2 0%,#7c3aed 100%)',
-      'display:flex','align-items:center','justify-content:center',
-      'box-shadow:0 2px 10px rgba(124,58,237,0.40)',
-      'pointer-events:none','z-index:5','top:7px',
-    ].join(';');
-
-    // ↖ arrow (depth: top-left is best) — badge sits at top-right
-    const SVG_NW = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none">'
-      + '<path d="M11 11 L3 3 M3 3 L3 7 M3 3 L7 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
-      + '</svg>';
-
-    // ↗ arrow (camera: top-right is best) — badge sits at top-left
-    const SVG_NE = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none">'
-      + '<path d="M3 11 L11 3 M11 3 L11 7 M11 3 L7 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
-      + '</svg>';
-
-    function addBadge(canvasId, dir) {
-      const canvas = document.getElementById(canvasId);
-      if (!canvas) return;
-      const d = document.createElement('div');
-      d.style.cssText = BASE + ';' + (dir === 'nw' ? 'right:7px' : 'left:7px');
-      d.innerHTML = dir === 'nw' ? SVG_NW : SVG_NE;
-      canvas.parentElement.appendChild(d);
-    }
-
-    ['abl-asym-scale','abl-asym-ss','abl-sel-scale','abl-sel-ss',
-     'abl-online-scale','abl-online-ss','abl-recipe-scale','abl-recipe-ss',
-     'abl-sup-scale','abl-sup-ss'].forEach(id => addBadge(id, 'nw'));
-
-    ['abl-asym-cam','abl-sel-cam','abl-online-cam',
-     'abl-recipe-cam','abl-sup-cam'].forEach(id => addBadge(id, 'ne'));
-  })();
-
-  // ── §5.5 Supervision Form (Table 11) — n=2 ───────────────────────
-  new Chart(document.getElementById('abl-sup-scale').getContext('2d'), {
-    type: 'scatter',
-    data: { datasets: [
-      sd('+L_feat',    0.283, 69.6, 0, 2),
-      sd('base (ours)',0.278, 70.3, 1, 2),
-    ]},
-    options: DEPTH_SCALE_OPTS
-  });
-  new Chart(document.getElementById('abl-sup-ss').getContext('2d'), {
-    type: 'scatter',
-    data: { datasets: [
-      sd('+L_feat',    0.125, 86.7, 0, 2),
-      sd('base (ours)',0.124, 86.7, 1, 2),
-    ]},
-    options: DEPTH_SS_OPTS
-  });
-  new Chart(document.getElementById('abl-sup-cam').getContext('2d'), {
-    type: 'scatter',
-    data: { datasets: [
-      sd('+L_feat',    78.9, 87.3, 0, 2),
-      sd('base (ours)',79.0, 87.3, 1, 2),
-    ]},
-    options: CAM_OPTS
-  });
-
 })();
 </script>
 
 <script>
+// ==================== ANIMATED EXPERIMENTS CHARTS ====================
+(function () {
+  // ── Palette (matches page palette) ────────────────────────────────
+  const GRAY   = 'rgba(148,163,184,0.82)';
+  const BLUE   = 'rgba(59,130,246,0.88)';
+  const ORANGE = '#C86038';
+
+  // ── Data (derived from experiment table) ──────────────────────────
+  const DEPTH_LABELS = ['OmniGeo','OmniVideo','Sintel','Bonn','KITTI','DROID','HOI4D'];
+  const CAM_LABELS   = ['OmniGeo','OmniVideo','RealEstate10K'];
+
+  const PRE_ABSREL = [0.346,0.236,0.300,0.055,0.074,0.306,0.044];
+  const IMP_ABSREL = [0.278,0.181,0.283,0.046,0.047,0.268,0.030];
+  const PRE_D125   = [0.592,0.713,0.641,0.971,0.960,0.597,0.957];
+  const IMP_D125   = [0.703,0.792,0.707,0.977,0.981,0.659,0.988];
+  const PRE_CAM    = [72.649,89.743,78.833];
+  const IMP_CAM    = [87.285,93.945,83.359];
+
+  const DEPTH_BANDS = [
+    {s:0,e:1,color:'rgba(34,160,100,0.07)', label:'new-domain'},
+    {s:2,e:4,color:'rgba(200,150,50,0.07)',  label:'old-domain'},
+    {s:5,e:6,color:'rgba(150,80,200,0.07)',  label:'OOD'},
+  ];
+  const CAM_BANDS = [
+    {s:0,e:1,color:'rgba(34,160,100,0.07)', label:'new-domain'},
+    {s:2,e:2,color:'rgba(200,150,50,0.07)', label:'old-domain'},
+  ];
+
+  // ── Animation timeline ─────────────────────────────────────────────
+  // Phase 0 [ 800ms]: all bars grow from 0 to pretrained height
+  // Phase 1 [ 500ms]: hold — pretrained bars fully visible
+  // Phase 2 [1200ms]: bars transform (↓ shrink+highlight / ↑ grow+gain)
+  // Phase 3 [ 700ms]: improvement labels fade in
+  const DUR   = [800, 500, 1200, 700];
+  const TOTAL = DUR.reduce((s,d) => s+d, 0);
+
+  const easeOut = t => 1 - (1-t)**3;
+  const easeIO  = t => t < .5 ? 2*t*t : -1+(4-2*t)*t;
+
+  function phaseOf(ms) {
+    let cum = 0;
+    for (let i = 0; i < DUR.length; i++) {
+      if (ms < cum + DUR[i]) return { p: i, t: (ms - cum) / DUR[i] };
+      cum += DUR[i];
+    }
+    return { p: DUR.length - 1, t: 1 };
+  }
+
+  // ── Chart factory ──────────────────────────────────────────────────
+  function makeExpChart(id, labels, pretrained, improved, cfg) {
+    const { dir, yMin, yMax, gridStep, bands, dp } = cfg;
+    const lower = dir === '\u2193';
+
+    const el = document.getElementById(id);
+    if (!el) return null;
+
+    const DPR  = window.devicePixelRatio || 1;
+    const wrap = el.parentElement;
+    const cssW = (wrap && wrap.clientWidth > 60) ? wrap.clientWidth - 4 : 360;
+    const cssH = 255;
+    el.style.width  = cssW + 'px';
+    el.style.height = cssH + 'px';
+    el.width  = cssW * DPR;
+    el.height = cssH * DPR;
+    const g = el.getContext('2d');
+    g.scale(DPR, DPR);
+
+    const W = cssW, H = cssH;
+    const PAD = { t: 20, b: 54, l: 36, r: 6 };
+    const PW  = W - PAD.l - PAD.r;
+    const PH  = H - PAD.t - PAD.b;
+    const BOT = PAD.t + PH;
+    const n   = labels.length;
+    const gW  = PW / n;
+    const bW  = Math.min(26, gW * 0.55);
+    const SC  = PH / (yMax - yMin);
+    const yOf = v => PAD.t + PH - (v - yMin) * SC;
+    const bX  = i => PAD.l + i * gW + (gW - bW) / 2;
+
+    function rRect(x, y, w, h, rt, rb, color) {
+      if (h < 0.5) return;
+      const r = Math.min(3, w/2, h/2);
+      const tl=rt?r:0, tr=rt?r:0, br=rb?r:0, bl=rb?r:0;
+      g.beginPath();
+      g.moveTo(x+tl,y); g.lineTo(x+w-tr,y);
+      if(tr) g.quadraticCurveTo(x+w,y,x+w,y+tr); else g.lineTo(x+w,y);
+      g.lineTo(x+w,y+h-br);
+      if(br) g.quadraticCurveTo(x+w,y+h,x+w-br,y+h); else g.lineTo(x+w,y+h);
+      g.lineTo(x+bl,y+h);
+      if(bl) g.quadraticCurveTo(x,y+h,x,y+h-bl); else g.lineTo(x,y+h);
+      g.lineTo(x,y+tl);
+      if(tl) g.quadraticCurveTo(x,y,x+tl,y); else g.lineTo(x,y);
+      g.closePath();
+      g.fillStyle = color; g.fill();
+    }
+
+    function stripe(x, y, w, h) {
+      g.save();
+      g.beginPath(); g.rect(x,y,w,h); g.clip();
+      g.strokeStyle = 'rgba(255,255,255,.22)'; g.lineWidth = 5;
+      for (let sx = x-h-8; sx < x+w+h; sx += 12) {
+        g.beginPath(); g.moveTo(sx,y); g.lineTo(sx+h,y+h); g.stroke();
+      }
+      g.restore();
+    }
+
+    return {
+      render(ms) {
+        const { p, t } = phaseOf(Math.min(ms, TOTAL+50));
+        const te = easeIO(t), to = easeOut(t);
+
+        g.clearRect(0, 0, W, H);
+
+        // Mini legend (top margin)
+        [[GRAY,'Pretrained'],[BLUE,'SelfEvo']].forEach(([c,lbl], i) => {
+          const lx = PAD.l + i * (PW/2);
+          g.fillStyle = c; g.fillRect(lx, 5, 8, 8);
+          g.fillStyle = '#555'; g.font = '8.5px Inter,sans-serif'; g.textAlign = 'left';
+          g.fillText(lbl, lx+11, 13);
+        });
+
+        // Domain bands
+        (bands||[]).forEach(b => {
+          const x0 = bX(b.s)-gW*0.22, x1 = bX(b.e)+bW+gW*0.22;
+          g.fillStyle = b.color; g.fillRect(x0, PAD.t, x1-x0, PH);
+          if (b.label) {
+            g.fillStyle = '#bbb'; g.font = '8px Inter,sans-serif'; g.textAlign = 'center';
+            g.fillText(b.label, (x0+x1)/2, BOT+46);
+          }
+        });
+
+        // Grid
+        const gFirst = Math.ceil(yMin/gridStep + 1e-9)*gridStep;
+        for (let v = gFirst; v <= yMax+1e-9; v = Math.round((v+gridStep)*1e6)/1e6) {
+          const gy = yOf(v);
+          g.strokeStyle='#e8e8e8'; g.lineWidth=1; g.setLineDash([4,4]);
+          g.beginPath(); g.moveTo(PAD.l,gy); g.lineTo(PAD.l+PW,gy); g.stroke();
+          g.setLineDash([]);
+          g.fillStyle='#aaa'; g.font='9px Inter,sans-serif'; g.textAlign='right';
+          g.fillText(yMax>5 ? v.toFixed(0) : v.toFixed(2), PAD.l-3, gy+3.5);
+        }
+
+        // Axes
+        g.strokeStyle='#3a3a3a'; g.lineWidth=1.5; g.setLineDash([]);
+        g.beginPath();
+        g.moveTo(PAD.l,PAD.t); g.lineTo(PAD.l,BOT);
+        g.moveTo(PAD.l,BOT);   g.lineTo(PAD.l+PW,BOT);
+        g.stroke();
+
+        // Bars
+        for (let i = 0; i < n; i++) {
+          const x = bX(i);
+          const pre = pretrained[i], imp = improved[i];
+          const diff = lower ? pre-imp : imp-pre;
+
+          if (p === 0) {
+            const h = (pre-yMin)*SC*easeOut(t);
+            if (h > 0) rRect(x, BOT-h, bW, h, true, true, GRAY);
+          } else if (p === 1) {
+            rRect(x, yOf(pre), bW, BOT-yOf(pre), true, true, GRAY);
+          } else {
+            const cur = p===2 ? (lower ? pre-diff*te : pre+diff*te) : imp;
+
+            if (lower) {
+              rRect(x, yOf(imp), bW, BOT-yOf(imp), false, true, GRAY);
+              const capH = yOf(imp)-yOf(cur);
+              if (capH > 0.5) {
+                rRect(x, yOf(cur), bW, capH, true, false, ORANGE);
+                stripe(x, yOf(cur), bW, capH);
+                g.strokeStyle='rgba(255,255,255,.6)'; g.lineWidth=1; g.setLineDash([3,3]);
+                g.beginPath(); g.moveTo(x,yOf(imp)); g.lineTo(x+bW,yOf(imp)); g.stroke();
+                g.setLineDash([]);
+              }
+            } else {
+              rRect(x, yOf(pre), bW, BOT-yOf(pre), false, true, GRAY);
+              const gainH = yOf(pre)-yOf(cur);
+              if (gainH > 0.5) {
+                rRect(x, yOf(cur), bW, gainH, true, false, BLUE);
+                g.strokeStyle='rgba(255,255,255,.6)'; g.lineWidth=1; g.setLineDash([3,3]);
+                g.beginPath(); g.moveTo(x,yOf(pre)); g.lineTo(x+bW,yOf(pre)); g.stroke();
+                g.setLineDash([]);
+              }
+            }
+
+            // Improvement annotation (phase 3)
+            if (p >= 3) {
+              const pct = (diff / pretrained[i] * 100).toFixed(1);
+              const lbl = (lower?'\u2212':'+')+pct+'%';
+              const ly  = lower ? yOf(pre)-3 : yOf(imp)-3;
+              g.fillStyle='#1e3a8a'; g.font='bold 7.5px Inter,sans-serif';
+              g.textAlign='center'; g.fillText(lbl, x+bW/2, ly);
+            }
+          }
+
+          // x-label (horizontal)
+          g.fillStyle='#888'; g.font='7.5px Inter,sans-serif'; g.textAlign='center';
+          g.fillText(labels[i], x+bW/2, BOT+13);
+        }
+      }
+    };
+  }
+
+  // ── Instantiate charts ─────────────────────────────────────────────
+  const charts = [
+    makeExpChart('exp-c-absrel', DEPTH_LABELS, PRE_ABSREL, IMP_ABSREL,
+      { dir:'\u2193', yMin:0,    yMax:0.40, gridStep:0.10, bands:DEPTH_BANDS, dp:3 }),
+    makeExpChart('exp-c-d125',   DEPTH_LABELS, PRE_D125,   IMP_D125,
+      { dir:'\u2191', yMin:0.55, yMax:1.00, gridStep:0.10, bands:DEPTH_BANDS, dp:3 }),
+    makeExpChart('exp-c-cam',    CAM_LABELS,   PRE_CAM,    IMP_CAM,
+      { dir:'\u2191', yMin:68,   yMax:97,   gridStep:5,    bands:CAM_BANDS,   dp:1 }),
+  ].filter(Boolean);
+
+  // ── Shared render loop ─────────────────────────────────────────────
+  let t0 = null, rafId = null, loopTimer = null;
+
+  function tick(ts) {
+    if (!t0) t0 = ts;
+    const ms = ts - t0;
+    charts.forEach(c => c.render(ms));
+    if (ms < TOTAL + 200) rafId = requestAnimationFrame(tick);
+    else loopTimer = setTimeout(play, 2500);
+  }
+
+  function play() {
+    cancelAnimationFrame(rafId);
+    clearTimeout(loopTimer);
+    t0 = null;
+    rafId = requestAnimationFrame(tick);
+  }
+
+  // ── Trigger on scroll ──────────────────────────────────────────────
+  let live = false;
+  const anchor = document.getElementById('exp-c-absrel');
+  if (anchor) {
+    new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && !live) { live = true;  play(); }
+      else if (!entries[0].isIntersecting)   { live = false; cancelAnimationFrame(rafId); clearTimeout(loopTimer); }
+    }, { threshold: 0.1 }).observe(anchor);
+  }
+})();
+
+// ==================== ANIMATED GENERALITY CHARTS ====================
+(function () {
+  // ── Per-model palette ──────────────────────────────────────────────
+  const VGGT_BASE = 'rgba(148,163,184,0.82)';
+  const VGGT_GAIN = 'rgba(59,130,246,0.88)';
+  const PI3_BASE  = 'rgba(251,191,36,0.65)';
+  const PI3_GAIN  = 'rgba(217,119,6,0.88)';
+
+  // ── Data ───────────────────────────────────────────────────────────
+  const GEN_DEPTH_LABELS = [['VGGT','DROID'],['VGGT','BEDLAM2.0'],['π³','DROID'],['π³','BEDLAM2.0']];
+  const GEN_CAM_LABELS   = [['VGGT','BEDLAM2.0'],['π³','BEDLAM2.0']];
+
+  const GEN_BASE_COLORS = [VGGT_BASE, VGGT_BASE, PI3_BASE,  PI3_BASE];
+  const GEN_GAIN_COLORS = [VGGT_GAIN, VGGT_GAIN, PI3_GAIN,  PI3_GAIN];
+  const GEN_LBL_COLORS  = ['#1e3a8a', '#1e3a8a', '#92400e', '#92400e'];
+  const GEN_CAM_BASE    = [VGGT_BASE, PI3_BASE];
+  const GEN_CAM_GAIN    = [VGGT_GAIN, PI3_GAIN];
+  const GEN_CAM_LBL     = ['#1e3a8a', '#92400e'];
+
+  const PRE_GEN_ABSREL = [0.306, 0.110, 0.271, 0.034];
+  const IMP_GEN_ABSREL = [0.254, 0.072, 0.249, 0.032];
+  const PRE_GEN_D125   = [0.597, 0.921, 0.670, 0.982];
+  const IMP_GEN_D125   = [0.656, 0.954, 0.699, 0.983];
+  const PRE_GEN_CAM    = [95.84, 96.08];
+  const IMP_GEN_CAM    = [97.68, 96.72];
+
+  // ── Animation timeline ─────────────────────────────────────────────
+  const DUR   = [800, 500, 1200, 700];
+  const TOTAL = DUR.reduce((s,d) => s+d, 0);
+
+  const easeOut = t => 1 - (1-t)**3;
+  const easeIO  = t => t < .5 ? 2*t*t : -1+(4-2*t)*t;
+
+  function phaseOf(ms) {
+    let cum = 0;
+    for (let i = 0; i < DUR.length; i++) {
+      if (ms < cum + DUR[i]) return { p: i, t: (ms - cum) / DUR[i] };
+      cum += DUR[i];
+    }
+    return { p: DUR.length - 1, t: 1 };
+  }
+
+  // ── Chart factory ──────────────────────────────────────────────────
+  function makeGenExpChart(id, labels, pretrained, improved, baseColors, gainColors, lblColors, cfg) {
+    const { dir, yMin, yMax, gridStep } = cfg;
+    const lower = dir === '\u2193';
+
+    const el = document.getElementById(id);
+    if (!el) return null;
+
+    const DPR  = window.devicePixelRatio || 1;
+    const wrap = el.parentElement;
+    const cssW = (wrap && wrap.clientWidth > 60) ? wrap.clientWidth - 4 : 360;
+    const cssH = 255;
+    el.style.width  = cssW + 'px';
+    el.style.height = cssH + 'px';
+    el.width  = cssW * DPR;
+    el.height = cssH * DPR;
+    const g = el.getContext('2d');
+    g.scale(DPR, DPR);
+
+    const W = cssW, H = cssH;
+    const PAD = { t: 12, b: 58, l: 36, r: 6 };
+    const PW  = W - PAD.l - PAD.r;
+    const PH  = H - PAD.t - PAD.b;
+    const BOT = PAD.t + PH;
+    const n   = labels.length;
+    const gW  = PW / n;
+    const bW  = Math.min(26, gW * 0.55);
+    const SC  = PH / (yMax - yMin);
+    const yOf = v => PAD.t + PH - (v - yMin) * SC;
+    const bX  = i => PAD.l + i * gW + (gW - bW) / 2;
+
+    function rRect(x, y, w, h, rt, rb, color) {
+      if (h < 0.5) return;
+      const r = Math.min(3, w/2, h/2);
+      const tl=rt?r:0, tr=rt?r:0, br=rb?r:0, bl=rb?r:0;
+      g.beginPath();
+      g.moveTo(x+tl,y); g.lineTo(x+w-tr,y);
+      if(tr) g.quadraticCurveTo(x+w,y,x+w,y+tr); else g.lineTo(x+w,y);
+      g.lineTo(x+w,y+h-br);
+      if(br) g.quadraticCurveTo(x+w,y+h,x+w-br,y+h); else g.lineTo(x+w,y+h);
+      g.lineTo(x+bl,y+h);
+      if(bl) g.quadraticCurveTo(x,y+h,x,y+h-bl); else g.lineTo(x,y+h);
+      g.lineTo(x,y+tl);
+      if(tl) g.quadraticCurveTo(x,y,x+tl,y); else g.lineTo(x,y);
+      g.closePath();
+      g.fillStyle = color; g.fill();
+    }
+
+    function stripe(x, y, w, h) {
+      g.save();
+      g.beginPath(); g.rect(x,y,w,h); g.clip();
+      g.strokeStyle = 'rgba(255,255,255,.22)'; g.lineWidth = 5;
+      for (let sx = x-h-8; sx < x+w+h; sx += 12) {
+        g.beginPath(); g.moveTo(sx,y); g.lineTo(sx+h,y+h); g.stroke();
+      }
+      g.restore();
+    }
+
+    return {
+      render(ms) {
+        const { p, t } = phaseOf(Math.min(ms, TOTAL+50));
+        const te = easeIO(t);
+
+        g.clearRect(0, 0, W, H);
+
+        // Grid
+        const gFirst = Math.ceil(yMin/gridStep + 1e-9)*gridStep;
+        for (let v = gFirst; v <= yMax+1e-9; v = Math.round((v+gridStep)*1e6)/1e6) {
+          const gy = yOf(v);
+          g.strokeStyle='#e8e8e8'; g.lineWidth=1; g.setLineDash([4,4]);
+          g.beginPath(); g.moveTo(PAD.l,gy); g.lineTo(PAD.l+PW,gy); g.stroke();
+          g.setLineDash([]);
+          g.fillStyle='#aaa'; g.font='9px Inter,sans-serif'; g.textAlign='right';
+          g.fillText(yMax>5 ? v.toFixed(0) : v.toFixed(2), PAD.l-3, gy+3.5);
+        }
+
+        // Axes
+        g.strokeStyle='#3a3a3a'; g.lineWidth=1.5; g.setLineDash([]);
+        g.beginPath();
+        g.moveTo(PAD.l,PAD.t); g.lineTo(PAD.l,BOT);
+        g.moveTo(PAD.l,BOT);   g.lineTo(PAD.l+PW,BOT);
+        g.stroke();
+
+        // Bars
+        for (let i = 0; i < n; i++) {
+          const x = bX(i);
+          const pre = pretrained[i], imp = improved[i];
+          const diff = lower ? pre-imp : imp-pre;
+
+          if (p === 0) {
+            const h = (pre-yMin)*SC*easeOut(t);
+            if (h > 0) rRect(x, BOT-h, bW, h, true, true, baseColors[i]);
+          } else if (p === 1) {
+            rRect(x, yOf(pre), bW, BOT-yOf(pre), true, true, baseColors[i]);
+          } else {
+            const cur = p===2 ? (lower ? pre-diff*te : pre+diff*te) : imp;
+
+            if (lower) {
+              rRect(x, yOf(imp), bW, BOT-yOf(imp), false, true, baseColors[i]);
+              const capH = yOf(imp)-yOf(cur);
+              if (capH > 0.5) {
+                rRect(x, yOf(cur), bW, capH, true, false, gainColors[i]);
+                stripe(x, yOf(cur), bW, capH);
+                g.strokeStyle='rgba(255,255,255,.6)'; g.lineWidth=1; g.setLineDash([3,3]);
+                g.beginPath(); g.moveTo(x,yOf(imp)); g.lineTo(x+bW,yOf(imp)); g.stroke();
+                g.setLineDash([]);
+              }
+            } else {
+              rRect(x, yOf(pre), bW, BOT-yOf(pre), false, true, baseColors[i]);
+              const gainH = yOf(pre)-yOf(cur);
+              if (gainH > 0.5) {
+                rRect(x, yOf(cur), bW, gainH, true, false, gainColors[i]);
+                g.strokeStyle='rgba(255,255,255,.6)'; g.lineWidth=1; g.setLineDash([3,3]);
+                g.beginPath(); g.moveTo(x,yOf(pre)); g.lineTo(x+bW,yOf(pre)); g.stroke();
+                g.setLineDash([]);
+              }
+            }
+
+            // Improvement annotation (phase 3)
+            if (p >= 3) {
+              const pct = (diff / pretrained[i] * 100).toFixed(1);
+              const lbl = (lower?'\u2212':'+')+pct+'%';
+              const ly  = lower ? yOf(pre)-3 : yOf(imp)-3;
+              g.fillStyle=lblColors[i]; g.font='bold 7.5px Inter,sans-serif';
+              g.textAlign='center'; g.fillText(lbl, x+bW/2, ly);
+            }
+          }
+
+          // x-labels: 2-line (horizontal)
+          const lb = labels[i];
+          g.fillStyle='#888'; g.font='7.5px Inter,sans-serif'; g.textAlign='center';
+          if (Array.isArray(lb)) {
+            g.fillText(lb[0], x+bW/2, BOT+12);
+            g.fillText(lb[1], x+bW/2, BOT+23);
+          } else {
+            g.fillText(lb, x+bW/2, BOT+13);
+          }
+        }
+      }
+    };
+  }
+
+  // ── Instantiate charts ─────────────────────────────────────────────
+  const charts = [
+    makeGenExpChart('exp-gc-absrel', GEN_DEPTH_LABELS, PRE_GEN_ABSREL, IMP_GEN_ABSREL,
+      GEN_BASE_COLORS, GEN_GAIN_COLORS, GEN_LBL_COLORS,
+      { dir:'\u2193', yMin:0,    yMax:0.40, gridStep:0.10 }),
+    makeGenExpChart('exp-gc-d125',   GEN_DEPTH_LABELS, PRE_GEN_D125,   IMP_GEN_D125,
+      GEN_BASE_COLORS, GEN_GAIN_COLORS, GEN_LBL_COLORS,
+      { dir:'\u2191', yMin:0.55, yMax:1.00, gridStep:0.10 }),
+    makeGenExpChart('exp-gc-cam',    GEN_CAM_LABELS,   PRE_GEN_CAM,    IMP_GEN_CAM,
+      GEN_CAM_BASE, GEN_CAM_GAIN, GEN_CAM_LBL,
+      { dir:'\u2191', yMin:93,   yMax:99,   gridStep:2    }),
+  ].filter(Boolean);
+
+  // ── Shared render loop ─────────────────────────────────────────────
+  let t0 = null, rafId = null, loopTimer = null;
+
+  function tick(ts) {
+    if (!t0) t0 = ts;
+    const ms = ts - t0;
+    charts.forEach(c => c.render(ms));
+    if (ms < TOTAL + 200) rafId = requestAnimationFrame(tick);
+    else loopTimer = setTimeout(play, 2500);
+  }
+
+  function play() {
+    cancelAnimationFrame(rafId);
+    clearTimeout(loopTimer);
+    t0 = null;
+    rafId = requestAnimationFrame(tick);
+  }
+
+  // ── Trigger on scroll ──────────────────────────────────────────────
+  let live = false;
+  const anchor = document.getElementById('exp-gc-absrel');
+  if (anchor) {
+    new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && !live) { live = true;  play(); }
+      else if (!entries[0].isIntersecting)   { live = false; cancelAnimationFrame(rafId); clearTimeout(loopTimer); }
+    }, { threshold: 0.1 }).observe(anchor);
+  }
+})();
+
 // Teaser video carousel
 (function () {
   var slides  = document.querySelectorAll('#teaser-slides .teaser-slide');

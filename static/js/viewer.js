@@ -204,6 +204,22 @@ function vec4Lerp(a, b, p) {
   return [a[0]*q+b[0]*p, a[1]*q+b[1]*p, a[2]*q+b[2]*p, a[3]*q+b[3]*p];
 }
 
+function rainbowColor(t) {
+  // t in [0,1]: hue sweeps red(0°) → orange → yellow → green → blue → purple(270°)
+  const h = t * 270;
+  const s = 1.0, l = 0.5;
+  const c = (1 - Math.abs(2*l - 1)) * s;
+  const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+  const m = l - c/2;
+  let r, g, b;
+  if      (h <  60) { r=c; g=x; b=0; }
+  else if (h < 120) { r=x; g=c; b=0; }
+  else if (h < 180) { r=0; g=c; b=x; }
+  else if (h < 240) { r=0; g=x; b=c; }
+  else              { r=x; g=0; b=c; }
+  return [r+m, g+m, b+m, 1.0];
+}
+
 function matRx(t) {
   const c = Math.cos(t), s = Math.sin(t);
   return [1,0,0,0, 0,c,-s,0, 0,s,c,0, 0,0,0,1];
@@ -272,6 +288,8 @@ const defaultCamera = {
   follow_rotation: true,
   rx: 0.3,
   ry: 0,
+  tx: 0,
+  ty: 0,
 };
 
 const defaultState = {
@@ -281,7 +299,7 @@ const defaultState = {
   points_alpha: 1.0,
   stride: 1,
   point_size: 4,
-  frustum_size: 0.25,
+  frustum_size: 0.15,
   z_clamp: 0.02,
   show_back_facing: false,
   every_nth: 10,
@@ -307,8 +325,8 @@ const defaultState = {
 
 const defaultColors = {
   frustum: '#ff0000',
-  other_frusta: '#6666ff',
-  other_frusta_end: '#6666ff',
+  other_frusta: '#4488ff',
+  other_frusta_end: '#ff6600',
   path: '#888888',
 };
 
@@ -356,8 +374,8 @@ function createViewer(config) {
   let lastNotifiedFrame = -1;
   let frameChangeCallback = null;
 
-  // Dual data: pretrained and selfevo
-  const sceneData = { pretrained: null, selfevo: null };
+  // Scene data keyed by version string (supports arbitrary keys for timeline)
+  const sceneData = {};
   let currentVersion = config.fixedVersion || 'selfevo';
   let currentSceneName = null;
 
@@ -529,14 +547,15 @@ function createViewer(config) {
   }
 
   // --- Scene Loading ---
-  async function loadScene(sceneName, cameraOverride) {
+  async function loadScene(sceneName, cameraOverride, stateOverride) {
     if (currentSceneName === sceneName) return;
     currentSceneName = sceneName;
     showLoading();
     remaining_to_load = 0;
     total_to_load = 0;
 
-    // Reset state but keep camera for smooth scene switching
+    // Reset state to defaults for new scene
+    Object.assign(state, cloneDefaults(defaultState));
     state.frame = 0;
     state.playing = true;
     loop_pause_until = 0;
@@ -566,10 +585,59 @@ function createViewer(config) {
       sceneData.selfevo = null;
     }
 
-    // Reset camera for new scene, applying per-scene overrides if provided
+    // Reset camera and state for new scene, applying per-scene overrides if provided
     Object.assign(camera, cloneDefaults(defaultCamera));
     if (cameraOverride) Object.assign(camera, cameraOverride);
+    if (stateOverride) Object.assign(state, stateOverride);
     dirty = true;
+  }
+
+  // --- Load a single version by arbitrary key (for timeline demo) ---
+  async function loadSceneVersion(sceneName, versionKey, cameraOverride, stateOverride) {
+    const sceneChanged = (currentSceneName !== sceneName);
+
+    // Fast path: already loaded for this scene — just switch version
+    if (!sceneChanged && sceneData[versionKey]) {
+      currentVersion = versionKey;
+      const data = getData();
+      if (data && data.poses) state.frame = Math.min(state.frame, data.poses.length - 1);
+      if (cameraOverride) Object.assign(camera, cameraOverride);
+      if (stateOverride)  Object.assign(state,  stateOverride);
+      dirty = true;
+      return;
+    }
+
+    if (sceneChanged) {
+      currentSceneName = sceneName;
+      // Evict cached versions for the old scene
+      for (const k of Object.keys(sceneData)) sceneData[k] = null;
+      Object.assign(state, cloneDefaults(defaultState));
+      state.frame = 0;
+      state.playing = true;
+      loop_pause_until = 0;
+      Object.assign(camera, cloneDefaults(defaultCamera));
+    }
+
+    showLoading();
+    remaining_to_load = 0;
+    total_to_load = 0;
+    const packed = await fetchPacked(`static/packed/${versionKey}/${sceneName}.packed`).catch(() => null);
+    if (packed && packed['data.json']) {
+      sceneData[versionKey] = await loadVersionData(packed);
+    }
+    currentVersion = versionKey;
+    if (cameraOverride) Object.assign(camera, cameraOverride);
+    if (stateOverride)  Object.assign(state,  stateOverride);
+    dirty = true;
+  }
+
+  // --- Preload a version in the background without switching to it ---
+  async function preloadVersion(sceneName, versionKey) {
+    if (currentSceneName !== sceneName || sceneData[versionKey]) return;
+    const packed = await fetchPacked(`static/packed/${versionKey}/${sceneName}.packed`).catch(() => null);
+    if (packed && packed['data.json'] && currentSceneName === sceneName) {
+      sceneData[versionKey] = await loadVersionData(packed);
+    }
   }
 
   // --- Toggle version (preserving camera) ---
@@ -593,7 +661,7 @@ function createViewer(config) {
     const h = cam.zoom * cameraInternal.aspect_ratio;
     const px = cameraInternal.xfrac - 1;
     const perspective = [w,0,px,0, 0,-h,0,0, 0,0,a,b, 0,0,1,0];
-    const target = [0, 0, -cam.forward];
+    const target = [-cam.tx, -cam.ty, -cam.forward];
     const follow_position = matT([-pose[0][3], -pose[1][3], -pose[2][3]]);
     let follow_rotation;
     if (cam.follow_rotation) {
@@ -813,18 +881,17 @@ function createViewer(config) {
     // Frusta lines
     prepareDrawFrustum(camera_matrix, size_factor);
     if (state.other_frusta) {
-      const c0 = rgba(colors.other_frusta);
-      const c1 = rgba(colors.other_frusta_end);
       for (const [i, fade] of otherFrames(data)) {
         if (i !== state.frame || !state.draw_frustum) {
           drawFrustum(camera_matrix, data, i,
-            vec4Lerp(c0, c1, i / (data.poses.length - 1)),
+            rainbowColor(data.poses.length > 1 ? i / (data.poses.length - 1) : 0),
             state.other_frusta_width * size_factor);
         }
       }
     }
     if (state.draw_frustum) {
-      drawFrustum(camera_matrix, data, state.frame, rgba(colors.frustum), state.frustum_width * size_factor);
+      const tf = data.poses.length > 1 ? state.frame / (data.poses.length - 1) : 0;
+      drawFrustum(camera_matrix, data, state.frame, rainbowColor(tf), state.frustum_width * size_factor);
     }
     if (state.draw_path) {
       drawPath(camera_matrix, data, rgba(colors.path), size_factor, state.path_width * size_factor, state.path_dash);
@@ -833,18 +900,17 @@ function createViewer(config) {
     // Frustum points
     prepareDrawFrustumPoints(camera_matrix, size_factor);
     if (state.other_frusta) {
-      const c0 = rgba(colors.other_frusta);
-      const c1 = rgba(colors.other_frusta_end);
       for (const [i, fade] of otherFrames(data)) {
         if (i !== state.frame || !state.draw_frustum) {
           drawFrustumPoints(camera_matrix, data, i,
-            vec4Lerp(c0, c1, i / (data.poses.length - 1)),
+            rainbowColor(data.poses.length > 1 ? i / (data.poses.length - 1) : 0),
             state.other_frusta_width * size_factor);
         }
       }
     }
     if (state.draw_frustum) {
-      drawFrustumPoints(camera_matrix, data, state.frame, rgba(colors.frustum), state.frustum_width * size_factor);
+      const tfp = data.poses.length > 1 ? state.frame / (data.poses.length - 1) : 0;
+      drawFrustumPoints(camera_matrix, data, state.frame, rainbowColor(tfp), state.frustum_width * size_factor);
     }
 
     // Images in frusta
@@ -961,6 +1027,7 @@ function createViewer(config) {
   function handleKey(key, shift) {
     const data = getData();
     if (!data || !data.poses) return false;
+    const step = camera.distance * 0.15;
     switch (key) {
       case 'ArrowLeft':
         state.playing = false;
@@ -973,6 +1040,15 @@ function createViewer(config) {
       case ' ':
         state.playing = !state.playing;
         return true;
+      // W/S: move forward/backward (along view depth)
+      case 'w': case 'W': camera.forward += step; return true;
+      case 's': case 'S': camera.forward -= step; return true;
+      // A/D: pan left/right
+      case 'a': case 'A': camera.tx -= step; return true;
+      case 'd': case 'D': camera.tx += step; return true;
+      // Q/E: move up/down
+      case 'q': case 'Q': camera.ty += step; return true;
+      case 'e': case 'E': camera.ty -= step; return true;
     }
     return false;
   }
@@ -1031,8 +1107,9 @@ function createViewer(config) {
   function onFrameChange(cb) { frameChangeCallback = cb; }
 
   function getFrameUrl(i) {
-    // Use selfevo data if available, else pretrained (input frames are the same)
-    const data = sceneData.selfevo || sceneData.pretrained;
+    // Use current version data if available, then any loaded version (input frames are the same across versions)
+    const data = sceneData[currentVersion] || sceneData.selfevo || sceneData.pretrained
+              || Object.values(sceneData).find(d => d);
     if (!data || !data.rgbBlobs) return null;
     const idx = (i !== undefined) ? i : state.frame;
     if (idx < 0 || idx >= data.rgbBlobs.length) return null;
@@ -1042,13 +1119,40 @@ function createViewer(config) {
     return data.rgbUrls[idx];
   }
 
+  function getCameraParams() {
+    const camDiff = {};
+    for (const k of Object.keys(defaultCamera)) {
+      if (camera[k] !== defaultCamera[k]) camDiff[k] = camera[k];
+    }
+    const stateDiff = {};
+    for (const k of Object.keys(defaultState)) {
+      if (state[k] !== defaultState[k]) stateDiff[k] = state[k];
+    }
+    const result = {
+      scene: currentSceneName,
+      camera: { ...camera },
+      cameraDiff: camDiff,
+      stateDiff: stateDiff,
+    };
+    const snippet = `{ name: "${currentSceneName}", label: "TODO", camera: ${JSON.stringify({ ...camDiff })} }`;
+    console.log('=== Camera Params ===');
+    console.log('Full camera:', JSON.stringify(camera, null, 2));
+    console.log('Camera diff from default:', JSON.stringify(camDiff, null, 2));
+    console.log('State diff from default:', JSON.stringify(stateDiff, null, 2));
+    console.log('SCENE_CONFIG snippet:\n' + snippet);
+    return result;
+  }
+
   return {
     loadScene,
+    loadSceneVersion,
+    preloadVersion,
     setVersion,
     togglePoints,
     toggleFrusta,
     onFrameChange,
     getFrameUrl,
+    getCameraParams,
     get currentVersion() { return currentVersion; },
     get currentScene() { return currentSceneName; },
     get state() { return state; },

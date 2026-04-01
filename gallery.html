@@ -81,6 +81,13 @@
           <button id="gallery-btn-points" onclick="toggleBothViewers('gallery', 'points', this)">Show All Points</button>
           <button id="gallery-btn-frusta" onclick="toggleBothViewers('gallery', 'frusta', this)">Show All Frusta</button>
         </div>
+        <div class="viewer-controls-legend">
+          <span class="ctrl-item"><kbd>Drag</kbd> Rotate</span>
+          <span class="ctrl-item"><kbd>Scroll</kbd> Zoom</span>
+          <span class="ctrl-item"><kbd>W</kbd><kbd>S</kbd> Forward / Backward</span>
+          <span class="ctrl-item"><kbd>A</kbd><kbd>D</kbd> Left / Right</span>
+          <span class="ctrl-item"><kbd>Q</kbd><kbd>E</kbd> Up / Down</span>
+        </div>
         <div style="font-size:11px;color:#888;margin-top:8px">
           Scene geometry is downsampled for faster loading. Sky masking applied for visualization only.
         </div>
@@ -116,11 +123,14 @@ const SCENE_CONFIG = {
     { name: "wild2-corgi-snow",                 label: "Corgi Snow" },
     { name: "wild2-corgi-snow-3",               label: "Corgi Snow 3" },
     { name: "wild2-cow-walking",                label: "Cow Walking" },
+    { name: "wild2-dog-rotation-vase",           label: "Dog Rotation" },
     { name: "wild2-horses-rotation",            label: "Horses Rotation" },
     { name: "wild2-kitten",                     label: "Kitten" },
     // DAVIS
+    { name: "davis-dance-twirl",                label: "Dance Twirl" },
+    { name: "davis-mallard-water",              label: "Mallard Water" },
+    { name: "davis-parkour",                    label: "Parkour" },
     { name: "davis-bear",                       label: "Bear" },
-    { name: "davis-blackswan",                  label: "Black Swan" },
     { name: "davis-boat",                       label: "Boat" },
     { name: "davis-breakdance",                 label: "Breakdance" },
     { name: "davis-breakdance-flare",           label: "Breakdance Flare" },

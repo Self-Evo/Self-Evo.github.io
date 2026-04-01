@@ -40,17 +40,19 @@ function initSection(sectionKey, preCanvasId, preLoadingId, preGlfailedId,
       thumb.alt = scene.label;
       thumb.title = scene.label;
       thumb.dataset.scene = scene.name;
+      if (scene.movie) thumb.dataset.movie = String(scene.movie);
 
       thumb.onerror = function() {
         const pill = document.createElement('button');
         pill.className = 'scene-pill' + (idx === 0 ? ' active' : '');
         pill.textContent = scene.label;
         pill.dataset.scene = scene.name;
-        pill.addEventListener('click', () => selectScene(sectionKey, scene.name, scenesContainer));
+        if (scene.movie) pill.dataset.movie = String(scene.movie);
+        pill.addEventListener('click', () => selectScene(sectionKey, scene.name, scenesContainer, scene.camera, scene.state));
         this.replaceWith(pill);
       };
 
-      thumb.addEventListener('click', () => selectScene(sectionKey, scene.name, scenesContainer, scene.camera));
+      thumb.addEventListener('click', () => selectScene(sectionKey, scene.name, scenesContainer, scene.camera, scene.state));
       scenesContainer.appendChild(thumb);
     });
 
@@ -64,22 +66,34 @@ function initSection(sectionKey, preCanvasId, preLoadingId, preGlfailedId,
       });
     }
 
-    // Load first scene in both viewers
-    if (scenes.length > 0) {
-      if (preViewer) preViewer.loadScene(scenes[0].name, scenes[0].camera);
-      if (evoViewer) evoViewer.loadScene(scenes[0].name, scenes[0].camera);
+    // For adaptation, apply movie 1 filter by default; otherwise load first scene
+    if (sectionKey === 'adaptation') {
+      applyMovieFilter('adaptation', 1);
+    } else {
+      if (preViewer) preViewer.loadScene(scenes[0].name, scenes[0].camera, scenes[0].state);
+      if (evoViewer) evoViewer.loadScene(scenes[0].name, scenes[0].camera, scenes[0].state);
+      syncViewerButtons(sectionKey, scenes[0].state);
     }
   }
 }
 
-function selectScene(sectionKey, sceneName, container, cameraOverride) {
+function syncViewerButtons(sectionKey, stateOverride) {
+  const s = stateOverride || {};
+  const pointsBtn = document.getElementById(sectionKey === 'generalization' ? 'gen-btn-points' : 'adapt-btn-points');
+  const frustaBtn = document.getElementById(sectionKey === 'generalization' ? 'gen-btn-frusta' : 'adapt-btn-frusta');
+  if (pointsBtn) pointsBtn.classList.toggle('active', s.other_points === 'points');
+  if (frustaBtn) frustaBtn.classList.toggle('active', !!s.other_frusta);
+}
+
+function selectScene(sectionKey, sceneName, container, cameraOverride, stateOverride) {
   container.querySelectorAll('.scene-thumb, .scene-pill').forEach(el => {
     el.classList.toggle('active', el.dataset.scene === sceneName);
   });
   const pre = viewers[sectionKey + '-pre'];
   const evo = viewers[sectionKey + '-evo'];
-  if (pre) pre.loadScene(sceneName, cameraOverride);
-  if (evo) evo.loadScene(sceneName, cameraOverride);
+  if (pre) pre.loadScene(sceneName, cameraOverride, stateOverride);
+  if (evo) evo.loadScene(sceneName, cameraOverride, stateOverride);
+  syncViewerButtons(sectionKey, stateOverride);
 }
 
 function toggleBothViewers(sectionKey, type, btnEl) {
@@ -96,6 +110,37 @@ function toggleBothViewers(sectionKey, type, btnEl) {
     const v = pre || evo;
     btnEl.classList.toggle('active', !!(v && v.state.other_frusta));
   }
+}
+
+function applyMovieFilter(sectionKey, movieNum) {
+  const container = document.getElementById(sectionKey === 'adaptation' ? 'adapt-scenes' : null);
+  if (!container) return;
+  const scenes = SCENE_CONFIG[sectionKey] || [];
+
+  // Show/hide elements
+  container.querySelectorAll('.scene-thumb, .scene-pill').forEach(el => {
+    el.style.display = el.dataset.movie === String(movieNum) ? '' : 'none';
+  });
+
+  // Find and load the first scene of this movie
+  const firstScene = scenes.find(s => s.movie === movieNum);
+  if (firstScene) {
+    container.querySelectorAll('.scene-thumb, .scene-pill').forEach(el => {
+      el.classList.toggle('active', el.dataset.scene === firstScene.name);
+    });
+    const pre = viewers[sectionKey + '-pre'];
+    const evo = viewers[sectionKey + '-evo'];
+    if (pre) pre.loadScene(firstScene.name, firstScene.camera, firstScene.state);
+    if (evo) evo.loadScene(firstScene.name, firstScene.camera, firstScene.state);
+    syncViewerButtons(sectionKey, firstScene.state);
+  }
+}
+
+function selectAdaptMovie(movieNum, btnEl) {
+  document.querySelectorAll('#adapt-movie-pagination .movie-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.movie === String(movieNum));
+  });
+  applyMovieFilter('adaptation', movieNum);
 }
 
 // --- Initialize on page load ---

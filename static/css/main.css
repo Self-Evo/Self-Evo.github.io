@@ -16,6 +16,13 @@
   margin-bottom: 8px;
 }
 
+.dir-hint {
+  font-size: 10px;
+  font-weight: 500;
+  color: #7c3aed;
+  margin-left: 2px;
+}
+
 .chart-legend {
   font-size: 13px;
   color: #555;
@@ -374,6 +381,70 @@ body {
   color: #fff;
 }
 
+/* --- Movie Pagination --- */
+.movie-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.movie-btn {
+  padding: 7px 22px;
+  border: 2px solid #e5e7eb;
+  border-radius: 20px;
+  background: #fff;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.movie-btn:hover {
+  border-color: #3273dc;
+  color: #3273dc;
+}
+
+.movie-btn.active {
+  border-color: #3273dc;
+  background: #3273dc;
+  color: #fff;
+}
+
+/* --- Viewer Controls Legend --- */
+.viewer-controls-legend {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6em 1.4em;
+  margin-top: 10px;
+  font-size: 11px;
+  color: #888;
+}
+
+.viewer-controls-legend .ctrl-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  white-space: nowrap;
+}
+
+.viewer-controls-legend kbd {
+  display: inline-block;
+  padding: 1px 5px;
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-bottom: 2px solid #bbb;
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  color: #444;
+  line-height: 1.5;
+}
+
 /* --- Scene Selector Thumbnails --- */
 .scene-selector {
   margin-top: 12px;
@@ -466,6 +537,120 @@ section#bibtex pre {
 
 .footer a {
   color: #0891b2;
+}
+
+/* --- Timeline Demo --- */
+.timeline-controls {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-top: 14px;
+  margin-bottom: 4px;
+}
+
+.tl-play-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid #3273dc;
+  background: #fff;
+  color: #3273dc;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+  transition: background 0.2s, color 0.2s;
+}
+.tl-play-btn:hover,
+.tl-play-btn.playing {
+  background: #3273dc;
+  color: #fff;
+}
+.tl-play-btn:active {
+  transform: scale(0.92);
+}
+
+.tl-morph-icon { display: block; overflow: visible; }
+
+.tl-morph-icon .icon-play,
+.tl-morph-icon .icon-pause {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.22s ease, opacity 0.22s ease;
+}
+
+/* Stopped: show triangle, hide bars */
+.tl-play-btn:not(.playing) .icon-play  { transform: scaleX(1); opacity: 1; }
+.tl-play-btn:not(.playing) .icon-pause { transform: scaleX(0); opacity: 0; }
+
+/* Playing: collapse triangle, expand bars */
+.tl-play-btn.playing .icon-play  { transform: scaleX(0); opacity: 0; }
+.tl-play-btn.playing .icon-pause { transform: scaleX(1); opacity: 1; }
+
+.timeline-track-wrapper {
+  flex: 1;
+  position: relative;
+  padding-bottom: 24px;
+}
+
+.timeline-slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: #e5e7eb;
+  outline: none;
+  cursor: pointer;
+}
+.timeline-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #3273dc;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(50,115,220,0.35);
+}
+.timeline-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #3273dc;
+  cursor: pointer;
+  border: none;
+}
+
+.timeline-labels {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 9.5px;
+  color: #aaa;
+  user-select: none;
+  pointer-events: none;
+}
+.timeline-labels span {
+  text-align: center;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.timeline-labels span:hover { color: #3273dc; }
+.timeline-labels span.tl-active {
+  color: #3273dc;
+  font-weight: 700;
 }
 
 /* --- Responsive --- */
