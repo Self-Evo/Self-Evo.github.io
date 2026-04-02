@@ -7,13 +7,13 @@
 #SBATCH -e /home/nan.huang/code/page/Self-Evo.github.io/logs/%j_timeline.err
 
 # Build script: SelfEvo Timeline Demo
-# Runs inference for pretrained + checkpoints 0-12 on 3 target scenes,
+# Runs inference for pretrained + checkpoints 0-12 on all Interactive Results scenes,
 # then packs the results into static/packed/timeline/{version}/{scene}.packed.
 #
 # Usage (interactive):  bash build_timeline.sh
 # Usage (SLURM):        sbatch build_timeline.sh
 #
-# Estimated time:  ~3-4 hours (14 model loads x ~2 min inference x 3 scenes)
+# Estimated time:  ~6-8 hours (14 model loads x ~2 min x 15 new scenes)
 # GPU memory:       ~24 GB (VGGT-1B fp16)
 
 set -e
@@ -21,7 +21,6 @@ set -e
 source /home/ed25519/miniconda3/etc/profile.d/conda.sh
 conda activate robust_vggt
 
-# vggt-exp has both the Python module and all training artifacts + input examples
 REPO=/home/nan.huang/code/vggt-exp
 cd $REPO
 export PYTHONPATH=$REPO
@@ -35,24 +34,75 @@ CKPT_DIR=$REPO/training/logs/random_995_frcam/ckpts
 
 mkdir -p $WEBSITE/logs
 
-# ── Target scene ──────────────────────────────────────────────────────────
-DAVIS_SCENE=davis-kid-football
-DAVIS_DIR=$REPO/examples/DAVIS_480p_1of5/kid-football
+# ── Scene list: name → input image folder ─────────────────────────────
+# Format: "scene-name:path/to/frames"
+# All use --image_folder (pre-extracted frames) and --mask_sky.
+SCENES=(
+  "davis-kid-football:$REPO/examples/DAVIS_480p_1of5/kid-football"
+"wild-5207050-uhd_3840_2160_25fps:$REPO/examples/wild/5207050-uhd_3840_2160_25fps_frames"
+  "wild-6539141-hd_1920_1080_25fps2:$REPO/examples/wild/6539141-hd_1920_1080_25fps2_frames"
+  "wild-clip_05:$REPO/examples/wild/clip_05_frames"
+  "wild-penguin:$REPO/examples/wild/penguin_frames"
+  "wild-sport:$REPO/examples/wild/sport_frames"
+  "wild-tom1:$REPO/examples/wild/tom1_frames"
+  "history-1:$REPO/examples/movie/history/1"
+  "wild2-corgi-snow-2:$REPO/examples/wild2/corgi-snow-2_frames"
+  "davis-car-roundabout:$REPO/examples/DAVIS_480p_1of5/car-roundabout"
+  "davis-drift-straight:$REPO/examples/DAVIS_480p_1of5/drift-straight"
+  "davis-drift-turn:$REPO/examples/DAVIS_480p_1of5/drift-turn"
+  "davis-snowboard:$REPO/examples/DAVIS_480p_1of5/snowboard"
+  "davis-blackswan:$REPO/examples/DAVIS_480p_1of5/blackswan"
+  "davis-walking:$REPO/examples/DAVIS_480p_1of5/walking"
+)
 
 # ══════════════════════════════════════════════════════════════════════════
 # Phase 1: Inference
-# Batched by checkpoint so each 16GB model loads only once per version.
+# Batched by checkpoint so each model loads only once per version.
+# Skips scenes whose cache.npz already exists.
 # ══════════════════════════════════════════════════════════════════════════
 
 run_inference_for_version() {
-  local VERSION_DIR=$1   # e.g. "timeline_pretrain" or "timeline_ckpt_00"
+  local VERSION_DIR=$1   # e.g. "timeline_pretrain"
   local CKPT_ARG=$2      # e.g. "" or "--ckpt_path /path/to/ckpt.pt"
 
   echo ""
   echo "=== Inference: $VERSION_DIR ==="
 
-  $INFER --image_folder $DAVIS_DIR --mask_sky $CKPT_ARG \
-    --output $EXPORTS/$VERSION_DIR/$DAVIS_SCENE/cache.npz
+  local any_needed=0
+  for entry in "${SCENES[@]}"; do
+    local SCENE="${entry%%:*}"
+    local NPZ="$EXPORTS/$VERSION_DIR/$SCENE/cache.npz"
+    if [ ! -f "$NPZ" ]; then
+      any_needed=1
+      break
+    fi
+  done
+
+  if [ "$any_needed" -eq 0 ]; then
+    echo "  All scenes already cached, skipping model load."
+    return
+  fi
+
+  for entry in "${SCENES[@]}"; do
+    local SCENE="${entry%%:*}"
+    local FOLDER="${entry##*:}"
+    local NPZ="$EXPORTS/$VERSION_DIR/$SCENE/cache.npz"
+
+    if [ -f "$NPZ" ]; then
+      echo "  SKIP: $SCENE (cache exists)"
+      continue
+    fi
+
+    if [ ! -d "$FOLDER" ]; then
+      echo "  WARNING: input dir not found: $FOLDER — skipping $SCENE"
+      continue
+    fi
+
+    echo "  Running: $SCENE"
+    mkdir -p "$(dirname $NPZ)"
+    $INFER --image_folder "$FOLDER" --mask_sky $CKPT_ARG \
+      --output "$NPZ"
+  done
 }
 
 # Pretrained (no checkpoint; loads HuggingFace weights)
@@ -72,6 +122,7 @@ done
 # ══════════════════════════════════════════════════════════════════════════
 # Phase 2: Pack
 # Converts .npz caches to .packed binaries for the WebGL viewer.
+# Skips scenes whose .packed already exists.
 # ══════════════════════════════════════════════════════════════════════════
 
 echo ""
@@ -79,18 +130,26 @@ echo "=== Packing ==="
 
 pack_version() {
   local VERSION_DIR=$1   # e.g. "timeline_pretrain"
-  local VERSION_KEY=$2   # e.g. "pretrain"  (subdirectory under static/packed/timeline/)
+  local VERSION_KEY=$2   # subdirectory under static/packed/timeline/
 
-  for SCENE in $DAVIS_SCENE; do
-    NPZ=$EXPORTS/$VERSION_DIR/$SCENE/cache.npz
-    OUT=$STATIC/packed/timeline/$VERSION_KEY/$SCENE.packed
-    if [ -f "$NPZ" ]; then
-      mkdir -p "$(dirname $OUT)"
-      $PACK --npz_path $NPZ --output $OUT --width 512
-      echo "  packed: timeline/$VERSION_KEY/$SCENE.packed"
-    else
-      echo "  WARNING: $NPZ not found, skipping"
+  for entry in "${SCENES[@]}"; do
+    local SCENE="${entry%%:*}"
+    local NPZ="$EXPORTS/$VERSION_DIR/$SCENE/cache.npz"
+    local OUT="$STATIC/packed/timeline/$VERSION_KEY/$SCENE.packed"
+
+    if [ -f "$OUT" ]; then
+      echo "  SKIP: timeline/$VERSION_KEY/$SCENE.packed (exists)"
+      continue
     fi
+
+    if [ ! -f "$NPZ" ]; then
+      echo "  WARNING: $NPZ not found, skipping"
+      continue
+    fi
+
+    mkdir -p "$(dirname $OUT)"
+    $PACK --npz_path "$NPZ" --output "$OUT" --width 512
+    echo "  packed: timeline/$VERSION_KEY/$SCENE.packed"
   done
 }
 
@@ -104,4 +163,4 @@ done
 echo ""
 echo "=== Done! ==="
 echo "Timeline packed files written to: $STATIC/packed/timeline/"
-ls -lh $STATIC/packed/timeline/
+ls -lh $STATIC/packed/timeline/pretrain/ | tail -5

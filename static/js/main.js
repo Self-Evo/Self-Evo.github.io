@@ -29,6 +29,20 @@ function initSection(sectionKey, preCanvasId, preLoadingId, preGlfailedId,
   viewers[sectionKey + '-pre'] = preViewer;
   viewers[sectionKey + '-evo'] = evoViewer;
 
+  // Sync camera controls between both viewers (delta-based so each keeps its own init)
+  if (preViewer && evoViewer) {
+    const CAM_KEYS = ['distance','forward','elevation','zoom','rx','ry','tx','ty'];
+    function applySyncDelta(source, target, cam) {
+      var srcBase = source.getBaseCamera();
+      var tgtBase = target.getBaseCamera();
+      var synced = {};
+      CAM_KEYS.forEach(function(k) { synced[k] = tgtBase[k] + (cam[k] - srcBase[k]); });
+      target.syncCamera(synced);
+    }
+    preViewer.onCameraChange(cam => applySyncDelta(preViewer, evoViewer, cam));
+    evoViewer.onCameraChange(cam => applySyncDelta(evoViewer, preViewer, cam));
+  }
+
   // --- Scene thumbnails ---
   const scenes = SCENE_CONFIG[sectionKey] || [];
   const scenesContainer = document.getElementById(scenesId);
@@ -48,11 +62,11 @@ function initSection(sectionKey, preCanvasId, preLoadingId, preGlfailedId,
         pill.textContent = scene.label;
         pill.dataset.scene = scene.name;
         if (scene.movie) pill.dataset.movie = String(scene.movie);
-        pill.addEventListener('click', () => selectScene(sectionKey, scene.name, scenesContainer, scene.camera, scene.state));
+        pill.addEventListener('click', () => selectScene(sectionKey, scene.name, scenesContainer, scene.camera, scene.state, scene.cameraPre));
         this.replaceWith(pill);
       };
 
-      thumb.addEventListener('click', () => selectScene(sectionKey, scene.name, scenesContainer, scene.camera, scene.state));
+      thumb.addEventListener('click', () => selectScene(sectionKey, scene.name, scenesContainer, scene.camera, scene.state, scene.cameraPre));
       scenesContainer.appendChild(thumb);
     });
 
@@ -70,7 +84,7 @@ function initSection(sectionKey, preCanvasId, preLoadingId, preGlfailedId,
     if (sectionKey === 'adaptation') {
       applyMovieFilter('adaptation', 1);
     } else {
-      if (preViewer) preViewer.loadScene(scenes[0].name, scenes[0].camera, scenes[0].state);
+      if (preViewer) preViewer.loadScene(scenes[0].name, scenes[0].cameraPre || scenes[0].camera, scenes[0].state);
       if (evoViewer) evoViewer.loadScene(scenes[0].name, scenes[0].camera, scenes[0].state);
       syncViewerButtons(sectionKey, scenes[0].state);
     }
@@ -85,15 +99,22 @@ function syncViewerButtons(sectionKey, stateOverride) {
   if (frustaBtn) frustaBtn.classList.toggle('active', !!s.other_frusta);
 }
 
-function selectScene(sectionKey, sceneName, container, cameraOverride, stateOverride) {
+function selectScene(sectionKey, sceneName, container, cameraOverride, stateOverride, cameraPreOverride) {
   container.querySelectorAll('.scene-thumb, .scene-pill').forEach(el => {
     el.classList.toggle('active', el.dataset.scene === sceneName);
   });
   const pre = viewers[sectionKey + '-pre'];
   const evo = viewers[sectionKey + '-evo'];
-  if (pre) pre.loadScene(sceneName, cameraOverride, stateOverride);
+  if (pre) pre.loadScene(sceneName, cameraPreOverride || cameraOverride, stateOverride);
   if (evo) evo.loadScene(sceneName, cameraOverride, stateOverride);
   syncViewerButtons(sectionKey, stateOverride);
+}
+
+function resetBothViewers(sectionKey) {
+  const pre = viewers[sectionKey + '-pre'];
+  const evo = viewers[sectionKey + '-evo'];
+  if (pre) pre.resetCamera();
+  if (evo) evo.resetCamera();
 }
 
 function toggleBothViewers(sectionKey, type, btnEl) {

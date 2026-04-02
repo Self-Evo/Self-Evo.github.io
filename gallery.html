@@ -40,7 +40,7 @@
         <h2 class="title is-3">More Generalization Scenes</h2>
         <p class="subtitle is-6" style="margin-bottom:1.5rem">
           SelfEvo generalizes across diverse in-the-wild videos.<br>
-          Click a thumbnail to explore any scene in 3D. Press Space to play/pause, drag to orbit.
+          Click a thumbnail to explore any scene in 3D. Press Space to play/pause. Left drag to rotate, right drag to pan, scroll to zoom.
         </p>
       </div>
     </div>
@@ -80,9 +80,11 @@
         <div class="shared-viewer-controls">
           <button id="gallery-btn-points" onclick="toggleBothViewers('gallery', 'points', this)">Show All Points</button>
           <button id="gallery-btn-frusta" onclick="toggleBothViewers('gallery', 'frusta', this)">Show All Frusta</button>
+          <button onclick="resetBothViewers('gallery')">Reset View</button>
         </div>
         <div class="viewer-controls-legend">
-          <span class="ctrl-item"><kbd>Drag</kbd> Rotate</span>
+          <span class="ctrl-item"><kbd>Left drag</kbd> Rotate</span>
+          <span class="ctrl-item"><kbd>Right drag</kbd> Pan</span>
           <span class="ctrl-item"><kbd>Scroll</kbd> Zoom</span>
           <span class="ctrl-item"><kbd>W</kbd><kbd>S</kbd> Forward / Backward</span>
           <span class="ctrl-item"><kbd>A</kbd><kbd>D</kbd> Left / Right</span>
@@ -144,12 +146,14 @@ const SCENE_CONFIG = {
     { name: "davis-paragliding-launch",         label: "Paragliding Launch" },
     { name: "davis-soapbox",                    label: "Soapbox" },
     { name: "davis-stunt",                      label: "Stunt" },
+    { name: "davis-drift-turn",                 label: "Drift Turn",  camera: { distance: 0.509, rx: 0.3756, ry: -0.4448 } },
+    { name: "davis-blackswan",                  label: "Black Swan" },
   ],
 };
 </script>
 
-<script src="./static/js/viewer.js?v=8"></script>
-<script src="./static/js/main.js?v=8"></script>
+<script src="./static/js/viewer.js?v=10"></script>
+<script src="./static/js/main.js?v=10"></script>
 
 <script>
 window.addEventListener('load', () => {

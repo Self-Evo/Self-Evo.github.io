@@ -168,9 +168,11 @@
         <div class="shared-viewer-controls">
           <button id="gen-btn-points" onclick="toggleBothViewers('generalization', 'points', this)">Show All Points</button>
           <button id="gen-btn-frusta" onclick="toggleBothViewers('generalization', 'frusta', this)">Show All Frusta</button>
+          <button onclick="resetBothViewers('generalization')">Reset View</button>
         </div>
         <div class="viewer-controls-legend">
-          <span class="ctrl-item"><kbd>Drag</kbd> Rotate</span>
+          <span class="ctrl-item"><kbd>Left drag</kbd> Rotate</span>
+          <span class="ctrl-item"><kbd>Right drag</kbd> Pan</span>
           <span class="ctrl-item"><kbd>Scroll</kbd> Zoom</span>
           <span class="ctrl-item"><kbd>W</kbd><kbd>S</kbd> Forward / Backward</span>
           <span class="ctrl-item"><kbd>A</kbd><kbd>D</kbd> Left / Right</span>
@@ -182,107 +184,6 @@
         <div class="scene-selector" id="gen-scenes"></div>
         <div style="margin-top:14px">
           <a href="gallery.html" style="font-size:13px;color:#3273dc;font-weight:500">More scenes &rarr;</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ==================== TIMELINE DEMO ==================== -->
-<section class="section" id="timeline">
-  <div class="container is-max-widescreen">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-three-fifths">
-        <h2 class="title is-3">How Does the Model Evolve?</h2>
-        <p class="subtitle is-6" style="margin-bottom:1.5rem">
-          Watch how 3D reconstruction quality improves across SelfEvo training checkpoints.<br>
-          The same scene — from pretrained all the way to checkpoint 12.
-        </p>
-      </div>
-    </div>
-
-    <div class="columns is-centered">
-      <div class="column has-text-centered">
-        <!-- Top: Input frame + version label, above viewer -->
-        <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:10px;gap:6px">
-          <p class="viewer-label pretrained-label" style="margin:0">Input</p>
-          <div class="input-frame-container" style="width:180px">
-            <img id="tl-input-frame" class="input-frame-img" alt="Input frame">
-          </div>
-          <p id="tl-version-label" class="viewer-label selfevo-label" style="margin:0">Pretrained</p>
-        </div>
-        <!-- WebGL viewer -->
-        <div class="viewer-container" style="width:100%;max-width:640px;display:block;margin:0 auto">
-          <canvas id="tl-canvas" width="512" height="288"></canvas>
-          <div class="viewer-overlay" id="tl-glfailed" style="display:none;color:#f88;background:black;align-items:center;justify-content:center">[WebGL2 required]</div>
-          <div class="viewer-overlay viewer-loading" id="tl-loading" style="display:none">Loading…</div>
-          <div class="viewer-buttons">
-            <button onclick="tlCam()">Get Camera</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Timeline scrubber -->
-    <div class="columns is-centered">
-      <div class="column is-four-fifths">
-        <div class="timeline-controls">
-          <button class="tl-play-btn" id="tl-play-btn" title="Play / Pause">
-            <svg class="tl-morph-icon" viewBox="0 0 14 14" fill="currentColor" width="14" height="14">
-              <path class="icon-play"  d="M1,1 L13,7 L1,13 Z"/>
-              <g   class="icon-pause">
-                <rect x="1" y="1" width="4" height="12" rx="0.5"/>
-                <rect x="9" y="1" width="4" height="12" rx="0.5"/>
-              </g>
-            </svg>
-          </button>
-          <div class="timeline-track-wrapper">
-            <input type="range" class="timeline-slider" id="tl-slider"
-                   min="0" max="13" value="0" step="1">
-            <div class="timeline-labels" id="tl-labels"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Controls + scene selector -->
-    <div class="columns is-centered">
-      <div class="column has-text-centered">
-        <div class="shared-viewer-controls" id="tl-shared-controls">
-          <button id="tl-btn-points" onclick="tlToggle('points',this)">Show All Points</button>
-          <button id="tl-btn-frusta" onclick="tlToggle('frusta',this)">Show All Frusta</button>
-        </div>
-        <div class="viewer-controls-legend" style="margin-top:8px">
-          <span class="ctrl-item"><kbd>Drag</kbd> Rotate</span>
-          <span class="ctrl-item"><kbd>Scroll</kbd> Zoom</span>
-          <span class="ctrl-item"><kbd>W</kbd><kbd>S</kbd> Fwd / Back</span>
-          <span class="ctrl-item"><kbd>A</kbd><kbd>D</kbd> Pan</span>
-          <span class="ctrl-item"><kbd>Q</kbd><kbd>E</kbd> Up / Down</span>
-        </div>
-        <div class="scene-selector" id="tl-scenes" style="margin-top:14px"></div>
-      </div>
-    </div>
-
-    <!-- Quantitative metrics across checkpoints -->
-    <div class="columns is-centered" style="margin-top:2.5rem">
-      <div class="column is-four-fifths">
-        <h3 class="title is-5 has-text-centered" style="margin-bottom:1.2rem">Quantitative Metrics Across Checkpoints</h3>
-        <div class="columns">
-          <div class="column">
-            <p class="chart-subtitle">Depth Abs Rel ↓ <span class="dir-hint">(↓ better)</span></p>
-            <p class="chart-note">Scale alignment, 7 datasets</p>
-            <div class="chart-wrap"><canvas id="tl-chart-absrel"></canvas></div>
-          </div>
-          <div class="column">
-            <p class="chart-subtitle">Depth δ&lt;1.25 ↑ <span class="dir-hint">(↑ better)</span></p>
-            <p class="chart-note">Scale alignment, 7 datasets</p>
-            <div class="chart-wrap"><canvas id="tl-chart-d125"></canvas></div>
-          </div>
-          <div class="column">
-            <p class="chart-subtitle">Camera AUC@30 ↑ <span class="dir-hint">(↑ better)</span></p>
-            <p class="chart-note">4 datasets</p>
-            <div class="chart-wrap"><canvas id="tl-chart-cam30"></canvas></div>
-          </div>
         </div>
       </div>
     </div>
@@ -317,6 +218,106 @@
           <p class="has-text-justified" style="margin-top:1rem">
             We propose an annotation-free self-improving framework that continually post-trains pretrained multi-view reconstruction models using unlabeled videos. Our method forms an online self-distillation loop where a richer-context teacher provides stop-gradient pseudo targets to a student operating on a dropped subset, and is updated as an EMA of the student after each step.
           </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TIMELINE DEMO ==================== -->
+<section class="section" id="timeline">
+  <div class="container is-max-widescreen">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-three-fifths">
+        <h2 class="title is-3">How Does the Model Evolve?</h2>
+        <p class="subtitle is-6" style="margin-bottom:1.5rem">
+          Watch how 3D reconstruction quality improves across SelfEvo training iterations.<br>
+          The same scene — from pretrained all the way to iteration 650.
+        </p>
+      </div>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <!-- Top: Input frame + version label, above viewer -->
+        <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:10px;gap:6px">
+          <p class="viewer-label pretrained-label" style="margin:0">Input</p>
+          <div class="input-frame-container" style="width:180px">
+            <img id="tl-input-frame" class="input-frame-img" alt="Input frame">
+          </div>
+        </div>
+        <!-- WebGL viewer -->
+        <div class="viewer-container" style="width:100%;max-width:640px;display:block;margin:0 auto">
+          <canvas id="tl-canvas" width="512" height="288"></canvas>
+          <div class="viewer-overlay" id="tl-glfailed" style="display:none;color:#f88;background:black;align-items:center;justify-content:center">[WebGL2 required]</div>
+          <div class="viewer-overlay viewer-loading" id="tl-loading" style="display:none">Loading…</div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline scrubber -->
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="timeline-controls">
+          <button class="tl-play-btn" id="tl-play-btn" title="Play / Pause">
+            <svg class="tl-morph-icon" viewBox="0 0 14 14" fill="currentColor" width="14" height="14">
+              <path class="icon-play"  d="M1,1 L13,7 L1,13 Z"/>
+              <g   class="icon-pause">
+                <rect x="1" y="1" width="4" height="12" rx="0.5"/>
+                <rect x="9" y="1" width="4" height="12" rx="0.5"/>
+              </g>
+            </svg>
+          </button>
+          <div class="timeline-track-wrapper">
+            <input type="range" class="timeline-slider" id="tl-slider"
+                   min="0" max="13" value="0" step="1">
+            <div class="timeline-labels" id="tl-labels"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls + scene selector -->
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <div class="shared-viewer-controls" id="tl-shared-controls">
+          <button id="tl-btn-points" onclick="tlToggle('points',this)">Show All Points</button>
+          <button id="tl-btn-frusta" onclick="tlToggle('frusta',this)">Show All Frusta</button>
+          <button onclick="tlResetView()">Reset View</button>
+        </div>
+        <div class="viewer-controls-legend" style="margin-top:8px">
+          <span class="ctrl-item"><kbd>Left drag</kbd> Rotate</span>
+          <span class="ctrl-item"><kbd>Right drag</kbd> Pan</span>
+          <span class="ctrl-item"><kbd>Scroll</kbd> Zoom</span>
+          <span class="ctrl-item"><kbd>W</kbd><kbd>S</kbd> Fwd / Back</span>
+          <span class="ctrl-item"><kbd>A</kbd><kbd>D</kbd> Pan</span>
+          <span class="ctrl-item"><kbd>Q</kbd><kbd>E</kbd> Up / Down</span>
+        </div>
+        <div class="scene-selector" id="tl-scenes" style="margin-top:14px"></div>
+      </div>
+    </div>
+
+    <!-- Quantitative metrics across checkpoints -->
+    <div class="columns is-centered" style="margin-top:2.5rem">
+      <div class="column is-four-fifths">
+        <h3 class="title is-5 has-text-centered" style="margin-bottom:1.2rem">Quantitative Metrics Across Iterations</h3>
+        <div class="columns">
+          <div class="column">
+            <p class="chart-subtitle">Depth Abs Rel ↓ <span class="dir-hint">(↓ better)</span></p>
+            <p class="chart-note">Scale alignment, 7 datasets</p>
+            <div class="chart-wrap"><canvas id="tl-chart-absrel"></canvas></div>
+          </div>
+          <div class="column">
+            <p class="chart-subtitle">Depth δ&lt;1.25 ↑ <span class="dir-hint">(↑ better)</span></p>
+            <p class="chart-note">Scale alignment, 7 datasets</p>
+            <div class="chart-wrap"><canvas id="tl-chart-d125"></canvas></div>
+          </div>
+          <div class="column">
+            <p class="chart-subtitle">Camera AUC@30 ↑ <span class="dir-hint">(↑ better)</span></p>
+            <p class="chart-note">4 datasets</p>
+            <div class="chart-wrap"><canvas id="tl-chart-cam30"></canvas></div>
+          </div>
         </div>
       </div>
     </div>
@@ -548,9 +549,11 @@
         <div class="shared-viewer-controls">
           <button id="adapt-btn-points" onclick="toggleBothViewers('adaptation', 'points', this)">Show All Points</button>
           <button id="adapt-btn-frusta" onclick="toggleBothViewers('adaptation', 'frusta', this)">Show All Frusta</button>
+          <button onclick="resetBothViewers('adaptation')">Reset View</button>
         </div>
         <div class="viewer-controls-legend">
-          <span class="ctrl-item"><kbd>Drag</kbd> Rotate</span>
+          <span class="ctrl-item"><kbd>Left drag</kbd> Rotate</span>
+          <span class="ctrl-item"><kbd>Right drag</kbd> Pan</span>
           <span class="ctrl-item"><kbd>Scroll</kbd> Zoom</span>
           <span class="ctrl-item"><kbd>W</kbd><kbd>S</kbd> Forward / Backward</span>
           <span class="ctrl-item"><kbd>A</kbd><kbd>D</kbd> Left / Right</span>
@@ -607,56 +610,57 @@ const SCENE_CONFIG = {
   ],
   generalization: [
     // wild
-    { name: "davis-kid-football", label: "Kid Football", state: { every_nth: 1, other_frusta: true } },
+    { name: "davis-kid-football", label: "Kid Football", camera: { distance: 0.275, rx: 0.4699, ry: 0.01652, ty: -0.18825 }, state: { every_nth: 1, other_frusta: true } },
     { name: "wild-15416627_3840_2160_30fps", label: "Wild: Clip 1", camera: { distance: 0.885, rx: 0.2597, ry: 0.0678 }, state: { every_nth: 1, other_points: "points" } },
-    { name: "wild-5207050-uhd_3840_2160_25fps", label: "Wild: Clip 4", camera: { distance: 3.51, rx: 0.4461, ry: 0.0088, ty: 1.053 }, state: { every_nth: 1, other_frusta: true, other_points: "points" } },
+    { name: "wild-5207050-uhd_3840_2160_25fps", label: "Wild: Clip 4", camera: { distance: 3.51, rx: 0.4461, ry: 0.0088, ty: 1.053 }, cameraPre: { distance: 0.723, rx: 0.4461, ry: 0.0088, ty: -0.20595 }, state: { every_nth: 1, other_frusta: true, other_points: "points" } },
     { name: "wild-6539141-hd_1920_1080_25fps2", label: "Wild: Clip 7", camera: { distance: 0.535, rx: 0.3296, ry: 0.4632, ty: -0.2408 }, state: { every_nth: 1, other_frusta: true } },
     { name: "wild-clip_05", label: "Wild: Clip 9", camera: { distance: 1.185 } },
     { name: "wild-penguin", label: "Wild: Penguin", state: { every_nth: 1, other_frusta: true, other_points: "points" } },
-    { name: "wild-sport", label: "Wild: Sport", camera: { distance: 0.187, rx: 0.2768, ry: 0.0850, ty: -0.0841 }, state: { every_nth: 1, other_points: "points" } },
-    { name: "wild-tom1", label: "Wild: Tom", camera: { distance: 0.367, tx: -0.3681, ty: -0.1805 }, state: { every_nth: 1, other_points: "points" } },
+    { name: "wild-sport", label: "Wild: Sport", camera: { distance: 0.393, rx: 0.2768, ry: 0.085, ty: -0.16405 }, state: { every_nth: 1, other_points: "points" } },
+    { name: "wild-tom1", label: "Wild: Tom", camera: { distance: 0.367, tx: -0.3681, ty: -0.1805 }, cameraPre: { distance: 0.630, rx: 0.39491, ry: -0.40698, tx: -0.3681, ty: 0.08770 }, state: { every_nth: 1, other_points: "points" } },
     { name: "history-1", label: "History", camera: { distance: 0.447, rx: 0.5095, ry: 0.0037, ty: -0.2012 } },
     // wild2
     { name: "wild2-corgi-snow-2", label: "Corgi Snow 2", camera: { rx: 0.3291, ry: -0.0085, ty: -0.18 }, state: { every_nth: 1, other_frusta: true, other_points: "points" } },
     // DAVIS
     { name: "davis-car-roundabout", label: "Car Roundabout", camera: { rx: 0.1978, ry: -0.3512, ty: -0.18 }, state: { every_nth: 1, other_points: "points" } },
     { name: "davis-drift-straight", label: "Drift Straight", camera: { distance: 0.807, rx: 0.3006, ry: 0.7446, ty: -0.1211 }, state: { every_nth: 1, other_points: "points" } },
-    { name: "davis-drift-turn", label: "Drift Turn", camera: { distance: 0.509, rx: 0.3756, ry: -0.4448 }, state: { every_nth: 1, other_frusta: true, other_points: "points" } },
     { name: "davis-snowboard", label: "Snowboard", camera: { distance: 0.396, rx: 0.2781, ry: -0.3174, ty: -0.18 }, state: { every_nth: 1, other_points: "points" } },
-    { name: "davis-blackswan", label: "Black Swan", state: { every_nth: 1, other_points: "points" } },
-    { name: "davis-walking", label: "Walking", camera: { distance: 2.968, rx: 0.1062, ry: -0.2638 }, state: { every_nth: 1, other_frusta: true, other_points: "points" } },
+    { name: "davis-walking", label: "Walking", camera: { distance: 2.968, rx: 0.1062, ry: -0.2638 }, cameraPre: { distance: 2.968, forward: 0.4452, rx: 0.1062, ry: -0.2638, ty: -0.44520 }, state: { every_nth: 1, other_frusta: true, other_points: "points" } },
   ]
 };
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
-<script src="./static/js/viewer.js?v=9"></script>
-<script src="./static/js/main.js?v=9"></script>
+<script src="./static/js/viewer.js?v=10"></script>
+<script src="./static/js/main.js?v=10"></script>
 <script>
 // ==================== TIMELINE CONTROLLER ====================
 (function () {
   const VERSIONS = [
     { key: 'timeline/pretrain', label: 'Pretrained' },
-    { key: 'timeline/ckpt_00',  label: 'Ckpt 0'    },
-    { key: 'timeline/ckpt_01',  label: 'Ckpt 1'    },
-    { key: 'timeline/ckpt_02',  label: 'Ckpt 2'    },
-    { key: 'timeline/ckpt_03',  label: 'Ckpt 3'    },
-    { key: 'timeline/ckpt_04',  label: 'Ckpt 4'    },
-    { key: 'timeline/ckpt_05',  label: 'Ckpt 5'    },
-    { key: 'timeline/ckpt_06',  label: 'Ckpt 6'    },
-    { key: 'timeline/ckpt_07',  label: 'Ckpt 7'    },
-    { key: 'timeline/ckpt_08',  label: 'Ckpt 8'    },
-    { key: 'timeline/ckpt_09',  label: 'Ckpt 9'    },
-    { key: 'timeline/ckpt_10',  label: 'Ckpt 10'   },
-    { key: 'timeline/ckpt_11',  label: 'Ckpt 11'   },
-    { key: 'timeline/ckpt_12',  label: 'Ckpt 12'   },
+    { key: 'timeline/ckpt_00',  label: 'Iter 50'   },
+    { key: 'timeline/ckpt_01',  label: 'Iter 100'  },
+    { key: 'timeline/ckpt_02',  label: 'Iter 150'  },
+    { key: 'timeline/ckpt_03',  label: 'Iter 200'  },
+    { key: 'timeline/ckpt_04',  label: 'Iter 250'  },
+    { key: 'timeline/ckpt_05',  label: 'Iter 300'  },
+    { key: 'timeline/ckpt_06',  label: 'Iter 350'  },
+    { key: 'timeline/ckpt_07',  label: 'Iter 400'  },
+    { key: 'timeline/ckpt_08',  label: 'Iter 450'  },
+    { key: 'timeline/ckpt_09',  label: 'Iter 500'  },
+    { key: 'timeline/ckpt_10',  label: 'Iter 550'  },
+    { key: 'timeline/ckpt_11',  label: 'Iter 600'  },
+    { key: 'timeline/ckpt_12',  label: 'Iter 650'  },
   ];
 
   const TL_SCENES = [
-    { name: 'davis-kid-football',
-      label: 'Kid Football',
-      state: { every_nth: 1, other_frusta: true } },
+    { name: 'davis-kid-football',        label: 'Kid Football',    camera: { distance: 0.275, rx: 0.4699, ry: 0.01652, ty: -0.18825 }, state: { every_nth: 1, other_frusta: true } },
+{ name: 'wild-5207050-uhd_3840_2160_25fps', label: 'Wild: Clip 4', camera: { distance: 3.51, rx: 0.4461, ry: 0.0088, ty: 1.053 }, state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
+    { name: 'wild-6539141-hd_1920_1080_25fps2', label: 'Wild: Clip 7', camera: { distance: 0.535, rx: 0.3296, ry: 0.4632, ty: -0.2408 }, state: { every_nth: 1, other_frusta: true } },
+    { name: 'wild-penguin',              label: 'Wild: Penguin',  state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
+    { name: 'wild-tom1',                 label: 'Wild: Tom',      camera: { distance: 0.367, tx: -0.3681, ty: -0.1805 }, state: { every_nth: 1, other_points: 'points' } },
+    { name: 'wild2-corgi-snow-2',        label: 'Corgi Snow',     camera: { rx: 0.3291, ry: -0.0085, ty: -0.18 }, state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
   ];
 
   const PLAY_MS = 1500; // ms per checkpoint during auto-play
@@ -822,8 +826,6 @@ const SCENE_CONFIG = {
     document.querySelectorAll('#tl-labels span').forEach(function(el, i) {
       el.classList.toggle('tl-active', i === idx);
     });
-    const lbl = document.getElementById('tl-version-label');
-    if (lbl) lbl.textContent = VERSIONS[idx].label;
   }
 
   // ── Sync viewer control buttons ───────────────────────────────────
@@ -847,9 +849,10 @@ const SCENE_CONFIG = {
     }
   };
 
-  window.tlCam = function() {
-    if (tlViewer) tlViewer.getCameraParams();
+  window.tlResetView = function() {
+    if (tlViewer) tlViewer.resetCamera();
   };
+
 
   window.addEventListener('load', init);
 })();
@@ -857,14 +860,36 @@ const SCENE_CONFIG = {
 
 <script>
 // ==================== TIMELINE QUANTITATIVE CHARTS ====================
+
+// Plugin: clip canvas to reveal lines from left to right
+Chart.register({
+  id: 'revealLeft',
+  afterInit(chart) { chart._revealProgress = 1; },
+  beforeDatasetsDraw(chart) {
+    const p = chart._revealProgress ?? 1;
+    if (p >= 1) return;
+    const { ctx, chartArea } = chart;
+    if (!chartArea) return;
+    const { left, top, width, height } = chartArea;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(left - 2, top - 10, width * p + 4, height + 20);
+    ctx.clip();
+  },
+  afterDatasetsDraw(chart) {
+    if ((chart._revealProgress ?? 1) >= 1) return;
+    chart.ctx.restore();
+  }
+});
+
 (function () {
-  const TL_LABELS = ['Pre','0','1','2','3','4','5','6','7','8','9','10','11','12'];
+  const TL_LABELS = ['Pre','50','100','150','200','250','300','350','400','450','500','550','600','650'];
 
   // Shared Chart.js defaults for compact line charts
   const BASE_OPT = {
     responsive: true,
     maintainAspectRatio: false,
-    animation: { duration: 600 },
+    animation: false,
     interaction: { mode: 'index', intersect: false },
     plugins: {
       legend: { position: 'top', labels: { font: { size: 10 }, boxWidth: 12, padding: 6 } },
@@ -886,55 +911,81 @@ const SCENE_CONFIG = {
   }
 
   // ── Depth Abs Rel ↓ ─────────────────────────────────────────────────
-  new Chart(document.getElementById('tl-chart-absrel'), {
-    type: 'line',
-    data: {
-      labels: TL_LABELS,
-      datasets: [
-        makeDataset('Bonn',       [0.0548,0.0536,0.0506,0.0497,0.0487,0.0474,0.0476,0.0470,0.0467,0.0464,0.0460,0.0459,0.0464,0.0467], '#0891b2'),
-        makeDataset('Droid',      [0.2927,0.2755,0.2290,0.1913,0.1756,0.1688,0.1645,0.1617,0.1567,0.1548,0.1532,0.1525,0.1520,0.1514], '#7c3aed'),
-        makeDataset('GameGeo',    [0.3455,0.3391,0.3258,0.3314,0.3155,0.3088,0.3034,0.2922,0.2940,0.2949,0.2933,0.2874,0.2780,0.2838], '#db2777'),
-        makeDataset('GameVideo',  [0.2361,0.2379,0.2203,0.2083,0.2039,0.1997,0.1948,0.1925,0.1896,0.1866,0.1841,0.1831,0.1812,0.1814], '#d97706'),
-        makeDataset('HOI4D',      [0.0443,0.0443,0.0412,0.0371,0.0355,0.0343,0.0326,0.0311,0.0305,0.0302,0.0300,0.0302,0.0303,0.0303], '#16a34a'),
-        makeDataset('KITTI',      [0.0735,0.0711,0.0690,0.0640,0.0609,0.0578,0.0531,0.0505,0.0482,0.0473,0.0466,0.0467,0.0472,0.0480], '#dc2626'),
-        makeDataset('Sintel',     [0.3002,0.2912,0.2679,0.2694,0.2878,0.2917,0.2933,0.2943,0.2924,0.2889,0.2930,0.2850,0.2835,0.2812], '#9333ea'),
-      ],
-    },
-    options: BASE_OPT,
-  });
+  const tlCharts = [
+    new Chart(document.getElementById('tl-chart-absrel'), {
+      type: 'line',
+      data: {
+        labels: TL_LABELS,
+        datasets: [
+          makeDataset('Bonn',       [0.0548,0.0536,0.0506,0.0497,0.0487,0.0474,0.0476,0.0470,0.0467,0.0464,0.0460,0.0459,0.0464,0.0467], '#0891b2'),
+          makeDataset('Droid',      [0.2927,0.2755,0.2290,0.1913,0.1756,0.1688,0.1645,0.1617,0.1567,0.1548,0.1532,0.1525,0.1520,0.1514], '#7c3aed'),
+          makeDataset('GameGeo',    [0.3455,0.3391,0.3258,0.3314,0.3155,0.3088,0.3034,0.2922,0.2940,0.2949,0.2933,0.2874,0.2780,0.2838], '#db2777'),
+          makeDataset('GameVideo',  [0.2361,0.2379,0.2203,0.2083,0.2039,0.1997,0.1948,0.1925,0.1896,0.1866,0.1841,0.1831,0.1812,0.1814], '#d97706'),
+          makeDataset('HOI4D',      [0.0443,0.0443,0.0412,0.0371,0.0355,0.0343,0.0326,0.0311,0.0305,0.0302,0.0300,0.0302,0.0303,0.0303], '#16a34a'),
+          makeDataset('KITTI',      [0.0735,0.0711,0.0690,0.0640,0.0609,0.0578,0.0531,0.0505,0.0482,0.0473,0.0466,0.0467,0.0472,0.0480], '#dc2626'),
+          makeDataset('Sintel',     [0.3002,0.2912,0.2679,0.2694,0.2878,0.2917,0.2933,0.2943,0.2924,0.2889,0.2930,0.2850,0.2835,0.2812], '#9333ea'),
+        ],
+      },
+      options: BASE_OPT,
+    }),
 
-  // ── Depth δ<1.25 ↑ ──────────────────────────────────────────────────
-  new Chart(document.getElementById('tl-chart-d125'), {
-    type: 'line',
-    data: {
-      labels: TL_LABELS,
-      datasets: [
-        makeDataset('Bonn',       [0.9708,0.9722,0.9741,0.9751,0.9747,0.9754,0.9758,0.9759,0.9761,0.9766,0.9768,0.9770,0.9771,0.9772], '#0891b2'),
-        makeDataset('Droid',      [0.5833,0.6099,0.6863,0.7413,0.7764,0.7866,0.7976,0.8035,0.8127,0.8151,0.8207,0.8200,0.8198,0.8216], '#7c3aed'),
-        makeDataset('GameGeo',    [0.5920,0.5993,0.6184,0.6373,0.6544,0.6603,0.6833,0.6883,0.6907,0.6933,0.6963,0.7000,0.7027,0.7031], '#db2777'),
-        makeDataset('GameVideo',  [0.7133,0.7092,0.7277,0.7459,0.7553,0.7690,0.7762,0.7790,0.7808,0.7845,0.7870,0.7884,0.7916,0.7899], '#d97706'),
-        makeDataset('HOI4D',      [0.9586,0.9581,0.9695,0.9816,0.9828,0.9841,0.9851,0.9863,0.9871,0.9875,0.9877,0.9877,0.9877,0.9877], '#16a34a'),
-        makeDataset('KITTI',      [0.9601,0.9647,0.9681,0.9716,0.9730,0.9748,0.9764,0.9777,0.9796,0.9808,0.9811,0.9807,0.9805,0.9804], '#dc2626'),
-        makeDataset('Sintel',     [0.6410,0.6609,0.7074,0.7285,0.7146,0.7249,0.7173,0.7135,0.7067,0.7050,0.7038,0.7081,0.7072,0.7031], '#9333ea'),
-      ],
-    },
-    options: BASE_OPT,
-  });
+    // ── Depth δ<1.25 ↑ ──────────────────────────────────────────────────
+    new Chart(document.getElementById('tl-chart-d125'), {
+      type: 'line',
+      data: {
+        labels: TL_LABELS,
+        datasets: [
+          makeDataset('Bonn',       [0.9708,0.9722,0.9741,0.9751,0.9747,0.9754,0.9758,0.9759,0.9761,0.9766,0.9768,0.9770,0.9771,0.9772], '#0891b2'),
+          makeDataset('Droid',      [0.5833,0.6099,0.6863,0.7413,0.7764,0.7866,0.7976,0.8035,0.8127,0.8151,0.8207,0.8200,0.8198,0.8216], '#7c3aed'),
+          makeDataset('GameGeo',    [0.5920,0.5993,0.6184,0.6373,0.6544,0.6603,0.6833,0.6883,0.6907,0.6933,0.6963,0.7000,0.7027,0.7031], '#db2777'),
+          makeDataset('GameVideo',  [0.7133,0.7092,0.7277,0.7459,0.7553,0.7690,0.7762,0.7790,0.7808,0.7845,0.7870,0.7884,0.7916,0.7899], '#d97706'),
+          makeDataset('HOI4D',      [0.9586,0.9581,0.9695,0.9816,0.9828,0.9841,0.9851,0.9863,0.9871,0.9875,0.9877,0.9877,0.9877,0.9877], '#16a34a'),
+          makeDataset('KITTI',      [0.9601,0.9647,0.9681,0.9716,0.9730,0.9748,0.9764,0.9777,0.9796,0.9808,0.9811,0.9807,0.9805,0.9804], '#dc2626'),
+          makeDataset('Sintel',     [0.6410,0.6609,0.7074,0.7285,0.7146,0.7249,0.7173,0.7135,0.7067,0.7050,0.7038,0.7081,0.7072,0.7031], '#9333ea'),
+        ],
+      },
+      options: BASE_OPT,
+    }),
 
-  // ── Camera AUC@30 ↑ ─────────────────────────────────────────────────
-  new Chart(document.getElementById('tl-chart-cam30'), {
-    type: 'line',
-    data: {
-      labels: TL_LABELS,
-      datasets: [
-        makeDataset('HOI4D',      [63.15,96.99,96.997,96.98,96.978,96.975,96.973,96.984,96.987,96.987,96.976,96.963,96.943,96.945], '#16a34a'),
-        makeDataset('OmniGeo',    [72.65,73.33,74.72,78.84,81.77,83.59,85.16,85.73,85.67,85.99,86.47,86.65,87.29,87.64],           '#0891b2'),
-        makeDataset('OmniVideo',  [89.74,90.34,91.52,93.03,93.62,93.74,93.87,93.89,93.87,93.94,93.93,93.91,93.95,93.94],           '#d97706'),
-        makeDataset('Re10K',      [78.83,78.45,78.74,79.25,79.78,80.71,81.36,81.78,82.38,82.76,83.12,83.34,83.36,83.38],           '#db2777'),
-      ],
-    },
-    options: BASE_OPT,
-  });
+    // ── Camera AUC@30 ↑ ─────────────────────────────────────────────────
+    new Chart(document.getElementById('tl-chart-cam30'), {
+      type: 'line',
+      data: {
+        labels: TL_LABELS,
+        datasets: [
+          makeDataset('HOI4D',      [63.15,96.99,96.997,96.98,96.978,96.975,96.973,96.984,96.987,96.987,96.976,96.963,96.943,96.945], '#16a34a'),
+          makeDataset('OmniGeo',    [72.65,73.33,74.72,78.84,81.77,83.59,85.16,85.73,85.67,85.99,86.47,86.65,87.29,87.64],           '#0891b2'),
+          makeDataset('OmniVideo',  [89.74,90.34,91.52,93.03,93.62,93.74,93.87,93.89,93.87,93.94,93.93,93.91,93.95,93.94],           '#d97706'),
+          makeDataset('Re10K',      [78.83,78.45,78.74,79.25,79.78,80.71,81.36,81.78,82.38,82.76,83.12,83.34,83.36,83.38],           '#db2777'),
+        ],
+      },
+      options: BASE_OPT,
+    }),
+  ];
+
+  // Animate reveal from left — loops with a 2s pause between each playback
+  const REVEAL_DURATION = 3000;
+  const REVEAL_PAUSE    = 2000;
+  const ease = function(t) { return 1 - Math.pow(1 - t, 4); }; // easeOutQuart
+
+  function runReveal() {
+    var start = performance.now();
+    tlCharts.forEach(function(c) { c._revealProgress = 0; c.update('none'); });
+    (function tick() {
+      var t = Math.min((performance.now() - start) / REVEAL_DURATION, 1);
+      tlCharts.forEach(function(c) { c._revealProgress = ease(t); c.update('none'); });
+      if (t < 1) { requestAnimationFrame(tick); }
+      else { setTimeout(runReveal, REVEAL_PAUSE); }
+    })();
+  }
+
+  const observer = new IntersectionObserver(function(entries) {
+    if (!entries[0].isIntersecting) return;
+    observer.disconnect();
+    runReveal();
+  }, { threshold: 0.2 });
+
+  observer.observe(document.getElementById('tl-chart-absrel'));
 })();
 </script>
 
@@ -1030,7 +1081,7 @@ const SCENE_CONFIG = {
   function startSyncedLoop() {
     syncLoopRunning = true;
 
-    // Phase 1 — reveal gain color and animate cap to target simultaneously
+    // Phase 1 — reveal gain color and animate cap to target
     syncedCharts.forEach(function(e) {
       e.chart.data.datasets[1].backgroundColor = e.gainBg;
       e.chart.options.animation = { duration: 1800, easing: 'easeOutCubic' };
@@ -1038,16 +1089,29 @@ const SCENE_CONFIG = {
       e.chart.update('active');
     });
 
-    // Phase 2 — after animation + 2s hold, snap all back to resting state
+    // Phase 2 — after animation: snap cap to full magnitude (colored) so both
+    //           the base bar and the improvement area are visible for 2s.
+    //           For lower-better charts the animated cap shrank to 0, so we
+    //           restore it to impr values; higher-better charts already show impr.
     setTimeout(function() {
       syncedCharts.forEach(function(e) {
         e.chart.options.animation = false;
-        e.chart.data.datasets[1].backgroundColor = e.initBg;
-        e.chart.data.datasets[1].data = e.initCap.slice();
+        e.chart.data.datasets[1].backgroundColor = e.gainBg;
+        e.chart.data.datasets[1].data = e.magnitudeCap.slice();
         e.chart.update('none');
       });
-      setTimeout(startSyncedLoop, 500);
-    }, 1800 + 2000);
+
+      // Phase 3 — after 2s hold, snap back to resting (all-gray) state and loop
+      setTimeout(function() {
+        syncedCharts.forEach(function(e) {
+          e.chart.options.animation = false;
+          e.chart.data.datasets[1].backgroundColor = e.initBg;
+          e.chart.data.datasets[1].data = e.initCap.slice();
+          e.chart.update('none');
+        });
+        setTimeout(startSyncedLoop, 500);
+      }, 2000);
+    }, 1800);
   }
 
   // ── Stacked-bar factory ───────────────────────────────────────────
@@ -1118,7 +1182,7 @@ const SCENE_CONFIG = {
       }
     });
 
-    syncedCharts.push({ chart: chart, initCap: initCap, targetCap: targetCap, initBg: initBg, gainBg: gainBg });
+    syncedCharts.push({ chart: chart, initCap: initCap, targetCap: targetCap, initBg: initBg, gainBg: gainBg, magnitudeCap: impr.slice() });
   }
 
   // ─────────────────────────────────────────────────────────────────────
@@ -1180,7 +1244,7 @@ const SCENE_CONFIG = {
       }
     });
 
-    syncedCharts.push({ chart: chart, initCap: initCap, targetCap: targetCap, initBg: initBg, gainBg: gainBg });
+    syncedCharts.push({ chart: chart, initCap: initCap, targetCap: targetCap, initBg: initBg, gainBg: gainBg, magnitudeCap: impr.slice() });
   }
 
   // ── Charts 7–9 rendered by Canvas2D animation (see <script> below) ─
@@ -1517,7 +1581,9 @@ const SCENE_CONFIG = {
           } else if (p === 1) {
             rRect(x, yOf(pre), bW, BOT-yOf(pre), true, true, GRAY);
           } else {
-            const cur = p===2 ? (lower ? pre-diff*te : pre+diff*te) : imp;
+            const cur = p===2
+              ? (lower ? pre-diff*te : pre+diff*te)
+              : (lower ? imp+diff*to : imp);
 
             if (lower) {
               rRect(x, yOf(imp), bW, BOT-yOf(imp), false, true, GRAY);
@@ -1700,7 +1766,7 @@ const SCENE_CONFIG = {
     return {
       render(ms) {
         const { p, t } = phaseOf(Math.min(ms, TOTAL+50));
-        const te = easeIO(t);
+        const te = easeIO(t), to = easeOut(t);
 
         g.clearRect(0, 0, W, H);
 
@@ -1734,7 +1800,9 @@ const SCENE_CONFIG = {
           } else if (p === 1) {
             rRect(x, yOf(pre), bW, BOT-yOf(pre), true, true, baseColors[i]);
           } else {
-            const cur = p===2 ? (lower ? pre-diff*te : pre+diff*te) : imp;
+            const cur = p===2
+              ? (lower ? pre-diff*te : pre+diff*te)
+              : (lower ? imp+diff*to : imp);
 
             if (lower) {
               rRect(x, yOf(imp), bW, BOT-yOf(imp), false, true, baseColors[i]);

@@ -373,11 +373,13 @@ function createViewer(config) {
   let loop_pause_until = 0;
   let lastNotifiedFrame = -1;
   let frameChangeCallback = null;
+  let cameraChangeCallback = null;
 
   // Scene data keyed by version string (supports arbitrary keys for timeline)
   const sceneData = {};
   let currentVersion = config.fixedVersion || 'selfevo';
   let currentSceneName = null;
+  let sceneCameraOverride = null;
 
   // Active data reference
   function getData() { return sceneData[currentVersion]; }
@@ -586,10 +588,23 @@ function createViewer(config) {
     }
 
     // Reset camera and state for new scene, applying per-scene overrides if provided
+    sceneCameraOverride = cameraOverride || null;
     Object.assign(camera, cloneDefaults(defaultCamera));
     if (cameraOverride) Object.assign(camera, cameraOverride);
     if (stateOverride) Object.assign(state, stateOverride);
     dirty = true;
+  }
+
+  function resetCamera() {
+    Object.assign(camera, cloneDefaults(defaultCamera));
+    if (sceneCameraOverride) Object.assign(camera, sceneCameraOverride);
+    dirty = true;
+  }
+
+  function getBaseCamera() {
+    var base = cloneDefaults(defaultCamera);
+    if (sceneCameraOverride) Object.assign(base, sceneCameraOverride);
+    return base;
   }
 
   // --- Load a single version by arbitrary key (for timeline demo) ---
@@ -980,24 +995,34 @@ function createViewer(config) {
 
   // --- Input handlers ---
   function addHandlers() {
-    let dragging = false;
-    let ox, oy, rxStart, ryStart;
-    const speed = Math.PI / 500;
+    let dragButton = -1;
+    let ox, oy, rxStart, ryStart, txStart, tyStart;
+    const rotSpeed = Math.PI / 500;
+    const panSpeed = 0.001;
+
+    canvasEl.addEventListener('contextmenu', (e) => e.preventDefault());
 
     canvasEl.addEventListener('pointerdown', (e) => {
-      dragging = true;
+      dragButton = e.button;
       ox = e.clientX; oy = e.clientY;
       rxStart = camera.rx; ryStart = camera.ry;
+      txStart = camera.tx; tyStart = camera.ty;
       canvasEl.setPointerCapture(e.pointerId);
     });
     canvasEl.addEventListener('pointermove', (e) => {
-      if (dragging) {
-        camera.rx = rxStart + (e.clientY - oy) * speed;
-        camera.ry = ryStart - (e.clientX - ox) * speed;
+      if (dragButton === 0) {
+        camera.rx = rxStart + (e.clientY - oy) * rotSpeed;
+        camera.ry = ryStart - (e.clientX - ox) * rotSpeed;
         dirty = true;
+        if (cameraChangeCallback) cameraChangeCallback(camera);
+      } else if (dragButton === 2) {
+        camera.tx = txStart - (e.clientX - ox) * panSpeed;
+        camera.ty = tyStart + (e.clientY - oy) * panSpeed;
+        dirty = true;
+        if (cameraChangeCallback) cameraChangeCallback(camera);
       }
     });
-    const endDrag = () => { dragging = false; };
+    const endDrag = () => { dragButton = -1; };
     canvasEl.addEventListener('pointerup', endDrag);
     canvasEl.addEventListener('pointercancel', endDrag);
     canvasEl.addEventListener('pointerout', endDrag);
@@ -1007,6 +1032,7 @@ function createViewer(config) {
       const delta = e.deltaY || -e.wheelDeltaY;
       camera.distance = Math.max(0, Math.min(10, camera.distance + delta * 0.001));
       dirty = true;
+      if (cameraChangeCallback) cameraChangeCallback(camera);
       e.preventDefault();
       e.stopPropagation();
     });
@@ -1015,6 +1041,7 @@ function createViewer(config) {
       if (e.ctrlKey || e.metaKey || e.altKey) return;
       if (handleKey(e.key, e.shiftKey)) {
         dirty = true;
+        if (cameraChangeCallback) cameraChangeCallback(camera);
         e.preventDefault();
         e.stopPropagation();
       }
@@ -1105,6 +1132,8 @@ function createViewer(config) {
   window.requestAnimationFrame(tick);
 
   function onFrameChange(cb) { frameChangeCallback = cb; }
+  function onCameraChange(cb) { cameraChangeCallback = cb; }
+  function syncCamera(cam) { Object.assign(camera, cam); dirty = true; }
 
   function getFrameUrl(i) {
     // Use current version data if available, then any loaded version (input frames are the same across versions)
@@ -1150,6 +1179,10 @@ function createViewer(config) {
     setVersion,
     togglePoints,
     toggleFrusta,
+    resetCamera,
+    getBaseCamera,
+    onCameraChange,
+    syncCamera,
     onFrameChange,
     getFrameUrl,
     getCameraParams,
