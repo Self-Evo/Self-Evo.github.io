@@ -2,10 +2,15 @@
 // Side-by-side viewers: pretrained (left) vs SelfEvo (right).
 
 const viewers = {};
+const sectionInited = {};
 
 function initSection(sectionKey, preCanvasId, preLoadingId, preGlfailedId,
                                   evoCanvasId, evoLoadingId, evoGlfailedId,
                                   scenesId, inputImgId) {
+  // Prevent double init
+  if (sectionInited[sectionKey]) return;
+  sectionInited[sectionKey] = true;
+
   let preViewer = null, evoViewer = null;
   try {
     preViewer = createViewer({
@@ -90,6 +95,14 @@ function initSection(sectionKey, preCanvasId, preLoadingId, preGlfailedId,
       if (preViewer) preViewer.loadScene(scenes[0].name, scenes[0].cameraPre || scenes[0].camera, scenes[0].state);
       if (evoViewer) evoViewer.loadScene(scenes[0].name, scenes[0].camera, scenes[0].state);
       syncViewerButtons(sectionKey, scenes[0].state);
+
+      // Preload next few scenes in the background
+      var driver = preViewer || evoViewer;
+      if (driver && scenes.length > 1) {
+        [1, 2, 3].forEach(function(i) {
+          if (i < scenes.length) driver.preloadSceneData(scenes[i].name);
+        });
+      }
     }
   }
 }
@@ -111,6 +124,18 @@ function selectScene(sectionKey, sceneName, container, cameraOverride, stateOver
   if (pre) pre.loadScene(sceneName, cameraPreOverride || cameraOverride, stateOverride);
   if (evo) evo.loadScene(sceneName, cameraOverride, stateOverride);
   syncViewerButtons(sectionKey, stateOverride);
+
+  // Preload adjacent scenes so next click is near-instant
+  var scenes = SCENE_CONFIG[sectionKey] || [];
+  var idx = scenes.findIndex(function(s) { return s.name === sceneName; });
+  if (idx >= 0) {
+    var driver = pre || evo;
+    [idx - 1, idx + 1, idx + 2].forEach(function(i) {
+      if (i >= 0 && i < scenes.length && driver) {
+        driver.preloadSceneData(scenes[i].name);
+      }
+    });
+  }
 }
 
 function resetBothViewers(sectionKey) {
@@ -167,14 +192,54 @@ function selectAdaptMovie(movieNum, btnEl) {
   applyMovieFilter('adaptation', movieNum);
 }
 
+// --- Pause/resume viewers based on section visibility ---
+function setupVisibilityManager(sectionId, sectionKey) {
+  var section = document.getElementById(sectionId);
+  if (!section) return;
+  new IntersectionObserver(function(entries) {
+    var visible = entries[0].isIntersecting;
+    var pre = viewers[sectionKey + '-pre'];
+    var evo = viewers[sectionKey + '-evo'];
+    if (visible) {
+      if (pre) pre.resume();
+      if (evo) evo.resume();
+    } else {
+      if (pre) pre.pause();
+      if (evo) evo.pause();
+    }
+  }, { threshold: 0 }).observe(section);
+}
+
+// --- Lazy-init sections when they scroll near the viewport ---
+function setupLazyInit(sectionId, initFn) {
+  var section = document.getElementById(sectionId);
+  if (!section) return;
+  var obs = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting) {
+      obs.disconnect();
+      initFn();
+    }
+  }, { rootMargin: '200px 0px' }); // init 200px before entering viewport
+  obs.observe(section);
+}
+
 // --- Initialize on page load ---
 window.addEventListener('load', () => {
-  initSection('adaptation',
-    'adapt-pre-canvas', 'adapt-pre-loading', 'adapt-pre-glfailed',
-    'adapt-evo-canvas', 'adapt-evo-loading', 'adapt-evo-glfailed',
-    'adapt-scenes', 'adapt-input-frame');
+  // Generalization is near the top — init immediately
   initSection('generalization',
     'gen-pre-canvas', 'gen-pre-loading', 'gen-pre-glfailed',
     'gen-evo-canvas', 'gen-evo-loading', 'gen-evo-glfailed',
     'gen-scenes', 'gen-input-frame');
+
+  // Adaptation is further down — lazy-init when near viewport
+  setupLazyInit('adaptation', function() {
+    initSection('adaptation',
+      'adapt-pre-canvas', 'adapt-pre-loading', 'adapt-pre-glfailed',
+      'adapt-evo-canvas', 'adapt-evo-loading', 'adapt-evo-glfailed',
+      'adapt-scenes', 'adapt-input-frame');
+    setupVisibilityManager('adaptation', 'adaptation');
+  });
+
+  // Pause/resume generalization viewers based on visibility
+  setupVisibilityManager('generalization', 'generalization');
 });

@@ -257,20 +257,34 @@ function rgba(text) {
 //  .packed FETCH
 // ============================================================
 
+const _packedCache = {};
+const _packedInflight = {};
+
 async function fetchPacked(url) {
-  const results = {};
-  const response = await fetch(url);
-  if (response.status !== 200) {
-    console.error('fetchPacked error', response.status, await response.text());
+  // Return from cache if already fetched
+  if (_packedCache[url]) return _packedCache[url];
+  // Deduplicate concurrent requests for the same URL
+  if (_packedInflight[url]) return _packedInflight[url];
+
+  _packedInflight[url] = (async function() {
+    const results = {};
+    const response = await fetch(url);
+    if (response.status !== 200) {
+      console.error('fetchPacked error', response.status, await response.text());
+      return results;
+    }
+    const blob = await response.blob();
+    const prefix_size = new DataView(await blob.slice(0, 8).arrayBuffer()).getUint32(0, true);
+    const json = JSON.parse(await blob.slice(8, prefix_size).text());
+    for (const [key, [start, end, content_type]] of Object.entries(json)) {
+      results[key] = blob.slice(start + prefix_size, end + prefix_size, content_type);
+    }
+    _packedCache[url] = results;
+    delete _packedInflight[url];
     return results;
-  }
-  const blob = await response.blob();
-  const prefix_size = new DataView(await blob.slice(0, 8).arrayBuffer()).getUint32(0, true);
-  const json = JSON.parse(await blob.slice(8, prefix_size).text());
-  for (const [key, [start, end, content_type]] of Object.entries(json)) {
-    results[key] = blob.slice(start + prefix_size, end + prefix_size, content_type);
-  }
-  return results;
+  })();
+
+  return _packedInflight[url];
 }
 
 function pad5(i) { return i.toString().padStart(5, '0'); }
@@ -606,6 +620,14 @@ function createViewer(config) {
     var base = cloneDefaults(defaultCamera);
     if (sceneCameraOverride) Object.assign(base, sceneCameraOverride);
     return base;
+  }
+
+  // --- Preload a scene's packed file into the fetch cache (no GPU work) ---
+  function preloadSceneData(sceneName) {
+    const loadPretrained = !config.fixedVersion || config.fixedVersion === 'pretrained';
+    const loadSelfevo    = !config.fixedVersion || config.fixedVersion === 'selfevo';
+    if (loadPretrained) fetchPacked(`static/packed/pretrained/${sceneName}.packed`).catch(() => null);
+    if (loadSelfevo)    fetchPacked(`static/packed/selfevo/${sceneName}.packed`).catch(() => null);
   }
 
   // --- Load a single version by arbitrary key (for timeline demo) ---
@@ -976,8 +998,12 @@ function createViewer(config) {
     }
   }
 
+  let paused = false;
+  let rafId = null;
+
   function tick() {
-    window.requestAnimationFrame(tick);
+    if (paused) { rafId = null; return; }
+    rafId = window.requestAnimationFrame(tick);
     if (remaining_to_load > 0) return;
     if (state.playing) update();
     if (state.frame !== lastNotifiedFrame) {
@@ -992,6 +1018,17 @@ function createViewer(config) {
       }
       draw();
     }
+  }
+
+  function pause() {
+    paused = true;
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+  }
+
+  function resume() {
+    if (!paused) return;
+    paused = false;
+    rafId = window.requestAnimationFrame(tick);
   }
 
   // --- Input handlers ---
@@ -1131,7 +1168,7 @@ function createViewer(config) {
   initBuffersGL(buffers);
   addHandlers();
   window.addEventListener('resize', resize);
-  window.requestAnimationFrame(tick);
+  rafId = window.requestAnimationFrame(tick);
 
   function onFrameChange(cb) { frameChangeCallback = cb; }
   function onCameraChange(cb) { cameraChangeCallback = cb; }
@@ -1180,6 +1217,7 @@ function createViewer(config) {
     loadScene,
     loadSceneVersion,
     preloadVersion,
+    preloadSceneData,
     setVersion,
     togglePoints,
     toggleFrusta,
@@ -1192,6 +1230,8 @@ function createViewer(config) {
     onFrameChange,
     getFrameUrl,
     getCameraParams,
+    pause,
+    resume,
     get currentVersion() { return currentVersion; },
     get currentScene() { return currentSceneName; },
     get state() { return state; },

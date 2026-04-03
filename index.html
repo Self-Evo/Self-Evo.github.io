@@ -657,8 +657,8 @@ const SCENE_CONFIG = {
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
-<script src="./static/js/viewer.js?v=11"></script>
-<script src="./static/js/main.js?v=11"></script>
+<script src="./static/js/viewer.js?v=12"></script>
+<script src="./static/js/main.js?v=12"></script>
 <script>
 // ==================== TIMELINE CONTROLLER ====================
 (function () {
@@ -878,6 +878,9 @@ const SCENE_CONFIG = {
 
   window.addEventListener('load', function() {
     init();
+    var tlSection = document.getElementById('timeline');
+    if (!tlSection) return;
+
     // Auto-start playback when section scrolls into view
     var autoPlayObserver = new IntersectionObserver(function(entries) {
       if (entries[0].isIntersecting && !tlPlaying) {
@@ -885,8 +888,14 @@ const SCENE_CONFIG = {
         autoPlayObserver.disconnect();
       }
     }, { threshold: 0.3 });
-    var tlSection = document.getElementById('timeline');
-    if (tlSection) autoPlayObserver.observe(tlSection);
+    autoPlayObserver.observe(tlSection);
+
+    // Pause/resume render loop based on visibility
+    new IntersectionObserver(function(entries) {
+      if (!tlViewer) return;
+      if (entries[0].isIntersecting) { tlViewer.resume(); }
+      else { tlViewer.pause(); }
+    }, { threshold: 0 }).observe(tlSection);
   });
 })();
 </script>
