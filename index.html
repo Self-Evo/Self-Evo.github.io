@@ -307,15 +307,15 @@
         <h3 class="title is-5 has-text-centered" style="margin-bottom:1.2rem">Quantitative Metrics Across Iterations</h3>
         <div class="columns">
           <div class="column">
-            <p class="chart-subtitle">Depth Abs Rel <span class="dir-hint">(↓ better)</span></p>
+            <p class="chart-subtitle">Depth Abs Rel ↓</p>
             <div class="chart-wrap"><canvas id="tl-chart-absrel"></canvas></div>
           </div>
           <div class="column">
-            <p class="chart-subtitle">Depth δ&lt;1.25 <span class="dir-hint">(↑ better)</span></p>
+            <p class="chart-subtitle">Depth δ&lt;1.25 ↑</p>
             <div class="chart-wrap"><canvas id="tl-chart-d125"></canvas></div>
           </div>
           <div class="column">
-            <p class="chart-subtitle">Camera AUC@30 <span class="dir-hint">(↑ better)</span></p>
+            <p class="chart-subtitle">Camera AUC@30 ↑</p>
             <div class="chart-wrap"><canvas id="tl-chart-cam30"></canvas></div>
           </div>
         </div>
@@ -410,7 +410,7 @@
       <p class="exp-desc">Frame dropping (★) lands in the optimal region in every case. Spatiotemporal context asymmetry forces the student to reconstruct geometry from fewer views, creating a far stronger signal than appearance perturbations.</p>
       <div class="columns">
         <div class="column">
-          <p class="chart-subtitle">Depth — Scale ↖</p>
+          <p class="chart-subtitle">Depth ↖</p>
           <div class="chart-wrap" style="height:300px">
             <canvas id="abl-asym-scale"></canvas>
           </div>
@@ -430,7 +430,7 @@
       <p class="exp-desc">Random sampling (★) reaches the optimal corner in both plots. Attention-guided selection offers no benefit — any diverse subset creates sufficient reconstruction challenge.</p>
       <div class="columns">
         <div class="column">
-          <p class="chart-subtitle">Depth — Scale ↖</p>
+          <p class="chart-subtitle">Depth ↖</p>
           <div class="chart-wrap" style="height:300px">
             <canvas id="abl-sel-scale"></canvas>
           </div>
@@ -450,7 +450,7 @@
       <p class="exp-desc">Online EMA (★) shows a large shift toward the optimal corner in both plots. A fixed teacher becomes stale as the student evolves; the co-evolving EMA continuously corrects pseudo-label errors throughout training.</p>
       <div class="columns">
         <div class="column">
-          <p class="chart-subtitle">Depth — Scale ↖</p>
+          <p class="chart-subtitle">Depth ↖</p>
           <div class="chart-wrap" style="height:300px">
             <canvas id="abl-online-scale"></canvas>
           </div>
@@ -470,7 +470,7 @@
       <p class="exp-desc">Freeze-C (★) occupies the best corner in both plots. Freeze-A is a clear outlier on camera (bottom-left), confirming backbone adaptation is critical for pose learning. Freezing the camera decoder anchors pose quality while the backbone and depth decoder continue to improve.</p>
       <div class="columns">
         <div class="column">
-          <p class="chart-subtitle">Depth — Scale ↖</p>
+          <p class="chart-subtitle">Depth ↖</p>
           <div class="chart-wrap" style="height:300px">
             <canvas id="abl-recipe-scale"></canvas>
           </div>
@@ -1520,7 +1520,7 @@ Chart.register({
 
   // ── Chart factory ──────────────────────────────────────────────────
   function makeExpChart(id, labels, pretrained, improved, cfg) {
-    const { dir, yMin, yMax, gridStep, bands, dp } = cfg;
+    const { dir, yMin, yMax, gridStep, bands, dp, gainColor } = cfg;
     const lower = dir === '\u2193';
 
     const el = document.getElementById(id);
@@ -1584,7 +1584,7 @@ Chart.register({
         g.clearRect(0, 0, W, H);
 
         // Mini legend (top margin)
-        [[GRAY,'Pretrained'],[lower?ORANGE:BLUE,'SelfEvo Improvement']].forEach(([c,lbl], i) => {
+        [[GRAY,'Pretrained'],[(gainColor||(lower?ORANGE:BLUE)),'SelfEvo Improvement']].forEach(([c,lbl], i) => {
           const lx = PAD.l + i * (PW/2);
           g.fillStyle = c; g.fillRect(lx, 5, 8, 8);
           g.fillStyle = '#555'; g.font = '8.5px Inter,sans-serif'; g.textAlign = 'left';
@@ -1636,7 +1636,7 @@ Chart.register({
             const frac = p === 2 ? te : 1;
             const overlayH = (yOf(imp) - yOf(pre)) * frac;
             if (overlayH > 0.5) {
-              rRect(x, yOf(pre), bW, overlayH, true, false, ORANGE);
+              rRect(x, yOf(pre), bW, overlayH, true, false, gainColor||(lower?ORANGE:BLUE));
               stripe(x, yOf(pre), bW, overlayH);
               g.strokeStyle='rgba(255,255,255,.6)'; g.lineWidth=1; g.setLineDash([3,3]);
               g.beginPath(); g.moveTo(x, yOf(pre)+overlayH); g.lineTo(x+bW, yOf(pre)+overlayH); g.stroke();
@@ -1676,7 +1676,7 @@ Chart.register({
   // ── Instantiate charts ─────────────────────────────────────────────
   const charts = [
     makeExpChart('exp-c-absrel', DEPTH_LABELS, PRE_ABSREL, IMP_ABSREL,
-      { dir:'\u2193', yMin:0,    yMax:0.40, gridStep:0.10, bands:DEPTH_BANDS, dp:3 }),
+      { dir:'\u2193', yMin:0,    yMax:0.40, gridStep:0.10, bands:DEPTH_BANDS, dp:3, gainColor:BLUE }),
     makeExpChart('exp-c-d125',   DEPTH_LABELS, PRE_D125,   IMP_D125,
       { dir:'\u2191', yMin:0.55, yMax:1.00, gridStep:0.10, bands:DEPTH_BANDS, dp:3 }),
     makeExpChart('exp-c-cam',    CAM_LABELS,   PRE_CAM,    IMP_CAM,
@@ -1700,13 +1700,12 @@ Chart.register({
   }
 
   // ── Trigger on scroll ──────────────────────────────────────────────
-  let live = false;
   const anchor = document.getElementById('exp-c-absrel');
   if (anchor) {
-    new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && !live) { live = true;  play(); }
-      else if (!entries[0].isIntersecting)   { live = false; cancelAnimationFrame(rafId); }
-    }, { threshold: 0.1 }).observe(anchor);
+    const obs = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) { play(); obs.disconnect(); }
+    }, { threshold: 0.1 });
+    obs.observe(anchor);
   }
 })();
 
@@ -1925,13 +1924,12 @@ Chart.register({
   }
 
   // ── Trigger on scroll ──────────────────────────────────────────────
-  let live = false;
   const anchor = document.getElementById('exp-gc-absrel');
   if (anchor) {
-    new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && !live) { live = true;  play(); }
-      else if (!entries[0].isIntersecting)   { live = false; cancelAnimationFrame(rafId); }
-    }, { threshold: 0.1 }).observe(anchor);
+    const obs = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) { play(); obs.disconnect(); }
+    }, { threshold: 0.1 });
+    obs.observe(anchor);
   }
 })();
 
