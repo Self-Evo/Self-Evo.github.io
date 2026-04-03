@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="SelfEvo — Model Evolution Timeline">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SelfEvo — How Does the Model Evolve?</title>
+
+  <link rel="icon" type="image/png" href="static/images/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="./static/css/main.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+</head>
+<body>
+
+<!-- ==================== NAV ==================== -->
+<section class="hero" style="padding-bottom:0">
+  <div class="hero-body" style="padding:1.2rem 1.5rem">
+    <div class="container is-max-widescreen">
+      <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap">
+        <a href="index.html" style="font-size:1.1rem;font-weight:700;color:#222;text-decoration:none">
+          <span class="selfevo-self">Self</span><span class="selfevo-evo">Evo</span>
+        </a>
+        <a href="index.html" style="font-size:13px;color:#3273dc">&larr; Back to main page</a>
+        <span style="font-size:1rem;font-weight:600;color:#444;margin-left:auto">Model Evolution Timeline</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TIMELINE ==================== -->
+<section class="section" id="timeline">
+  <div class="container is-max-widescreen">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-three-fifths">
+        <h2 class="title is-3">How Does the Model Evolve?</h2>
+        <p class="subtitle is-6" style="margin-bottom:1.5rem">
+          Watch how 3D reconstruction quality improves across SelfEvo training iterations.<br>
+          The same scene — from pretrained all the way to iteration 650.
+        </p>
+      </div>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <!-- Top: Input frame + version label, above viewer -->
+        <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:10px;gap:6px">
+          <p class="viewer-label pretrained-label" style="margin:0">Input</p>
+          <div class="input-frame-container" style="width:180px">
+            <img id="tl-input-frame" class="input-frame-img" alt="Input frame">
+          </div>
+        </div>
+        <!-- WebGL viewer -->
+        <div class="viewer-container" style="width:100%;max-width:640px;display:block;margin:0 auto">
+          <canvas id="tl-canvas" width="512" height="288"></canvas>
+          <div class="viewer-overlay" id="tl-glfailed" style="display:none;color:#f88;background:black;align-items:center;justify-content:center">[WebGL2 required]</div>
+          <div class="viewer-overlay viewer-loading" id="tl-loading" style="display:none">Loading…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline scrubber -->
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="timeline-controls">
+          <button class="tl-play-btn" id="tl-play-btn" title="Play / Pause">
+            <svg class="tl-morph-icon" viewBox="0 0 14 14" fill="currentColor" width="14" height="14">
+              <path class="icon-play"  d="M1,1 L13,7 L1,13 Z"/>
+              <g   class="icon-pause">
+                <rect x="1" y="1" width="4" height="12" rx="0.5"/>
+                <rect x="9" y="1" width="4" height="12" rx="0.5"/>
+              </g>
+            </svg>
+          </button>
+          <div class="timeline-track-wrapper">
+            <input type="range" class="timeline-slider" id="tl-slider"
+                   min="0" max="13" value="0" step="1">
+            <div class="timeline-labels" id="tl-labels"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls + scene selector -->
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <div class="shared-viewer-controls" id="tl-shared-controls">
+          <button id="tl-btn-points" onclick="tlToggle('points',this)">Show All Points</button>
+          <button id="tl-btn-frusta" onclick="tlToggle('frusta',this)">Show All Frusta</button>
+          <button onclick="tlResetView()">Reset View</button>
+        </div>
+        <div class="viewer-controls-legend" style="margin-top:8px">
+          <span class="ctrl-item"><kbd>Left drag</kbd> Rotate</span>
+          <span class="ctrl-item"><kbd>Right drag</kbd> Pan</span>
+          <span class="ctrl-item"><kbd>Scroll</kbd> Zoom</span>
+          <span class="ctrl-item"><kbd>W</kbd><kbd>S</kbd> Fwd / Back</span>
+          <span class="ctrl-item"><kbd>A</kbd><kbd>D</kbd> Pan</span>
+          <span class="ctrl-item"><kbd>Q</kbd><kbd>E</kbd> Up / Down</span>
+          <span class="ctrl-item"><kbd>Space</kbd> Pause / Resume</span>
+        </div>
+        <div class="scene-selector" id="tl-scenes" style="margin-top:14px"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <div class="container has-text-centered">
+    <div class="content">
+      Website template adapted from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>
+      and <a href="https://mega-sam.github.io">MegaSaM</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="./static/js/viewer.js?v=11"></script>
+<script>
+// ==================== TIMELINE CONTROLLER ====================
+(function () {
+  const VERSIONS = [
+    { key: 'timeline/pretrain', label: 'Pretrained' },
+    { key: 'timeline/ckpt_00',  label: 'Iter 50'   },
+    { key: 'timeline/ckpt_01',  label: 'Iter 100'  },
+    { key: 'timeline/ckpt_02',  label: 'Iter 150'  },
+    { key: 'timeline/ckpt_03',  label: 'Iter 200'  },
+    { key: 'timeline/ckpt_04',  label: 'Iter 250'  },
+    { key: 'timeline/ckpt_05',  label: 'Iter 300'  },
+    { key: 'timeline/ckpt_06',  label: 'Iter 350'  },
+    { key: 'timeline/ckpt_07',  label: 'Iter 400'  },
+    { key: 'timeline/ckpt_08',  label: 'Iter 450'  },
+    { key: 'timeline/ckpt_09',  label: 'Iter 500'  },
+    { key: 'timeline/ckpt_10',  label: 'Iter 550'  },
+    { key: 'timeline/ckpt_11',  label: 'Iter 600'  },
+    { key: 'timeline/ckpt_12',  label: 'Iter 650'  },
+  ];
+
+  const TL_SCENES = [
+    { name: 'wild-5207050-uhd_3840_2160_25fps',   label: 'Wild: Clip 4', camera: { distance: 3.51, rx: 0.4461, ry: 0.0088, ty: 1.053 },          state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
+    { name: 'davis-kid-football',                  label: 'Kid Football', camera: { distance: 0.275, rx: 0.4699, ry: 0.01652, ty: -0.18825 },      state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
+    { name: 'wild-6539141-hd_1920_1080_25fps2',    label: 'Wild: Clip 7', camera: { distance: 0.535, rx: 0.3296, ry: 0.4632, ty: -0.2408 },        state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
+    { name: 'wild-penguin',                        label: 'Wild: Penguin',                                                                          state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
+    { name: 'wild-tom1',                           label: 'Wild: Tom',    camera: { distance: 0.367, tx: -0.3681, ty: -0.1805 },                    state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
+    { name: 'wild2-corgi-snow-2',                  label: 'Corgi Snow',   camera: { rx: 0.3291, ry: -0.0085, ty: -0.18 },                          state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
+  ];
+
+  const PLAY_MS = 800;
+
+  let tlViewer  = null;
+  let tlScene   = TL_SCENES[0];
+  let tlIdx     = 0;
+  let tlPlaying = false;
+  let tlPlayTimer = null;
+
+  function init() {
+    try {
+      tlViewer = createViewer({
+        canvasId:   'tl-canvas',
+        loadingId:  'tl-loading',
+        glfailedId: 'tl-glfailed',
+        sectionKey: 'timeline',
+      });
+    } catch(e) {
+      console.error('[timeline] viewer init failed:', e);
+      return;
+    }
+
+    buildLabels();
+    buildScenes();
+
+    document.getElementById('tl-slider').addEventListener('input', function(e) {
+      goTo(parseInt(e.target.value, 10));
+    });
+    document.getElementById('tl-play-btn').addEventListener('click', togglePlay);
+
+    tlViewer.onFrameChange(function(frame) {
+      const url = tlViewer.getFrameUrl(frame);
+      const img = document.getElementById('tl-input-frame');
+      if (url && img) img.src = url;
+    });
+
+    loadVersion(0, tlScene.camera, tlScene.state);
+    syncButtons(tlScene.state);
+  }
+
+  function buildLabels() {
+    const container = document.getElementById('tl-labels');
+    VERSIONS.forEach(function(v, i) {
+      const span = document.createElement('span');
+      span.textContent = v.label;
+      if (i === 0) span.className = 'tl-active';
+      span.addEventListener('click', function() { goTo(i); });
+      container.appendChild(span);
+    });
+  }
+
+  function buildScenes() {
+    const container = document.getElementById('tl-scenes');
+    TL_SCENES.forEach(function(scene, idx) {
+      const thumb = document.createElement('img');
+      thumb.className = 'scene-thumb' + (idx === 0 ? ' active' : '');
+      thumb.src = 'static/images/thumbs/' + scene.name + '.jpg';
+      thumb.alt = scene.label;
+      thumb.title = scene.label;
+      thumb.dataset.scene = scene.name;
+
+      thumb.onerror = function() {
+        const pill = document.createElement('button');
+        pill.className = 'scene-pill' + (idx === 0 ? ' active' : '');
+        pill.textContent = scene.label;
+        pill.dataset.scene = scene.name;
+        pill.addEventListener('click', function() { selectScene(scene); });
+        this.replaceWith(pill);
+      };
+
+      thumb.addEventListener('click', function() { selectScene(scene); });
+      container.appendChild(thumb);
+    });
+  }
+
+  function selectScene(scene) {
+    tlScene = scene;
+    document.querySelectorAll('#tl-scenes .scene-thumb, #tl-scenes .scene-pill')
+      .forEach(function(el) {
+        el.classList.toggle('active', el.dataset.scene === scene.name);
+      });
+    stopPlay();
+    loadVersion(0, scene.camera, scene.state).then(startPlay);
+    syncButtons(scene.state);
+  }
+
+  async function loadVersion(idx, camOverride, stateOverride) {
+    tlIdx = idx;
+    updateUI(idx);
+    const v = VERSIONS[idx];
+    await tlViewer.loadSceneVersion(
+      tlScene.name, v.key,
+      camOverride  !== undefined ? camOverride  : null,
+      stateOverride !== undefined ? stateOverride : null
+    );
+    schedulePreload(idx);
+  }
+
+  function goTo(idx) {
+    if (idx === tlIdx) return;
+    tlIdx = idx;
+    updateUI(idx);
+    const v = VERSIONS[idx];
+    tlViewer.loadSceneVersion(tlScene.name, v.key, null, null).then(function() {
+      schedulePreload(idx);
+    });
+  }
+
+  function schedulePreload(idx) {
+    [idx + 1, idx + 2].forEach(function(i) {
+      if (i >= 0 && i < VERSIONS.length) {
+        tlViewer.preloadVersion(tlScene.name, VERSIONS[i].key);
+      }
+    });
+  }
+
+  function togglePlay() {
+    if (tlPlaying) { stopPlay(); } else { startPlay(); }
+  }
+
+  function startPlay() {
+    tlPlaying = true;
+    document.getElementById('tl-play-btn').classList.add('playing');
+    if (tlIdx >= VERSIONS.length - 1) {
+      loadVersion(0, tlScene.camera, tlScene.state).then(step);
+    } else {
+      step();
+    }
+  }
+
+  function stopPlay() {
+    tlPlaying = false;
+    clearTimeout(tlPlayTimer);
+    tlPlayTimer = null;
+    document.getElementById('tl-play-btn').classList.remove('playing');
+  }
+
+  function step() {
+    if (!tlPlaying) return;
+    tlPlayTimer = setTimeout(function() {
+      if (!tlPlaying) return;
+      const next = tlIdx + 1;
+      if (next >= VERSIONS.length) { stopPlay(); return; }
+      goTo(next);
+      schedulePreload(next);
+      step();
+    }, PLAY_MS);
+  }
+
+  function updateUI(idx) {
+    document.getElementById('tl-slider').value = idx;
+    document.querySelectorAll('#tl-labels span').forEach(function(el, i) {
+      el.classList.toggle('tl-active', i === idx);
+    });
+  }
+
+  function syncButtons(stateOverride) {
+    const s = stateOverride || {};
+    const pBtn = document.getElementById('tl-btn-points');
+    const fBtn = document.getElementById('tl-btn-frusta');
+    if (pBtn) pBtn.classList.toggle('active', s.other_points === 'points');
+    if (fBtn) fBtn.classList.toggle('active', !!s.other_frusta);
+  }
+
+  window.tlToggle = function(type, btnEl) {
+    if (!tlViewer) return;
+    if (type === 'points') {
+      tlViewer.togglePoints();
+      btnEl.classList.toggle('active', tlViewer.state.other_points === 'points');
+    } else {
+      tlViewer.toggleFrusta();
+      btnEl.classList.toggle('active', tlViewer.state.other_frusta);
+    }
+  };
+
+  window.tlResetView = function() {
+    if (tlViewer) tlViewer.resetCamera();
+  };
+
+  window.addEventListener('load', function() {
+    init();
+    startPlay();
+  });
+})();
+</script>
+
+</body>
+</html>
