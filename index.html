@@ -46,13 +46,13 @@
       <div class="columns is-centered">
         <div class="column is-four-fifths has-text-centered">
           <div class="is-size-5 publication-authors">
-            <span class="author-block"><a href="https://nnanhuang.github.io/" target="_blank">Nan Huang</a><sup>1,2,*</sup>,&nbsp;</span>
-            <span class="author-block"><a href="https://github.com/yupengchengg147" target="_blank">Pengcheng Yu</a><sup>2,4,*</sup>,&nbsp;</span>
+            <span class="author-block"><a href="https://nnanhuang.github.io/" target="_blank">Nan Huang</a><sup>1,2*</sup>,&nbsp;</span>
+            <span class="author-block"><a href="https://github.com/yupengchengg147" target="_blank">Pengcheng Yu</a><sup>2,4*</sup>,&nbsp;</span>
             <span class="author-block"><a href="https://fantasticoven2.github.io/" target="_blank">Weijia Zeng</a><sup>6</sup>,&nbsp;</span>
             <span class="author-block"><a href="https://rehg.org/" target="_blank">James M. Rehg</a><sup>1</sup>,&nbsp;</span>
             <span class="author-block"><a href="https://people.eecs.berkeley.edu/~kanazawa/" target="_blank">Angjoo Kanazawa</a><sup>5</sup>,&nbsp;</span>
-            <span class="author-block"><a href="https://havenfeng.github.io/" target="_blank">Haiwen Feng</a><sup>2,5,†</sup>,&nbsp;</span>
-            <span class="author-block"><a href="https://qianqianwang68.github.io/" target="_blank">Qianqian Wang</a><sup>3,†</sup></span>
+            <span class="author-block"><a href="https://havenfeng.github.io/" target="_blank">Haiwen Feng</a><sup>2,5†</sup>,&nbsp;</span>
+            <span class="author-block"><a href="https://qianqianwang68.github.io/" target="_blank">Qianqian Wang</a><sup>3†</sup></span>
           </div>
           <div class="is-size-6 publication-authors" style="margin-top:0.5rem;color:#666">
             <span class="author-block"><sup>1</sup>UIUC&nbsp;&nbsp;</span>
@@ -177,6 +177,7 @@
           <span class="ctrl-item"><kbd>W</kbd><kbd>S</kbd> Forward / Backward</span>
           <span class="ctrl-item"><kbd>A</kbd><kbd>D</kbd> Left / Right</span>
           <span class="ctrl-item"><kbd>Q</kbd><kbd>E</kbd> Up / Down</span>
+          <span class="ctrl-item"><kbd>Space</kbd> Pause / Resume</span>
         </div>
         <div style="font-size:11px;color:#888;margin-top:8px">
           Scene geometry is downsampled for faster loading. Sky masking applied for visualization only.
@@ -293,6 +294,7 @@
           <span class="ctrl-item"><kbd>W</kbd><kbd>S</kbd> Fwd / Back</span>
           <span class="ctrl-item"><kbd>A</kbd><kbd>D</kbd> Pan</span>
           <span class="ctrl-item"><kbd>Q</kbd><kbd>E</kbd> Up / Down</span>
+          <span class="ctrl-item"><kbd>Space</kbd> Pause / Resume</span>
         </div>
         <div class="scene-selector" id="tl-scenes" style="margin-top:14px"></div>
       </div>
@@ -304,18 +306,15 @@
         <h3 class="title is-5 has-text-centered" style="margin-bottom:1.2rem">Quantitative Metrics Across Iterations</h3>
         <div class="columns">
           <div class="column">
-            <p class="chart-subtitle">Depth Abs Rel ↓ <span class="dir-hint">(↓ better)</span></p>
-            <p class="chart-note">Scale alignment, 7 datasets</p>
+            <p class="chart-subtitle">Depth Abs Rel <span class="dir-hint">(↓ better)</span></p>
             <div class="chart-wrap"><canvas id="tl-chart-absrel"></canvas></div>
           </div>
           <div class="column">
-            <p class="chart-subtitle">Depth δ&lt;1.25 ↑ <span class="dir-hint">(↑ better)</span></p>
-            <p class="chart-note">Scale alignment, 7 datasets</p>
+            <p class="chart-subtitle">Depth δ&lt;1.25 <span class="dir-hint">(↑ better)</span></p>
             <div class="chart-wrap"><canvas id="tl-chart-d125"></canvas></div>
           </div>
           <div class="column">
-            <p class="chart-subtitle">Camera AUC@30 ↑ <span class="dir-hint">(↑ better)</span></p>
-            <p class="chart-note">4 datasets</p>
+            <p class="chart-subtitle">Camera AUC@30 <span class="dir-hint">(↑ better)</span></p>
             <div class="chart-wrap"><canvas id="tl-chart-cam30"></canvas></div>
           </div>
         </div>
@@ -353,11 +352,11 @@
       <p class="exp-desc">SelfEvo (VGGT) consistently outperforms pretrained VGGT across all eight benchmarks — including new-domain, old-domain, and out-of-distribution settings — without using any labeled data.</p>
       <div class="columns">
         <div class="column">
-          <p class="chart-subtitle">Depth Scale — Abs Rel ↓</p>
+          <p class="chart-subtitle">Depth — Abs Rel ↓</p>
           <div class="chart-wrap" style="height:265px"><canvas id="exp-c-absrel"></canvas></div>
         </div>
         <div class="column">
-          <p class="chart-subtitle">Depth Scale — δ &lt; 1.25 ↑</p>
+          <p class="chart-subtitle">Depth — δ &lt; 1.25 ↑</p>
           <div class="chart-wrap" style="height:265px"><canvas id="exp-c-d125"></canvas></div>
         </div>
         <div class="column">
@@ -373,11 +372,11 @@
       <p class="exp-desc">The gains are not tied to a specific base model or dataset. SelfEvo improves both VGGT and π³ when self-improved on DROID (depth) and BEDLAM2.0 (depth &amp; camera). Gray bars show the pretrained baseline; colored bars show the SelfEvo improvement. <span style="display:inline-flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:rgba(59,130,246,0.88);display:inline-block"></span>VGGT</span>&nbsp;&nbsp;<span style="display:inline-flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:rgba(217,119,6,0.88);display:inline-block"></span>π³</span></p>
       <div class="columns">
         <div class="column">
-          <p class="chart-subtitle">Depth Scale — Abs Rel ↓</p>
+          <p class="chart-subtitle">Depth — Abs Rel ↓</p>
           <div class="chart-wrap" style="height:265px"><canvas id="exp-gc-absrel"></canvas></div>
         </div>
         <div class="column">
-          <p class="chart-subtitle">Depth Scale — δ &lt; 1.25 ↑</p>
+          <p class="chart-subtitle">Depth — δ &lt; 1.25 ↑</p>
           <div class="chart-wrap" style="height:265px"><canvas id="exp-gc-d125"></canvas></div>
         </div>
         <div class="column">
@@ -393,33 +392,31 @@
 <!-- ==================== ANALYSIS ==================== -->
 <section class="section" id="analysis">
   <div class="container is-max-widescreen">
+    <div class="columns is-centered">
+      <div class="column" style="max-width:860px">
 
     <!-- Analysis heading -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Analysis</h2>
-      </div>
+    <div class="has-text-centered" style="margin-bottom:0.75rem">
+      <h2 class="title is-3">Analysis</h2>
     </div>
-    <div class="columns is-centered" style="margin-bottom:1.5rem">
-      <div class="column is-four-fifths">
-        <p class="exp-desc">We ablate four design axes on Omniworld-Game. Each subsection shows two scatter plots — depth (scale) and camera. ★ denotes our default choice.</p>
-      </div>
+    <div style="margin-bottom:1.5rem">
+      <p class="exp-desc">We ablate four design axes on Omniworld-Game. Each subsection shows two scatter plots — depth (scale) and camera. ★ denotes our default choice.</p>
     </div>
 
     <!-- §5.1 Asymmetry Mechanism -->
     <div class="exp-block">
-      <h4 class="exp-heading">§5.1 &mdash; Asymmetry Mechanism</h4>
+      <h4 class="exp-heading">Asymmetry Mechanism</h4>
       <p class="exp-desc">Frame dropping (★) lands in the optimal region in every case. Spatiotemporal context asymmetry forces the student to reconstruct geometry from fewer views, creating a far stronger signal than appearance perturbations.</p>
       <div class="columns">
         <div class="column">
-          <p class="chart-subtitle">Depth — Scale <span class="dir-hint">↖ best</span></p>
-          <div class="chart-wrap" style="height:220px">
+          <p class="chart-subtitle">Depth — Scale ↖</p>
+          <div class="chart-wrap" style="height:300px">
             <canvas id="abl-asym-scale"></canvas>
           </div>
         </div>
         <div class="column">
-          <p class="chart-subtitle">Camera <span class="dir-hint">↗ best</span></p>
-          <div class="chart-wrap" style="height:220px">
+          <p class="chart-subtitle">Camera ↗</p>
+          <div class="chart-wrap" style="height:300px">
             <canvas id="abl-asym-cam"></canvas>
           </div>
         </div>
@@ -428,18 +425,18 @@
 
     <!-- §5.2 Frame Selection Strategy -->
     <div class="exp-block">
-      <h4 class="exp-heading">§5.2 &mdash; Frame Selection Strategy</h4>
+      <h4 class="exp-heading">Frame Selection Strategy</h4>
       <p class="exp-desc">Random sampling (★) reaches the optimal corner in both plots. Attention-guided selection offers no benefit — any diverse subset creates sufficient reconstruction challenge.</p>
       <div class="columns">
         <div class="column">
-          <p class="chart-subtitle">Depth — Scale <span class="dir-hint">↖ best</span></p>
-          <div class="chart-wrap" style="height:220px">
+          <p class="chart-subtitle">Depth — Scale ↖</p>
+          <div class="chart-wrap" style="height:300px">
             <canvas id="abl-sel-scale"></canvas>
           </div>
         </div>
         <div class="column">
-          <p class="chart-subtitle">Camera <span class="dir-hint">↗ best</span></p>
-          <div class="chart-wrap" style="height:220px">
+          <p class="chart-subtitle">Camera ↗</p>
+          <div class="chart-wrap" style="height:300px">
             <canvas id="abl-sel-cam"></canvas>
           </div>
         </div>
@@ -448,18 +445,18 @@
 
     <!-- §5.3 Online vs Offline Teacher -->
     <div class="exp-block">
-      <h4 class="exp-heading">§5.3 &mdash; Online vs. Offline Teacher</h4>
+      <h4 class="exp-heading">Online vs. Offline Teacher</h4>
       <p class="exp-desc">Online EMA (★) shows a large shift toward the optimal corner in both plots. A fixed teacher becomes stale as the student evolves; the co-evolving EMA continuously corrects pseudo-label errors throughout training.</p>
       <div class="columns">
         <div class="column">
-          <p class="chart-subtitle">Depth — Scale <span class="dir-hint">↖ best</span></p>
-          <div class="chart-wrap" style="height:220px">
+          <p class="chart-subtitle">Depth — Scale ↖</p>
+          <div class="chart-wrap" style="height:300px">
             <canvas id="abl-online-scale"></canvas>
           </div>
         </div>
         <div class="column">
-          <p class="chart-subtitle">Camera <span class="dir-hint">↗ best</span></p>
-          <div class="chart-wrap" style="height:220px">
+          <p class="chart-subtitle">Camera ↗</p>
+          <div class="chart-wrap" style="height:300px">
             <canvas id="abl-online-cam"></canvas>
           </div>
         </div>
@@ -468,24 +465,26 @@
 
     <!-- §5.4 Training Recipe -->
     <div class="exp-block">
-      <h4 class="exp-heading">§5.4 &mdash; Training Recipe</h4>
+      <h4 class="exp-heading">Training Recipe</h4>
       <p class="exp-desc">Freeze-C (★) occupies the best corner in both plots. Freeze-A is a clear outlier on camera (bottom-left), confirming backbone adaptation is critical for pose learning. Freezing the camera decoder anchors pose quality while the backbone and depth decoder continue to improve.</p>
       <div class="columns">
         <div class="column">
-          <p class="chart-subtitle">Depth — Scale <span class="dir-hint">↖ best</span></p>
-          <div class="chart-wrap" style="height:220px">
+          <p class="chart-subtitle">Depth — Scale ↖</p>
+          <div class="chart-wrap" style="height:300px">
             <canvas id="abl-recipe-scale"></canvas>
           </div>
         </div>
         <div class="column">
-          <p class="chart-subtitle">Camera <span class="dir-hint">↗ best</span></p>
-          <div class="chart-wrap" style="height:220px">
+          <p class="chart-subtitle">Camera ↗</p>
+          <div class="chart-wrap" style="height:300px">
             <canvas id="abl-recipe-cam"></canvas>
           </div>
         </div>
       </div>
     </div>
 
+      </div>
+    </div>
   </div>
 </section>
 
@@ -558,11 +557,36 @@
           <span class="ctrl-item"><kbd>W</kbd><kbd>S</kbd> Forward / Backward</span>
           <span class="ctrl-item"><kbd>A</kbd><kbd>D</kbd> Left / Right</span>
           <span class="ctrl-item"><kbd>Q</kbd><kbd>E</kbd> Up / Down</span>
+          <span class="ctrl-item"><kbd>Space</kbd> Pause / Resume</span>
         </div>
         <div style="font-size:11px;color:#888;margin-top:8px">
           Scene geometry is downsampled for faster loading.
         </div>
         <div class="scene-selector" id="adapt-scenes"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== LIMITATIONS ==================== -->
+<section class="section">
+  <div class="container is-max-desktop content">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered">Limitations</h2>
+        <p>Our pipeline relies on sufficient camera motion for context asymmetry via frame dropping, limiting effectiveness on static-camera videos. The framework also requires the base model to have non-trivial predictive ability on the training data, as it cannot bootstrap from severely degraded predictions — it is best viewed as a post-training refinement rather than training from scratch. Extended training may lead to model collapse, though we observe stable performance in practice; sustaining improvement over longer horizons remains an open problem.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== ACKNOWLEDGEMENTS ==================== -->
+<section class="section">
+  <div class="container is-max-desktop content">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered">Acknowledgements</h2>
+        <p>We thank XXX and YYY for their support and helpful discussions.</p>
       </div>
     </div>
   </div>
@@ -632,8 +656,8 @@ const SCENE_CONFIG = {
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
-<script src="./static/js/viewer.js?v=10"></script>
-<script src="./static/js/main.js?v=10"></script>
+<script src="./static/js/viewer.js?v=11"></script>
+<script src="./static/js/main.js?v=11"></script>
 <script>
 // ==================== TIMELINE CONTROLLER ====================
 (function () {
@@ -655,15 +679,15 @@ const SCENE_CONFIG = {
   ];
 
   const TL_SCENES = [
-    { name: 'davis-kid-football',        label: 'Kid Football',    camera: { distance: 0.275, rx: 0.4699, ry: 0.01652, ty: -0.18825 }, state: { every_nth: 1, other_frusta: true } },
-{ name: 'wild-5207050-uhd_3840_2160_25fps', label: 'Wild: Clip 4', camera: { distance: 3.51, rx: 0.4461, ry: 0.0088, ty: 1.053 }, state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
-    { name: 'wild-6539141-hd_1920_1080_25fps2', label: 'Wild: Clip 7', camera: { distance: 0.535, rx: 0.3296, ry: 0.4632, ty: -0.2408 }, state: { every_nth: 1, other_frusta: true } },
-    { name: 'wild-penguin',              label: 'Wild: Penguin',  state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
-    { name: 'wild-tom1',                 label: 'Wild: Tom',      camera: { distance: 0.367, tx: -0.3681, ty: -0.1805 }, state: { every_nth: 1, other_points: 'points' } },
-    { name: 'wild2-corgi-snow-2',        label: 'Corgi Snow',     camera: { rx: 0.3291, ry: -0.0085, ty: -0.18 }, state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
+    { name: 'wild-5207050-uhd_3840_2160_25fps',   label: 'Wild: Clip 4', camera: { distance: 3.51, rx: 0.4461, ry: 0.0088, ty: 1.053 },          state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
+    { name: 'davis-kid-football',                  label: 'Kid Football', camera: { distance: 0.275, rx: 0.4699, ry: 0.01652, ty: -0.18825 },      state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
+    { name: 'wild-6539141-hd_1920_1080_25fps2',    label: 'Wild: Clip 7', camera: { distance: 0.535, rx: 0.3296, ry: 0.4632, ty: -0.2408 },        state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
+    { name: 'wild-penguin',                        label: 'Wild: Penguin',                                                                          state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
+    { name: 'wild-tom1',                           label: 'Wild: Tom',    camera: { distance: 0.367, tx: -0.3681, ty: -0.1805 },                    state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
+    { name: 'wild2-corgi-snow-2',                  label: 'Corgi Snow',   camera: { rx: 0.3291, ry: -0.0085, ty: -0.18 },                          state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
   ];
 
-  const PLAY_MS = 1500; // ms per checkpoint during auto-play
+  const PLAY_MS = 800; // ms per checkpoint during auto-play
 
   let tlViewer  = null;
   let tlScene   = TL_SCENES[0];
@@ -700,6 +724,7 @@ const SCENE_CONFIG = {
     });
 
     loadVersion(0, tlScene.camera, tlScene.state);
+    syncButtons(tlScene.state);
   }
 
   // ── Build timeline tick labels ─────────────────────────────────────
@@ -739,7 +764,7 @@ const SCENE_CONFIG = {
     });
   }
 
-  // ── Select a scene (resets to pretrained) ─────────────────────────
+  // ── Select a scene (resets to pretrained and auto-plays) ──────────
   function selectScene(scene) {
     tlScene = scene;
     document.querySelectorAll('#tl-scenes .scene-thumb, #tl-scenes .scene-pill')
@@ -747,7 +772,7 @@ const SCENE_CONFIG = {
         el.classList.toggle('active', el.dataset.scene === scene.name);
       });
     stopPlay();
-    loadVersion(0, scene.camera, scene.state);
+    loadVersion(0, scene.camera, scene.state).then(startPlay);
     syncButtons(scene.state);
   }
 
@@ -854,7 +879,18 @@ const SCENE_CONFIG = {
   };
 
 
-  window.addEventListener('load', init);
+  window.addEventListener('load', function() {
+    init();
+    // Auto-start playback when section scrolls into view
+    var autoPlayObserver = new IntersectionObserver(function(entries) {
+      if (entries[0].isIntersecting && !tlPlaying) {
+        startPlay();
+        autoPlayObserver.disconnect();
+      }
+    }, { threshold: 0.3 });
+    var tlSection = document.getElementById('timeline');
+    if (tlSection) autoPlayObserver.observe(tlSection);
+  });
 })();
 </script>
 
@@ -910,20 +946,24 @@ Chart.register({
     };
   }
 
-  // ── Depth Abs Rel ↓ ─────────────────────────────────────────────────
+  // Consistent colors across all three charts
+  const C_DROID    = '#7c3aed'; // violet
+  const C_OMNIGEO  = '#0284c7'; // sky blue  (matches camera chart)
+  const C_OMNIVID  = '#d97706'; // amber     (matches camera chart)
+  const C_SINTEL   = '#16a34a'; // green
+  const C_RE10K    = '#e11d48'; // rose
+
+  // ── Depth Abs Rel ↓  (4 datasets with most visible variation) ────────
   const tlCharts = [
     new Chart(document.getElementById('tl-chart-absrel'), {
       type: 'line',
       data: {
         labels: TL_LABELS,
         datasets: [
-          makeDataset('Bonn',       [0.0548,0.0536,0.0506,0.0497,0.0487,0.0474,0.0476,0.0470,0.0467,0.0464,0.0460,0.0459,0.0464,0.0467], '#0891b2'),
-          makeDataset('Droid',      [0.2927,0.2755,0.2290,0.1913,0.1756,0.1688,0.1645,0.1617,0.1567,0.1548,0.1532,0.1525,0.1520,0.1514], '#7c3aed'),
-          makeDataset('GameGeo',    [0.3455,0.3391,0.3258,0.3314,0.3155,0.3088,0.3034,0.2922,0.2940,0.2949,0.2933,0.2874,0.2780,0.2838], '#db2777'),
-          makeDataset('GameVideo',  [0.2361,0.2379,0.2203,0.2083,0.2039,0.1997,0.1948,0.1925,0.1896,0.1866,0.1841,0.1831,0.1812,0.1814], '#d97706'),
-          makeDataset('HOI4D',      [0.0443,0.0443,0.0412,0.0371,0.0355,0.0343,0.0326,0.0311,0.0305,0.0302,0.0300,0.0302,0.0303,0.0303], '#16a34a'),
-          makeDataset('KITTI',      [0.0735,0.0711,0.0690,0.0640,0.0609,0.0578,0.0531,0.0505,0.0482,0.0473,0.0466,0.0467,0.0472,0.0480], '#dc2626'),
-          makeDataset('Sintel',     [0.3002,0.2912,0.2679,0.2694,0.2878,0.2917,0.2933,0.2943,0.2924,0.2889,0.2930,0.2850,0.2835,0.2812], '#9333ea'),
+          makeDataset('Droid',     [0.2927,0.2755,0.2290,0.1913,0.1756,0.1688,0.1645,0.1617,0.1567,0.1548,0.1532,0.1525,0.1520,0.1514], C_DROID),
+          makeDataset('OmniGeo',   [0.3455,0.3391,0.3258,0.3314,0.3155,0.3088,0.3034,0.2922,0.2940,0.2949,0.2933,0.2874,0.2780,0.2838], C_OMNIGEO),
+          makeDataset('OmniVideo', [0.2361,0.2379,0.2203,0.2083,0.2039,0.1997,0.1948,0.1925,0.1896,0.1866,0.1841,0.1831,0.1812,0.1814], C_OMNIVID),
+          makeDataset('Sintel',    [0.3002,0.2912,0.2679,0.2694,0.2878,0.2917,0.2933,0.2943,0.2924,0.2889,0.2930,0.2850,0.2835,0.2812], C_SINTEL),
         ],
       },
       options: BASE_OPT,
@@ -935,13 +975,10 @@ Chart.register({
       data: {
         labels: TL_LABELS,
         datasets: [
-          makeDataset('Bonn',       [0.9708,0.9722,0.9741,0.9751,0.9747,0.9754,0.9758,0.9759,0.9761,0.9766,0.9768,0.9770,0.9771,0.9772], '#0891b2'),
-          makeDataset('Droid',      [0.5833,0.6099,0.6863,0.7413,0.7764,0.7866,0.7976,0.8035,0.8127,0.8151,0.8207,0.8200,0.8198,0.8216], '#7c3aed'),
-          makeDataset('GameGeo',    [0.5920,0.5993,0.6184,0.6373,0.6544,0.6603,0.6833,0.6883,0.6907,0.6933,0.6963,0.7000,0.7027,0.7031], '#db2777'),
-          makeDataset('GameVideo',  [0.7133,0.7092,0.7277,0.7459,0.7553,0.7690,0.7762,0.7790,0.7808,0.7845,0.7870,0.7884,0.7916,0.7899], '#d97706'),
-          makeDataset('HOI4D',      [0.9586,0.9581,0.9695,0.9816,0.9828,0.9841,0.9851,0.9863,0.9871,0.9875,0.9877,0.9877,0.9877,0.9877], '#16a34a'),
-          makeDataset('KITTI',      [0.9601,0.9647,0.9681,0.9716,0.9730,0.9748,0.9764,0.9777,0.9796,0.9808,0.9811,0.9807,0.9805,0.9804], '#dc2626'),
-          makeDataset('Sintel',     [0.6410,0.6609,0.7074,0.7285,0.7146,0.7249,0.7173,0.7135,0.7067,0.7050,0.7038,0.7081,0.7072,0.7031], '#9333ea'),
+          makeDataset('Droid',     [0.5833,0.6099,0.6863,0.7413,0.7764,0.7866,0.7976,0.8035,0.8127,0.8151,0.8207,0.8200,0.8198,0.8216], C_DROID),
+          makeDataset('OmniGeo',   [0.5920,0.5993,0.6184,0.6373,0.6544,0.6603,0.6833,0.6883,0.6907,0.6933,0.6963,0.7000,0.7027,0.7031], C_OMNIGEO),
+          makeDataset('OmniVideo', [0.7133,0.7092,0.7277,0.7459,0.7553,0.7690,0.7762,0.7790,0.7808,0.7845,0.7870,0.7884,0.7916,0.7899], C_OMNIVID),
+          makeDataset('Sintel',    [0.6410,0.6609,0.7074,0.7285,0.7146,0.7249,0.7173,0.7135,0.7067,0.7050,0.7038,0.7081,0.7072,0.7031], C_SINTEL),
         ],
       },
       options: BASE_OPT,
@@ -953,10 +990,9 @@ Chart.register({
       data: {
         labels: TL_LABELS,
         datasets: [
-          makeDataset('HOI4D',      [63.15,96.99,96.997,96.98,96.978,96.975,96.973,96.984,96.987,96.987,96.976,96.963,96.943,96.945], '#16a34a'),
-          makeDataset('OmniGeo',    [72.65,73.33,74.72,78.84,81.77,83.59,85.16,85.73,85.67,85.99,86.47,86.65,87.29,87.64],           '#0891b2'),
-          makeDataset('OmniVideo',  [89.74,90.34,91.52,93.03,93.62,93.74,93.87,93.89,93.87,93.94,93.93,93.91,93.95,93.94],           '#d97706'),
-          makeDataset('Re10K',      [78.83,78.45,78.74,79.25,79.78,80.71,81.36,81.78,82.38,82.76,83.12,83.34,83.36,83.38],           '#db2777'),
+          makeDataset('OmniGeo',   [72.65,73.33,74.72,78.84,81.77,83.59,85.16,85.73,85.67,85.99,86.47,86.65,87.29,87.64], C_OMNIGEO),
+          makeDataset('OmniVideo', [89.74,90.34,91.52,93.03,93.62,93.74,93.87,93.89,93.87,93.94,93.93,93.91,93.95,93.94], C_OMNIVID),
+          makeDataset('Re10K',     [78.83,78.45,78.74,79.25,79.78,80.71,81.36,81.78,82.38,82.76,83.12,83.34,83.36,83.38], C_RE10K),
         ],
       },
       options: BASE_OPT,
@@ -975,7 +1011,6 @@ Chart.register({
       var t = Math.min((performance.now() - start) / REVEAL_DURATION, 1);
       tlCharts.forEach(function(c) { c._revealProgress = ease(t); c.update('none'); });
       if (t < 1) { requestAnimationFrame(tick); }
-      else { setTimeout(runReveal, REVEAL_PAUSE); }
     })();
   }
 
@@ -1070,91 +1105,97 @@ Chart.register({
   ];
 
   // ── Synced animation registry ─────────────────────────────────────
-  // Each entry: { chart, initCap, targetCap }
-  //   initCap   = cap values at rest / animation start
-  //   targetCap = cap values at animation end
-  // datasets[0] (gray base) is NEVER touched by the animation loop.
-  // Only datasets[1] (colored cap) animates.
   const syncedCharts = [];
   let syncLoopRunning = false;
+  const SYNC_DUR = 1800; // ms
+
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+  // Plugin: paints a colored overlay from the top of each bar downward.
+  // Reads chart._colorOverlay = { impr[], pretrained[], color, progress 0→1 }
+  const colorOverlayPlugin = {
+    id: 'colorOverlay',
+    afterDatasetsDraw: function(chart) {
+      var ov = chart._colorOverlay;
+      if (!ov || ov.progress <= 0) return;
+      var meta = chart.getDatasetMeta(0);
+      var ctx = chart.ctx;
+      ctx.save();
+      meta.data.forEach(function(bar, i) {
+        var fullH = bar.base - bar.y;          // full bar pixel height
+        if (fullH <= 0) return;
+        var frac = ov.impr[i] / ov.pretrained[i]; // fraction of bar that is improvement
+        var colorH = fullH * frac * ov.progress;
+        var c = Array.isArray(ov.color) ? ov.color[i] : ov.color;
+        ctx.fillStyle = c;
+        ctx.fillRect(bar.x - bar.width / 2, bar.y, bar.width, colorH);
+      });
+      ctx.restore();
+    }
+  };
 
   function startSyncedLoop() {
     syncLoopRunning = true;
-
-    // Phase 1 — reveal gain color and animate cap to target
-    syncedCharts.forEach(function(e) {
-      e.chart.data.datasets[1].backgroundColor = e.gainBg;
-      e.chart.options.animation = { duration: 1800, easing: 'easeOutCubic' };
-      e.chart.data.datasets[1].data = e.targetCap.slice();
-      e.chart.update('active');
-    });
-
-    // Phase 2 — after animation: snap cap to full magnitude (colored) so both
-    //           the base bar and the improvement area are visible for 2s.
-    //           For lower-better charts the animated cap shrank to 0, so we
-    //           restore it to impr values; higher-better charts already show impr.
-    setTimeout(function() {
+    var start = performance.now();
+    (function frame() {
+      var p = Math.min((performance.now() - start) / SYNC_DUR, 1);
+      var ep = easeOutCubic(p);
       syncedCharts.forEach(function(e) {
-        e.chart.options.animation = false;
-        e.chart.data.datasets[1].backgroundColor = e.gainBg;
-        e.chart.data.datasets[1].data = e.magnitudeCap.slice();
+        if (e.lowerBetter) {
+          // Overlay approach: bar stays constant, plugin paints color from top
+          e.chart._colorOverlay.progress = ep;
+        } else {
+          // Higher-better: interpolate cap dataset
+          e.chart.data.datasets[1].data = e.targetCap.map(function(v) {
+            return v * ep;
+          });
+        }
         e.chart.update('none');
       });
-
-      // Phase 3 — after 2s hold, snap back to resting (all-gray) state and loop
-      setTimeout(function() {
-        syncedCharts.forEach(function(e) {
-          e.chart.options.animation = false;
-          e.chart.data.datasets[1].backgroundColor = e.initBg;
-          e.chart.data.datasets[1].data = e.initCap.slice();
-          e.chart.update('none');
-        });
-        setTimeout(startSyncedLoop, 500);
-      }, 2000);
-    }, 1800);
+      if (p < 1) requestAnimationFrame(frame);
+    })();
   }
 
   // ── Stacked-bar factory ───────────────────────────────────────────
   //
   // Lower-better (sign '−', e.g. Abs Rel):
-  //   gray (datasets[0]) = SelfEvo value  — fixed, never moves
-  //   initCap  = impr  → bar starts at SelfEvo+impr = pretrained height (colored cap visible)
-  //   targetCap = zeros → cap shrinks to 0, bar decreases to SelfEvo height
+  //   Single gray bar at pretrained height (constant during animation).
+  //   Plugin paints colored overlay from the top down.  At animation end,
+  //   snaps to proper stacked state (gray base + colored cap) for datalabels.
   //
   // Higher-better (sign '+', e.g. δ<1.25, AUC):
   //   gray (datasets[0]) = pretrained value — fixed, never moves
-  //   initCap  = zeros  → bar starts at pretrained height, no cap
-  //   targetCap = impr  → cap grows, bar increases to pretrained+impr = SelfEvo height
+  //   cap  starts at 0, grows to impr  → bar increases to SelfEvo height
   //
   function makeStackedChart(id, labels, base, impr, yLabel, yMin, gainColor, dp, padBottom, bands, baseLeg, sign) {
     const labelColor  = (gainColor === BLUE_GAIN) ? '#1e3a8a' : '#14532d';
     const lowerBetter = (sign === '\u2212');
 
-    // Lower-better: cap starts at impr but colored GRAY (bar looks all-gray at pretrained height).
-    //   On animation: cap color switches to gainColor and shrinks to 0 → bar decreases.
-    // Higher-better: cap starts at 0 (invisible). On animation: cap grows to impr (gain color).
-    const initCap   = lowerBetter ? impr.slice()                    : impr.map(function() { return 0; });
-    const targetCap = lowerBetter ? impr.map(function() { return 0; }) : impr.slice();
-    const initBg    = lowerBetter ? GRAY_BASE : gainColor;   // resting cap color
-    const gainBg    = gainColor;                              // animation cap color
+    const pretrained  = base.map(function(v,i){ return v + impr[i]; });
+    const initBase    = lowerBetter ? pretrained.slice() : base.slice();
+    const targetBase  = base.slice();
+    const targetCap   = impr.slice();
+
+    var chartPlugins = bands ? [makeBands(bands)] : [];
+    if (lowerBetter) chartPlugins.push(colorOverlayPlugin);
 
     const chart = new Chart(document.getElementById(id).getContext('2d'), {
       type: 'bar',
-      plugins: bands ? [makeBands(bands)] : [],
+      plugins: chartPlugins,
       data: {
         labels,
         datasets: [
           {
             label: baseLeg,
-            data: base.slice(),           // gray base — never changes
+            data: initBase.slice(),
             backgroundColor: GRAY_BASE,
             datalabels: { display: false },
             barPercentage: 0.55, categoryPercentage: 0.7, maxBarThickness: 28
           },
           {
             label: 'SelfEvo improvement',
-            data: initCap.slice(),        // colored cap — animated only
-            backgroundColor: initBg,     // gray at rest for lower-better
+            data: impr.map(function() { return 0; }),   // invisible until animation ends
+            backgroundColor: gainColor,
             barPercentage: 0.55, categoryPercentage: 0.7, maxBarThickness: 28,
             datalabels: {
               display: true, anchor: 'end', align: 'end', offset: 2,
@@ -1182,7 +1223,11 @@ Chart.register({
       }
     });
 
-    syncedCharts.push({ chart: chart, initCap: initCap, targetCap: targetCap, initBg: initBg, gainBg: gainBg, magnitudeCap: impr.slice() });
+    if (lowerBetter) {
+      chart._colorOverlay = { impr: impr.slice(), pretrained: pretrained.slice(), color: gainColor, progress: 0 };
+    }
+
+    syncedCharts.push({ chart: chart, initBase: initBase, targetBase: targetBase, targetCap: targetCap, lowerBetter: lowerBetter });
   }
 
   // ─────────────────────────────────────────────────────────────────────
@@ -1197,27 +1242,31 @@ Chart.register({
   function makeGenChart(id, labels, base, impr, baseColors, gainColors, labelColors, yLabel, yMin, dp, sign) {
     const lowerBetter = (sign === '\u2212');
 
-    const initCap   = lowerBetter ? impr.slice()                    : impr.map(function() { return 0; });
-    const targetCap = lowerBetter ? impr.map(function() { return 0; }) : impr.slice();
-    const initBg    = lowerBetter ? baseColors : gainColors;  // resting cap color
-    const gainBg    = gainColors;                             // animation cap color
+    const pretrained  = base.map(function(v,i){ return v + impr[i]; });
+    const initBase    = lowerBetter ? pretrained.slice() : base.slice();
+    const targetBase  = base.slice();
+    const targetCap   = impr.slice();
+
+    var chartPlugins = [];
+    if (lowerBetter) chartPlugins.push(colorOverlayPlugin);
 
     const chart = new Chart(document.getElementById(id).getContext('2d'), {
       type: 'bar',
+      plugins: chartPlugins,
       data: {
         labels,
         datasets: [
           {
             label: 'Pretrained',
-            data: base.slice(),           // gray base — never changes
+            data: initBase.slice(),
             backgroundColor: baseColors,
             datalabels: { display: false },
             barPercentage: 0.55, categoryPercentage: 0.7, maxBarThickness: 28
           },
           {
             label: 'SelfEvo improvement',
-            data: initCap.slice(),        // colored cap — animated only
-            backgroundColor: initBg,     // base color at rest for lower-better
+            data: impr.map(function() { return 0; }),
+            backgroundColor: gainColors,
             barPercentage: 0.55, categoryPercentage: 0.7, maxBarThickness: 28,
             datalabels: {
               display: true, anchor: 'end', align: 'end', offset: 2,
@@ -1244,7 +1293,11 @@ Chart.register({
       }
     });
 
-    syncedCharts.push({ chart: chart, initCap: initCap, targetCap: targetCap, initBg: initBg, gainBg: gainBg, magnitudeCap: impr.slice() });
+    if (lowerBetter) {
+      chart._colorOverlay = { impr: impr.slice(), pretrained: pretrained.slice(), color: gainColors, progress: 0 };
+    }
+
+    syncedCharts.push({ chart: chart, initBase: initBase, targetBase: targetBase, targetCap: targetCap, lowerBetter: lowerBetter });
   }
 
   // ── Charts 7–9 rendered by Canvas2D animation (see <script> below) ─
@@ -1534,7 +1587,7 @@ Chart.register({
         g.clearRect(0, 0, W, H);
 
         // Mini legend (top margin)
-        [[GRAY,'Pretrained'],[BLUE,'SelfEvo']].forEach(([c,lbl], i) => {
+        [[GRAY,'Pretrained'],[lower?ORANGE:BLUE,'SelfEvo Improvement']].forEach(([c,lbl], i) => {
           const lx = PAD.l + i * (PW/2);
           g.fillStyle = c; g.fillRect(lx, 5, 8, 8);
           g.fillStyle = '#555'; g.font = '8.5px Inter,sans-serif'; g.textAlign = 'left';
@@ -1546,7 +1599,7 @@ Chart.register({
           const x0 = bX(b.s)-gW*0.22, x1 = bX(b.e)+bW+gW*0.22;
           g.fillStyle = b.color; g.fillRect(x0, PAD.t, x1-x0, PH);
           if (b.label) {
-            g.fillStyle = '#bbb'; g.font = '8px Inter,sans-serif'; g.textAlign = 'center';
+            g.fillStyle = '#666'; g.font = 'bold 10px Inter,sans-serif'; g.textAlign = 'center';
             g.fillText(b.label, (x0+x1)/2, BOT+46);
           }
         });
@@ -1580,39 +1633,38 @@ Chart.register({
             if (h > 0) rRect(x, BOT-h, bW, h, true, true, GRAY);
           } else if (p === 1) {
             rRect(x, yOf(pre), bW, BOT-yOf(pre), true, true, GRAY);
-          } else {
-            const cur = p===2
-              ? (lower ? pre-diff*te : pre+diff*te)
-              : (lower ? imp+diff*to : imp);
-
-            if (lower) {
-              rRect(x, yOf(imp), bW, BOT-yOf(imp), false, true, GRAY);
-              const capH = yOf(imp)-yOf(cur);
-              if (capH > 0.5) {
-                rRect(x, yOf(cur), bW, capH, true, false, ORANGE);
-                stripe(x, yOf(cur), bW, capH);
-                g.strokeStyle='rgba(255,255,255,.6)'; g.lineWidth=1; g.setLineDash([3,3]);
-                g.beginPath(); g.moveTo(x,yOf(imp)); g.lineTo(x+bW,yOf(imp)); g.stroke();
-                g.setLineDash([]);
-              }
-            } else {
-              rRect(x, yOf(pre), bW, BOT-yOf(pre), false, true, GRAY);
-              const gainH = yOf(pre)-yOf(cur);
-              if (gainH > 0.5) {
-                rRect(x, yOf(cur), bW, gainH, true, false, BLUE);
-                g.strokeStyle='rgba(255,255,255,.6)'; g.lineWidth=1; g.setLineDash([3,3]);
-                g.beginPath(); g.moveTo(x,yOf(pre)); g.lineTo(x+bW,yOf(pre)); g.stroke();
-                g.setLineDash([]);
-              }
+          } else if (lower) {
+            // Bar stays at pretrained height; orange overlay paints from top down
+            rRect(x, yOf(pre), bW, BOT-yOf(pre), true, true, GRAY);
+            const frac = p === 2 ? te : 1;
+            const overlayH = (yOf(imp) - yOf(pre)) * frac;
+            if (overlayH > 0.5) {
+              rRect(x, yOf(pre), bW, overlayH, true, false, ORANGE);
+              stripe(x, yOf(pre), bW, overlayH);
+              g.strokeStyle='rgba(255,255,255,.6)'; g.lineWidth=1; g.setLineDash([3,3]);
+              g.beginPath(); g.moveTo(x, yOf(pre)+overlayH); g.lineTo(x+bW, yOf(pre)+overlayH); g.stroke();
+              g.setLineDash([]);
             }
-
-            // Improvement annotation (phase 3)
             if (p >= 3) {
               const pct = (diff / pretrained[i] * 100).toFixed(1);
-              const lbl = (lower?'\u2212':'+')+pct+'%';
-              const ly  = lower ? yOf(pre)-3 : yOf(imp)-3;
               g.fillStyle='#1e3a8a'; g.font='bold 7.5px Inter,sans-serif';
-              g.textAlign='center'; g.fillText(lbl, x+bW/2, ly);
+              g.textAlign='center'; g.fillText('\u2212'+pct+'%', x+bW/2, yOf(pre)-3);
+            }
+          } else {
+            // Higher-better: gray fixed, blue cap grows upward
+            const cur = p===2 ? pre+diff*te : imp;
+            rRect(x, yOf(pre), bW, BOT-yOf(pre), false, true, GRAY);
+            const gainH = yOf(pre)-yOf(cur);
+            if (gainH > 0.5) {
+              rRect(x, yOf(cur), bW, gainH, true, false, BLUE);
+              g.strokeStyle='rgba(255,255,255,.6)'; g.lineWidth=1; g.setLineDash([3,3]);
+              g.beginPath(); g.moveTo(x,yOf(pre)); g.lineTo(x+bW,yOf(pre)); g.stroke();
+              g.setLineDash([]);
+            }
+            if (p >= 3) {
+              const pct = (diff / pretrained[i] * 100).toFixed(1);
+              g.fillStyle='#1e3a8a'; g.font='bold 7.5px Inter,sans-serif';
+              g.textAlign='center'; g.fillText('+'+pct+'%', x+bW/2, yOf(imp)-3);
             }
           }
 
@@ -1634,20 +1686,18 @@ Chart.register({
       { dir:'\u2191', yMin:68,   yMax:97,   gridStep:5,    bands:CAM_BANDS,   dp:1 }),
   ].filter(Boolean);
 
-  // ── Shared render loop ─────────────────────────────────────────────
-  let t0 = null, rafId = null, loopTimer = null;
+  // ── Shared render (one-shot) ────────────────────────────────────────
+  let t0 = null, rafId = null;
 
   function tick(ts) {
     if (!t0) t0 = ts;
     const ms = ts - t0;
     charts.forEach(c => c.render(ms));
     if (ms < TOTAL + 200) rafId = requestAnimationFrame(tick);
-    else loopTimer = setTimeout(play, 2500);
   }
 
   function play() {
     cancelAnimationFrame(rafId);
-    clearTimeout(loopTimer);
     t0 = null;
     rafId = requestAnimationFrame(tick);
   }
@@ -1658,7 +1708,7 @@ Chart.register({
   if (anchor) {
     new IntersectionObserver(entries => {
       if (entries[0].isIntersecting && !live) { live = true;  play(); }
-      else if (!entries[0].isIntersecting)   { live = false; cancelAnimationFrame(rafId); clearTimeout(loopTimer); }
+      else if (!entries[0].isIntersecting)   { live = false; cancelAnimationFrame(rafId); }
     }, { threshold: 0.1 }).observe(anchor);
   }
 })();
@@ -1799,39 +1849,38 @@ Chart.register({
             if (h > 0) rRect(x, BOT-h, bW, h, true, true, baseColors[i]);
           } else if (p === 1) {
             rRect(x, yOf(pre), bW, BOT-yOf(pre), true, true, baseColors[i]);
-          } else {
-            const cur = p===2
-              ? (lower ? pre-diff*te : pre+diff*te)
-              : (lower ? imp+diff*to : imp);
-
-            if (lower) {
-              rRect(x, yOf(imp), bW, BOT-yOf(imp), false, true, baseColors[i]);
-              const capH = yOf(imp)-yOf(cur);
-              if (capH > 0.5) {
-                rRect(x, yOf(cur), bW, capH, true, false, gainColors[i]);
-                stripe(x, yOf(cur), bW, capH);
-                g.strokeStyle='rgba(255,255,255,.6)'; g.lineWidth=1; g.setLineDash([3,3]);
-                g.beginPath(); g.moveTo(x,yOf(imp)); g.lineTo(x+bW,yOf(imp)); g.stroke();
-                g.setLineDash([]);
-              }
-            } else {
-              rRect(x, yOf(pre), bW, BOT-yOf(pre), false, true, baseColors[i]);
-              const gainH = yOf(pre)-yOf(cur);
-              if (gainH > 0.5) {
-                rRect(x, yOf(cur), bW, gainH, true, false, gainColors[i]);
-                g.strokeStyle='rgba(255,255,255,.6)'; g.lineWidth=1; g.setLineDash([3,3]);
-                g.beginPath(); g.moveTo(x,yOf(pre)); g.lineTo(x+bW,yOf(pre)); g.stroke();
-                g.setLineDash([]);
-              }
+          } else if (lower) {
+            // Bar stays at pretrained height; colored overlay paints from top down
+            rRect(x, yOf(pre), bW, BOT-yOf(pre), true, true, baseColors[i]);
+            const frac = p === 2 ? te : 1;
+            const overlayH = (yOf(imp) - yOf(pre)) * frac;
+            if (overlayH > 0.5) {
+              rRect(x, yOf(pre), bW, overlayH, true, false, gainColors[i]);
+              stripe(x, yOf(pre), bW, overlayH);
+              g.strokeStyle='rgba(255,255,255,.6)'; g.lineWidth=1; g.setLineDash([3,3]);
+              g.beginPath(); g.moveTo(x, yOf(pre)+overlayH); g.lineTo(x+bW, yOf(pre)+overlayH); g.stroke();
+              g.setLineDash([]);
             }
-
-            // Improvement annotation (phase 3)
             if (p >= 3) {
               const pct = (diff / pretrained[i] * 100).toFixed(1);
-              const lbl = (lower?'\u2212':'+')+pct+'%';
-              const ly  = lower ? yOf(pre)-3 : yOf(imp)-3;
               g.fillStyle=lblColors[i]; g.font='bold 7.5px Inter,sans-serif';
-              g.textAlign='center'; g.fillText(lbl, x+bW/2, ly);
+              g.textAlign='center'; g.fillText('\u2212'+pct+'%', x+bW/2, yOf(pre)-3);
+            }
+          } else {
+            // Higher-better: gray fixed, colored cap grows upward
+            const cur = p===2 ? pre+diff*te : imp;
+            rRect(x, yOf(pre), bW, BOT-yOf(pre), false, true, baseColors[i]);
+            const gainH = yOf(pre)-yOf(cur);
+            if (gainH > 0.5) {
+              rRect(x, yOf(cur), bW, gainH, true, false, gainColors[i]);
+              g.strokeStyle='rgba(255,255,255,.6)'; g.lineWidth=1; g.setLineDash([3,3]);
+              g.beginPath(); g.moveTo(x,yOf(pre)); g.lineTo(x+bW,yOf(pre)); g.stroke();
+              g.setLineDash([]);
+            }
+            if (p >= 3) {
+              const pct = (diff / pretrained[i] * 100).toFixed(1);
+              g.fillStyle=lblColors[i]; g.font='bold 7.5px Inter,sans-serif';
+              g.textAlign='center'; g.fillText('+'+pct+'%', x+bW/2, yOf(imp)-3);
             }
           }
 
@@ -1862,20 +1911,18 @@ Chart.register({
       { dir:'\u2191', yMin:93,   yMax:99,   gridStep:2    }),
   ].filter(Boolean);
 
-  // ── Shared render loop ─────────────────────────────────────────────
-  let t0 = null, rafId = null, loopTimer = null;
+  // ── Shared render (one-shot) ────────────────────────────────────────
+  let t0 = null, rafId = null;
 
   function tick(ts) {
     if (!t0) t0 = ts;
     const ms = ts - t0;
     charts.forEach(c => c.render(ms));
     if (ms < TOTAL + 200) rafId = requestAnimationFrame(tick);
-    else loopTimer = setTimeout(play, 2500);
   }
 
   function play() {
     cancelAnimationFrame(rafId);
-    clearTimeout(loopTimer);
     t0 = null;
     rafId = requestAnimationFrame(tick);
   }
@@ -1886,7 +1933,7 @@ Chart.register({
   if (anchor) {
     new IntersectionObserver(entries => {
       if (entries[0].isIntersecting && !live) { live = true;  play(); }
-      else if (!entries[0].isIntersecting)   { live = false; cancelAnimationFrame(rafId); clearTimeout(loopTimer); }
+      else if (!entries[0].isIntersecting)   { live = false; cancelAnimationFrame(rafId); }
     }, { threshold: 0.1 }).observe(anchor);
   }
 })();

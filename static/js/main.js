@@ -41,6 +41,9 @@ function initSection(sectionKey, preCanvasId, preLoadingId, preGlfailedId,
     }
     preViewer.onCameraChange(cam => applySyncDelta(preViewer, evoViewer, cam));
     evoViewer.onCameraChange(cam => applySyncDelta(evoViewer, preViewer, cam));
+
+    preViewer.onPlaybackChange(playing => evoViewer.syncPlayback(playing));
+    evoViewer.onPlaybackChange(playing => preViewer.syncPlayback(playing));
   }
 
   // --- Scene thumbnails ---

@@ -374,6 +374,7 @@ function createViewer(config) {
   let lastNotifiedFrame = -1;
   let frameChangeCallback = null;
   let cameraChangeCallback = null;
+  let playbackChangeCallback = null;
 
   // Scene data keyed by version string (supports arbitrary keys for timeline)
   const sceneData = {};
@@ -1017,7 +1018,7 @@ function createViewer(config) {
         if (cameraChangeCallback) cameraChangeCallback(camera);
       } else if (dragButton === 2) {
         camera.tx = txStart - (e.clientX - ox) * panSpeed;
-        camera.ty = tyStart + (e.clientY - oy) * panSpeed;
+        camera.ty = tyStart - (e.clientY - oy) * panSpeed;
         dirty = true;
         if (cameraChangeCallback) cameraChangeCallback(camera);
       }
@@ -1066,13 +1067,14 @@ function createViewer(config) {
         return true;
       case ' ':
         state.playing = !state.playing;
+        if (playbackChangeCallback) playbackChangeCallback(state.playing);
         return true;
       // W/S: move forward/backward (along view depth)
       case 'w': case 'W': camera.forward += step; return true;
       case 's': case 'S': camera.forward -= step; return true;
       // A/D: pan left/right
-      case 'a': case 'A': camera.tx -= step; return true;
-      case 'd': case 'D': camera.tx += step; return true;
+      case 'a': case 'A': camera.tx += step; return true;
+      case 'd': case 'D': camera.tx -= step; return true;
       // Q/E: move up/down
       case 'q': case 'Q': camera.ty += step; return true;
       case 'e': case 'E': camera.ty -= step; return true;
@@ -1134,6 +1136,8 @@ function createViewer(config) {
   function onFrameChange(cb) { frameChangeCallback = cb; }
   function onCameraChange(cb) { cameraChangeCallback = cb; }
   function syncCamera(cam) { Object.assign(camera, cam); dirty = true; }
+  function onPlaybackChange(cb) { playbackChangeCallback = cb; }
+  function syncPlayback(playing) { state.playing = playing; }
 
   function getFrameUrl(i) {
     // Use current version data if available, then any loaded version (input frames are the same across versions)
@@ -1183,6 +1187,8 @@ function createViewer(config) {
     getBaseCamera,
     onCameraChange,
     syncCamera,
+    onPlaybackChange,
+    syncPlayback,
     onFrameChange,
     getFrameUrl,
     getCameraParams,

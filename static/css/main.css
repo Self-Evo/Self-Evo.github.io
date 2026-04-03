@@ -47,14 +47,18 @@
   font-size: 1.1rem;
   font-weight: 700;
   color: #222;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
 }
 
 .exp-desc {
-  font-size: 13px;
+  font-size: 1rem;
   color: #555;
   margin-bottom: 1.5rem;
   max-width: 780px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
 }
 
 .chart-note {
@@ -452,6 +456,13 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   gap: 6px;
+}
+
+/* Force 7-per-row for the 14-scene generalization selector */
+#gen-scenes {
+  display: grid;
+  grid-template-columns: repeat(7, 100px);
+  justify-content: center;
 }
 
 .scene-selector .scene-thumb {
