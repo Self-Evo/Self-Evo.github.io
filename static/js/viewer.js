@@ -207,7 +207,7 @@ function vec4Lerp(a, b, p) {
 function rainbowColor(t) {
   // t in [0,1]: hue sweeps red(0°) → orange → yellow → green → blue → purple(270°)
   const h = t * 270;
-  const s = 1.0, l = 0.5;
+  const s = 0.45, l = 0.55;
   const c = (1 - Math.abs(2*l - 1)) * s;
   const x = c * (1 - Math.abs((h / 60) % 2 - 1));
   const m = l - c/2;
