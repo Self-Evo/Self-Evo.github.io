@@ -238,66 +238,62 @@
       </div>
     </div>
 
-    <div class="columns is-centered">
-      <div class="column has-text-centered">
-        <!-- Top: Input frame + version label, above viewer -->
-        <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:10px;gap:6px">
-          <p class="viewer-label pretrained-label" style="margin:0">Input</p>
-          <div class="input-frame-container" style="width:180px">
-            <img id="tl-input-frame" class="input-frame-img" alt="Input frame">
-          </div>
-        </div>
-        <!-- WebGL viewer -->
-        <div class="viewer-container" style="width:100%;max-width:640px;display:block;margin:0 auto">
-          <canvas id="tl-canvas" width="512" height="288"></canvas>
-          <div class="viewer-overlay" id="tl-glfailed" style="display:none;color:#f88;background:black;align-items:center;justify-content:center">[WebGL2 required]</div>
-          <div class="viewer-overlay viewer-loading" id="tl-loading" style="display:none">Loading…</div>
-
-        </div>
-      </div>
-    </div>
-
-    <!-- Timeline scrubber -->
+    <!-- Pre-rendered video carousel -->
     <div class="columns is-centered">
       <div class="column is-four-fifths">
-        <div class="timeline-controls">
-          <button class="tl-play-btn" id="tl-play-btn" title="Play / Pause">
-            <svg class="tl-morph-icon" viewBox="0 0 14 14" fill="currentColor" width="14" height="14">
-              <path class="icon-play"  d="M1,1 L13,7 L1,13 Z"/>
-              <g   class="icon-pause">
-                <rect x="1" y="1" width="4" height="12" rx="0.5"/>
-                <rect x="9" y="1" width="4" height="12" rx="0.5"/>
-              </g>
-            </svg>
-          </button>
-          <div class="timeline-track-wrapper">
-            <input type="range" class="timeline-slider" id="tl-slider"
-                   min="0" max="13" value="0" step="1">
-            <div class="timeline-labels" id="tl-labels"></div>
+        <div class="tl-carousel" id="tl-carousel">
+          <button class="tl-carousel-btn tl-carousel-prev" id="tl-carousel-prev">&#8249;</button>
+          <div class="tl-carousel-track" id="tl-carousel-track">
+            <div class="tl-carousel-slide" data-packed="static/packed/selfevo/wild-tom1.packed">
+              <div class="tl-slide-label">Wild: Tom</div>
+              <div class="tl-input-wrap"><div class="viewer-label" style="background:#555;color:#fff;display:inline-block;margin-bottom:4px">Input</div><br><img class="tl-input-img" alt="Input"></div>
+              <video muted playsinline loop preload="metadata">
+                <source src="static/videos/time/tom.mov" type="video/mp4">
+              </video>
+            </div>
+            <div class="tl-carousel-slide" data-packed="static/packed/selfevo/wild-5207050-uhd_3840_2160_25fps.packed">
+              <div class="tl-slide-label">Wild: Clip 4</div>
+              <div class="tl-input-wrap"><div class="viewer-label" style="background:#555;color:#fff;display:inline-block;margin-bottom:4px">Input</div><br><img class="tl-input-img" alt="Input"></div>
+              <video muted playsinline loop preload="metadata">
+                <source src="static/videos/time/Clip4.mov" type="video/mp4">
+              </video>
+            </div>
+            <div class="tl-carousel-slide" data-packed="static/packed/selfevo/wild-6539141-hd_1920_1080_25fps2.packed">
+              <div class="tl-slide-label">Wild: Clip 7</div>
+              <div class="tl-input-wrap"><div class="viewer-label" style="background:#555;color:#fff;display:inline-block;margin-bottom:4px">Input</div><br><img class="tl-input-img" alt="Input"></div>
+              <video muted playsinline loop preload="metadata">
+                <source src="static/videos/time/clip7.mov" type="video/mp4">
+              </video>
+            </div>
+            <div class="tl-carousel-slide" data-packed="static/packed/selfevo/wild-penguin.packed">
+              <div class="tl-slide-label">Wild: Penguin</div>
+              <div class="tl-input-wrap"><div class="viewer-label" style="background:#555;color:#fff;display:inline-block;margin-bottom:4px">Input</div><br><img class="tl-input-img" alt="Input"></div>
+              <video muted playsinline loop preload="metadata">
+                <source src="static/videos/time/penguin.mov" type="video/mp4">
+              </video>
+            </div>
+            <div class="tl-carousel-slide" data-packed="static/packed/selfevo/davis-kid-football.packed">
+              <div class="tl-slide-label">Kid Football</div>
+              <div class="tl-input-wrap"><div class="viewer-label" style="background:#555;color:#fff;display:inline-block;margin-bottom:4px">Input</div><br><img class="tl-input-img" alt="Input"></div>
+              <video muted playsinline loop preload="metadata">
+                <source src="static/videos/time/kid-football.mov" type="video/mp4">
+              </video>
+            </div>
+            <div class="tl-carousel-slide" data-packed="static/packed/selfevo/wild2-corgi-snow-2.packed">
+              <div class="tl-slide-label">Corgi Snow</div>
+              <div class="tl-input-wrap"><div class="viewer-label" style="background:#555;color:#fff;display:inline-block;margin-bottom:4px">Input</div><br><img class="tl-input-img" alt="Input"></div>
+              <video muted playsinline loop preload="metadata">
+                <source src="static/videos/time/corgi-snow.mov" type="video/mp4">
+              </video>
+            </div>
           </div>
+          <button class="tl-carousel-btn tl-carousel-next" id="tl-carousel-next">&#8250;</button>
+          <div class="tl-carousel-dots" id="tl-carousel-dots"></div>
         </div>
-      </div>
-    </div>
-
-    <!-- Controls + scene selector -->
-    <div class="columns is-centered">
-      <div class="column has-text-centered">
-        <div class="shared-viewer-controls" id="tl-shared-controls">
-          <button id="tl-btn-points" onclick="tlToggle('points',this)">Show All Points</button>
-          <button id="tl-btn-frusta" onclick="tlToggle('frusta',this)">Show All Frusta</button>
-          <button onclick="tlResetView()">Reset View</button>
-        </div>
-        <div class="viewer-controls-legend" style="margin-top:8px">
-          <span class="ctrl-item"><kbd>Left drag</kbd> Rotate</span>
-          <span class="ctrl-item"><kbd>Right drag</kbd> Pan</span>
-          <span class="ctrl-item"><kbd>Scroll</kbd> Zoom</span>
-          <span class="ctrl-item"><kbd>W</kbd><kbd>S</kbd> Fwd / Back</span>
-          <span class="ctrl-item"><kbd>A</kbd><kbd>D</kbd> Pan</span>
-          <span class="ctrl-item"><kbd>Q</kbd><kbd>E</kbd> Up / Down</span>
-          <span class="ctrl-item"><kbd>Space</kbd> Pause / Resume</span>
-        </div>
-        <div class="scene-selector" id="tl-scenes" style="margin-top:14px"></div>
-        <a href="timeline.html" style="display:inline-block;margin-top:12px;font-size:13px;color:#3273dc">More examples &rarr;</a>
+        <p class="has-text-centered" style="margin-top:12px;font-size:13px">
+          Want to explore the 3D point clouds interactively?
+          <a href="timeline.html" style="color:#3273dc">Try the interactive timeline viewer &rarr;</a>
+        </p>
       </div>
     </div>
 
@@ -350,7 +346,7 @@
     <!-- Self-Improvement Results -->
     <div class="exp-block">
       <h3 class="exp-heading">Self-Improvement Results</h3>
-      <p class="exp-desc">SelfEvo (VGGT) consistently outperforms pretrained VGGT across all eight benchmarks — including new-domain, old-domain, and out-of-distribution settings — without using any labeled data.</p>
+      <p class="exp-desc">SelfEvo (VGGT) consistently outperforms pretrained VGGT across all eight benchmarks — including new-domain and unseen domain settings — without using any labeled data.</p>
       <div class="columns">
         <div class="column">
           <p class="chart-subtitle">Depth — Abs Rel ↓</p>
@@ -642,10 +638,9 @@ const SCENE_CONFIG = {
     { name: "wild-clip_05", label: "Wild: Clip 9", camera: { distance: 1.185 } },
     { name: "wild-penguin", label: "Wild: Penguin", state: { every_nth: 1, other_frusta: true, other_points: "points" } },
     { name: "wild-sport", label: "Wild: Sport", camera: { distance: 0.393, rx: 0.2768, ry: 0.085, ty: -0.16405 }, state: { every_nth: 1, other_points: "points" } },
+    { name: "wild-dive", label: "Wild: Dive", state: { every_nth: 1, other_frusta: true, other_points: "points" } },
     { name: "wild-tom1", label: "Wild: Tom", camera: { distance: 0.367, tx: -0.3681, ty: -0.1805 }, cameraPre: { distance: 0.630, rx: 0.39491, ry: -0.40698, tx: -0.3681, ty: 0.08770 }, state: { every_nth: 1, other_points: "points" } },
     { name: "history-1", label: "History", camera: { distance: 0.447, rx: 0.5095, ry: 0.0037, ty: -0.2012 } },
-    // wild2
-    { name: "wild2-corgi-snow-2", label: "Corgi Snow 2", camera: { rx: 0.3291, ry: -0.0085, ty: -0.18 }, state: { every_nth: 1, other_frusta: true, other_points: "points" } },
     // DAVIS
     { name: "davis-car-roundabout", label: "Car Roundabout", camera: { rx: 0.1978, ry: -0.3512, ty: -0.18 }, state: { every_nth: 1, other_points: "points" } },
     { name: "davis-drift-straight", label: "Drift Straight", camera: { distance: 0.807, rx: 0.3006, ry: 0.7446, ty: -0.1211 }, state: { every_nth: 1, other_points: "points" } },
@@ -660,9 +655,125 @@ const SCENE_CONFIG = {
 <script src="./static/js/viewer.js?v=12"></script>
 <script src="./static/js/main.js?v=12"></script>
 <script>
-// ==================== TIMELINE CONTROLLER ====================
+// ==================== TIMELINE VIDEO CAROUSEL ====================
 (function () {
-  const VERSIONS = [
+  var slides = document.querySelectorAll('#tl-carousel-track .tl-carousel-slide');
+  var track = document.getElementById('tl-carousel-track');
+  var dotsContainer = document.getElementById('tl-carousel-dots');
+  if (!slides.length || !track) return;
+
+  var current = 0;
+  var slideData = []; // per-slide: { imgEl, urls[], frame, timer, loaded }
+
+  // --- Parse packed file and extract RGB blob URLs (same as viewer.js) ---
+  function loadPackedInput(slideIdx) {
+    var slide = slides[slideIdx];
+    var sd = slideData[slideIdx];
+    if (sd.loaded) return;
+    sd.loaded = true;
+    var packedUrl = slide.dataset.packed;
+    if (!packedUrl) return;
+
+    fetch(packedUrl).then(function(r) { return r.arrayBuffer(); }).then(function(buf) {
+      var view = new DataView(buf);
+      var prefixSize = view.getUint32(0, true);
+      var decoder = new TextDecoder();
+      var indexJson = decoder.decode(new Uint8Array(buf, 8, prefixSize - 8));
+      var index = JSON.parse(indexJson);
+      var blobStart = prefixSize;
+
+      var urls = [];
+      for (var i = 1; ; i++) {
+        var key = 'rgb_' + String(i).padStart(5, '0') + '.png';
+        if (!index[key]) break;
+        var offsets = index[key];
+        var blob = new Blob([new Uint8Array(buf, blobStart + offsets[0], offsets[1] - offsets[0])], { type: 'image/png' });
+        urls.push(URL.createObjectURL(blob));
+      }
+      sd.urls = urls;
+      sd.frame = 0;
+      if (urls.length > 0) sd.imgEl.src = urls[0];
+      if (slideIdx === current) startInputAnim(slideIdx);
+    });
+  }
+
+  function stepInput(idx) {
+    var sd = slideData[idx];
+    if (!sd.urls || sd.urls.length <= 1) return;
+    sd.frame = (sd.frame + 1) % sd.urls.length;
+    sd.imgEl.src = sd.urls[sd.frame];
+    // Pause 1s at end of loop, otherwise 100ms (10fps)
+    var delay = (sd.frame === sd.urls.length - 1) ? 1000 : 100;
+    sd.timer = setTimeout(function() { stepInput(idx); }, delay);
+  }
+
+  function startInputAnim(idx) {
+    var sd = slideData[idx];
+    if (sd.timer || !sd.urls || sd.urls.length <= 1) return;
+    stepInput(idx);
+  }
+
+  function stopInputAnim(idx) {
+    var sd = slideData[idx];
+    if (sd.timer) { clearTimeout(sd.timer); sd.timer = null; }
+  }
+
+  // --- Init slide data ---
+  slides.forEach(function(s, i) {
+    var imgEl = s.querySelector('.tl-input-img');
+    slideData.push({ imgEl: imgEl, urls: [], frame: 0, timer: null, loaded: false });
+
+    var dot = document.createElement('span');
+    dot.className = 'tl-carousel-dot' + (i === 0 ? ' active' : '');
+    dot.addEventListener('click', function() { goTo(i); });
+    dotsContainer.appendChild(dot);
+  });
+
+  function goTo(idx) {
+    stopInputAnim(current);
+    current = ((idx % slides.length) + slides.length) % slides.length;
+    track.style.transform = 'translateX(-' + (current * 100) + '%)';
+    slides.forEach(function(s, i) {
+      var v = s.querySelector('video');
+      if (!v) return;
+      if (i === current) { v.currentTime = 0; v.play(); }
+      else { v.pause(); }
+    });
+    dotsContainer.querySelectorAll('.tl-carousel-dot').forEach(function(d, i) {
+      d.classList.toggle('active', i === current);
+    });
+    loadPackedInput(current);
+    startInputAnim(current);
+  }
+
+  document.getElementById('tl-carousel-prev').addEventListener('click', function() { goTo(current - 1); });
+  document.getElementById('tl-carousel-next').addEventListener('click', function() { goTo(current + 1); });
+
+  // Touch/swipe
+  var startX = 0;
+  var carousel = document.getElementById('tl-carousel');
+  carousel.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; }, { passive: true });
+  carousel.addEventListener('touchend', function(e) {
+    var dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 40) goTo(dx < 0 ? current + 1 : current - 1);
+  });
+
+  // Auto-play when section scrolls into view
+  var observer = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting) {
+      var v = slides[current].querySelector('video');
+      if (v) v.play();
+      loadPackedInput(current);
+      startInputAnim(current);
+      observer.disconnect();
+    }
+  }, { threshold: 0.3 });
+  observer.observe(document.getElementById('timeline'));
+})();
+</script>
+
+<!-- Timeline controller moved to timeline.html -->
+<!-- REMOVED_TL_CTRL_START
     { key: 'timeline/pretrain', label: 'Pretrained' },
     { key: 'timeline/ckpt_00',  label: 'Iter 50'   },
     { key: 'timeline/ckpt_01',  label: 'Iter 100'  },
@@ -680,19 +791,18 @@ const SCENE_CONFIG = {
   ];
 
   const TL_SCENES = [
-    { name: 'wild-tom1',                           label: 'Wild: Tom',    camera: { distance: 0.367, tx: -0.3681, ty: -0.1805 },                    state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
-    { name: 'wild-5207050-uhd_3840_2160_25fps',   label: 'Wild: Clip 4', camera: { distance: 3.51, rx: 0.4461, ry: 0.0088, ty: 1.053 },          state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
+    { name: 'wild-tom1',                           label: 'Wild: Tom',    camera: { distance: 0.367, tx: -0.3681, ty: -0.1805 },                    state: { every_nth: 1, other_frusta: true, other_points: 'points', playing: false } },
+    { name: 'wild-5207050-uhd_3840_2160_25fps',   label: 'Wild: Clip 4', camera: { distance: 3.51, rx: 0.4461, ry: 0.0088, ty: 1.053 },          state: { every_nth: 1, other_frusta: true, other_points: 'points', playing: false } },
   ];
 
-  const PLAY_MS = 800; // ms per checkpoint during auto-play
+  const PLAY_MS = 800;
 
   let tlViewer  = null;
   let tlScene   = TL_SCENES[0];
-  let tlIdx     = 0;         // current version index
+  let tlIdx     = 0;
   let tlPlaying = false;
   let tlPlayTimer = null;
 
-  // ── Init ──────────────────────────────────────────────────────────────
   function init() {
     try {
       tlViewer = createViewer({
@@ -834,9 +944,12 @@ const SCENE_CONFIG = {
     if (!tlPlaying) return;
     tlPlayTimer = setTimeout(function() {
       if (!tlPlaying) return;
-      const next = tlIdx + 1;
-      if (next >= VERSIONS.length) { stopPlay(); return; }
-      goTo(next);
+      const next = (tlIdx + 1) % VERSIONS.length;
+      if (next === 0) {
+        loadVersion(0, tlScene.camera, tlScene.state);
+      } else {
+        goTo(next);
+      }
       schedulePreload(next);
       step();
     }, PLAY_MS);
@@ -895,10 +1008,7 @@ const SCENE_CONFIG = {
       if (!tlViewer) return;
       if (entries[0].isIntersecting) { tlViewer.resume(); }
       else { tlViewer.pause(); }
-    }, { threshold: 0 }).observe(tlSection);
-  });
-})();
-</script>
+REMOVED_TL_CTRL_END -->
 
 <script>
 // ==================== TIMELINE QUANTITATIVE CHARTS ====================
@@ -1101,13 +1211,12 @@ Chart.register({
   const DEPTH_LABELS = ['OmniGeo','OmniVideo','Sintel','Bonn','KITTI','DROID','HOI4D'];
   const DEPTH_BANDS  = [
     { s:0, e:1, color:'rgba(34,160,100,0.07)',  label:'new-domain' },
-    { s:2, e:4, color:'rgba(200,150,50,0.07)',  label:'old-domain' },
-    { s:5, e:6, color:'rgba(150,80,200,0.07)',  label:'OOD'        },
+    { s:2, e:6, color:'rgba(200,150,50,0.07)',  label:'unseen domain' },
   ];
   const CAM_LABELS = ['OmniGeo','OmniVideo','RealEstate10K'];
   const CAM_BANDS  = [
     { s:0, e:1, color:'rgba(34,160,100,0.07)', label:'new-domain' },
-    { s:2, e:2, color:'rgba(200,150,50,0.07)', label:'old-domain' },
+    { s:2, e:2, color:'rgba(200,150,50,0.07)', label:'unseen domain' },
   ];
 
   // ── Synced animation registry ─────────────────────────────────────
@@ -1214,11 +1323,23 @@ Chart.register({
       options: {
         animation: false,
         responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
         layout: { padding: { bottom: padBottom || 0, top: 22 } },
         plugins: {
           legend: { display: true, position: 'top', labels: { font:{size:11}, boxWidth:12, padding:8 } },
           datalabels: { display: false },
-          tooltip: { mode: 'index', intersect: false }
+          tooltip: {
+            enabled: true,
+            callbacks: {
+              label: function(ctx) {
+                var i = ctx.dataIndex;
+                var preVal = lowerBetter ? pretrained[i] : base[i];
+                var evoVal = lowerBetter ? base[i] : (base[i] + impr[i]);
+                if (ctx.datasetIndex === 0) return baseLeg + ': ' + preVal.toFixed(dp);
+                return 'SelfEvo: ' + evoVal.toFixed(dp) + ' (' + sign + Math.abs(impr[i]).toFixed(dp) + ')';
+              }
+            }
+          }
         },
         scales: {
           x: { stacked: true, grid: { display: false }, ticks: { font:{size:9}, maxRotation:0, minRotation:0 } },
@@ -1286,11 +1407,23 @@ Chart.register({
       options: {
         animation: false,
         responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
         layout: { padding: { bottom: 0, top: 22 } },
         plugins: {
           legend: { display: true, position: 'top', labels: { font:{size:10}, boxWidth:10, padding:6 } },
           datalabels: { display: false },
-          tooltip: { mode: 'index', intersect: false }
+          tooltip: {
+            enabled: true,
+            callbacks: {
+              label: function(ctx) {
+                var i = ctx.dataIndex;
+                var preVal = lowerBetter ? pretrained[i] : base[i];
+                var evoVal = lowerBetter ? base[i] : (base[i] + impr[i]);
+                if (ctx.datasetIndex === 0) return 'Pretrained: ' + preVal.toFixed(dp);
+                return 'SelfEvo: ' + evoVal.toFixed(dp) + ' (' + sign + Math.abs(impr[i]).toFixed(dp) + ')';
+              }
+            }
+          }
         },
         scales: {
           x: { stacked: true, grid: { display: false }, ticks: { font:{size:9}, maxRotation:0, minRotation:0 } },
@@ -1499,12 +1632,11 @@ Chart.register({
 
   const DEPTH_BANDS = [
     {s:0,e:1,color:'rgba(34,160,100,0.07)', label:'new-domain'},
-    {s:2,e:4,color:'rgba(200,150,50,0.07)',  label:'old-domain'},
-    {s:5,e:6,color:'rgba(150,80,200,0.07)',  label:'OOD'},
+    {s:2,e:6,color:'rgba(200,150,50,0.07)',  label:'unseen domain'},
   ];
   const CAM_BANDS = [
     {s:0,e:1,color:'rgba(34,160,100,0.07)', label:'new-domain'},
-    {s:2,e:2,color:'rgba(200,150,50,0.07)', label:'old-domain'},
+    {s:2,e:2,color:'rgba(200,150,50,0.07)', label:'unseen domain'},
   ];
 
   // ── Animation timeline ─────────────────────────────────────────────
@@ -1585,15 +1717,71 @@ Chart.register({
       g.restore();
     }
 
-    return {
-      render(ms) {
-        const { p, t } = phaseOf(Math.min(ms, TOTAL+50));
-        const te = easeIO(t), to = easeOut(t);
+    // ── Hover tooltip ───────────────────────────────────────────────
+    let hoverIdx = -1;
+    el.addEventListener('mousemove', function(e) {
+      const rect = el.getBoundingClientRect();
+      const mx = (e.clientX - rect.left) * (el.width / rect.width) / DPR;
+      const my = (e.clientY - rect.top) * (el.height / rect.height) / DPR;
+      let found = -1;
+      for (let i = 0; i < n; i++) {
+        if (mx >= bX(i) && mx <= bX(i) + bW && my >= PAD.t && my <= BOT) { found = i; break; }
+      }
+      if (found !== hoverIdx) { hoverIdx = found; renderFinal(); }
+    });
+    el.addEventListener('mouseleave', function() {
+      if (hoverIdx !== -1) { hoverIdx = -1; renderFinal(); }
+    });
 
-        g.clearRect(0, 0, W, H);
+    function drawTooltip(i) {
+      const pre = pretrained[i], imp = improved[i];
+      const diff = lower ? pre - imp : imp - pre;
+      const dpFmt = yMax > 5 ? 1 : 3;
+      const lines = [
+        labels[i],
+        'Pretrained: ' + pre.toFixed(dpFmt),
+        'SelfEvo: ' + imp.toFixed(dpFmt) + ' (' + (lower ? '\u2212' : '+') + diff.toFixed(dpFmt) + ')',
+      ];
+      g.font = '9px Inter,sans-serif';
+      const tw = Math.max(...lines.map(l => g.measureText(l).width)) + 14;
+      const th = lines.length * 14 + 8;
+      let tx = bX(i) + bW / 2 - tw / 2;
+      let ty = yOf(Math.max(pre, imp)) - th - 6;
+      tx = Math.max(2, Math.min(tx, W - tw - 2));
+      ty = Math.max(2, ty);
+      // Background
+      g.fillStyle = 'rgba(30,30,30,0.88)';
+      const cr = 4;
+      g.beginPath();
+      g.moveTo(tx+cr,ty); g.lineTo(tx+tw-cr,ty); g.quadraticCurveTo(tx+tw,ty,tx+tw,ty+cr);
+      g.lineTo(tx+tw,ty+th-cr); g.quadraticCurveTo(tx+tw,ty+th,tx+tw-cr,ty+th);
+      g.lineTo(tx+cr,ty+th); g.quadraticCurveTo(tx,ty+th,tx,ty+th-cr);
+      g.lineTo(tx,ty+cr); g.quadraticCurveTo(tx,ty,tx+cr,ty);
+      g.closePath(); g.fill();
+      // Text
+      g.fillStyle = '#fff'; g.textAlign = 'left';
+      lines.forEach((l, li) => {
+        g.font = li === 0 ? 'bold 9px Inter,sans-serif' : '9px Inter,sans-serif';
+        g.fillText(l, tx + 7, ty + 14 + li * 14);
+      });
+      // Highlight bar
+      g.strokeStyle = 'rgba(255,255,255,0.7)'; g.lineWidth = 2;
+      g.strokeRect(bX(i)-1, yOf(Math.max(pre,imp)), bW+2, BOT - yOf(Math.max(pre,imp)));
+    }
 
-        // Mini legend (top margin)
-        [[GRAY,'Pretrained'],[(gainColor||(lower?ORANGE:BLUE)),'SelfEvo Improvement']].forEach(([c,lbl], i) => {
+    function renderFinal() {
+      renderFrame(TOTAL + 50);
+      if (hoverIdx >= 0) drawTooltip(hoverIdx);
+    }
+
+    function renderFrame(ms) {
+      const { p, t } = phaseOf(Math.min(ms, TOTAL+50));
+      const te = easeIO(t), to = easeOut(t);
+
+      g.clearRect(0, 0, W, H);
+
+      // Mini legend (top margin)
+      [[GRAY,'Pretrained'],[(gainColor||(lower?ORANGE:BLUE)),'SelfEvo Improvement']].forEach(([c,lbl], i) => {
           const lx = PAD.l + i * (PW/2);
           g.fillStyle = c; g.fillRect(lx, 5, 8, 8);
           g.fillStyle = '#555'; g.font = '8.5px Inter,sans-serif'; g.textAlign = 'left';
@@ -1678,6 +1866,11 @@ Chart.register({
           g.fillStyle='#888'; g.font='7.5px Inter,sans-serif'; g.textAlign='center';
           g.fillText(labels[i], x+bW/2, BOT+13);
         }
+    }
+
+    return {
+      render(ms) {
+        renderFrame(ms);
       }
     };
   }
@@ -1818,15 +2011,69 @@ Chart.register({
       g.restore();
     }
 
-    return {
-      render(ms) {
-        const { p, t } = phaseOf(Math.min(ms, TOTAL+50));
-        const te = easeIO(t), to = easeOut(t);
+    // ── Hover tooltip ───────────────────────────────────────────────
+    let hoverIdx = -1;
+    el.addEventListener('mousemove', function(e) {
+      const rect = el.getBoundingClientRect();
+      const mx = (e.clientX - rect.left) * (el.width / rect.width) / DPR;
+      const my = (e.clientY - rect.top) * (el.height / rect.height) / DPR;
+      let found = -1;
+      for (let i = 0; i < n; i++) {
+        if (mx >= bX(i) && mx <= bX(i) + bW && my >= PAD.t && my <= BOT) { found = i; break; }
+      }
+      if (found !== hoverIdx) { hoverIdx = found; renderFinal(); }
+    });
+    el.addEventListener('mouseleave', function() {
+      if (hoverIdx !== -1) { hoverIdx = -1; renderFinal(); }
+    });
 
-        g.clearRect(0, 0, W, H);
+    function drawTooltip(i) {
+      const pre = pretrained[i], imp = improved[i];
+      const diff = lower ? pre - imp : imp - pre;
+      const dpFmt = yMax > 5 ? 1 : 3;
+      const lbl = Array.isArray(labels[i]) ? labels[i].join(' ') : labels[i];
+      const lines = [
+        lbl,
+        'Pretrained: ' + pre.toFixed(dpFmt),
+        'SelfEvo: ' + imp.toFixed(dpFmt) + ' (' + (lower ? '\u2212' : '+') + diff.toFixed(dpFmt) + ')',
+      ];
+      g.font = '9px Inter,sans-serif';
+      const tw = Math.max(...lines.map(l => g.measureText(l).width)) + 14;
+      const th = lines.length * 14 + 8;
+      let tx = bX(i) + bW / 2 - tw / 2;
+      let ty = yOf(Math.max(pre, imp)) - th - 6;
+      tx = Math.max(2, Math.min(tx, W - tw - 2));
+      ty = Math.max(2, ty);
+      g.fillStyle = 'rgba(30,30,30,0.88)';
+      const cr = 4;
+      g.beginPath();
+      g.moveTo(tx+cr,ty); g.lineTo(tx+tw-cr,ty); g.quadraticCurveTo(tx+tw,ty,tx+tw,ty+cr);
+      g.lineTo(tx+tw,ty+th-cr); g.quadraticCurveTo(tx+tw,ty+th,tx+tw-cr,ty+th);
+      g.lineTo(tx+cr,ty+th); g.quadraticCurveTo(tx,ty+th,tx,ty+th-cr);
+      g.lineTo(tx,ty+cr); g.quadraticCurveTo(tx,ty,tx+cr,ty);
+      g.closePath(); g.fill();
+      g.fillStyle = '#fff'; g.textAlign = 'left';
+      lines.forEach((l, li) => {
+        g.font = li === 0 ? 'bold 9px Inter,sans-serif' : '9px Inter,sans-serif';
+        g.fillText(l, tx + 7, ty + 14 + li * 14);
+      });
+      g.strokeStyle = 'rgba(255,255,255,0.7)'; g.lineWidth = 2;
+      g.strokeRect(bX(i)-1, yOf(Math.max(pre,imp)), bW+2, BOT - yOf(Math.max(pre,imp)));
+    }
 
-        // Grid
-        const gFirst = Math.ceil(yMin/gridStep + 1e-9)*gridStep;
+    function renderFinal() {
+      renderFrame(TOTAL + 50);
+      if (hoverIdx >= 0) drawTooltip(hoverIdx);
+    }
+
+    function renderFrame(ms) {
+      const { p, t } = phaseOf(Math.min(ms, TOTAL+50));
+      const te = easeIO(t), to = easeOut(t);
+
+      g.clearRect(0, 0, W, H);
+
+      // Grid
+      const gFirst = Math.ceil(yMin/gridStep + 1e-9)*gridStep;
         for (let v = gFirst; v <= yMax+1e-9; v = Math.round((v+gridStep)*1e6)/1e6) {
           const gy = yOf(v);
           g.strokeStyle='#e8e8e8'; g.lineWidth=1; g.setLineDash([4,4]);
@@ -1899,6 +2146,11 @@ Chart.register({
             g.fillText(lb, x+bW/2, BOT+13);
           }
         }
+    }
+
+    return {
+      render(ms) {
+        renderFrame(ms);
       }
     };
   }

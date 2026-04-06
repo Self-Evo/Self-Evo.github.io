@@ -593,11 +593,9 @@ section#bibtex pre {
   transition: transform 0.22s ease, opacity 0.22s ease;
 }
 
-/* Stopped: show triangle, hide bars */
 .tl-play-btn:not(.playing) .icon-play  { transform: scaleX(1); opacity: 1; }
 .tl-play-btn:not(.playing) .icon-pause { transform: scaleX(0); opacity: 0; }
 
-/* Playing: collapse triangle, expand bars */
 .tl-play-btn.playing .icon-play  { transform: scaleX(0); opacity: 0; }
 .tl-play-btn.playing .icon-pause { transform: scaleX(1); opacity: 1; }
 
@@ -663,6 +661,95 @@ section#bibtex pre {
   color: #3273dc;
   font-weight: 700;
 }
+
+/* --- Timeline Video Carousel --- */
+.tl-carousel {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #f2f2f2;
+  margin-bottom: 2rem;
+}
+.tl-carousel-track {
+  display: flex;
+  transition: transform 0.45s ease;
+}
+.tl-carousel-slide {
+  min-width: 100%;
+  position: relative;
+}
+.tl-carousel-slide video {
+  width: 100%;
+  display: block;
+}
+.tl-carousel-slide video:first-of-type {
+  border-radius: 10px 10px 0 0;
+}
+.tl-carousel-slide video:last-of-type {
+  border-radius: 0 0 10px 10px;
+}
+.tl-input-wrap {
+  text-align: center;
+  padding: 10px 0;
+  background: #f8f8f8;
+}
+.tl-input-img {
+  max-width: 220px;
+  border-radius: 6px;
+}
+.tl-slide-label {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 6px;
+  z-index: 5;
+  pointer-events: none;
+}
+.tl-carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.4);
+  color: #fff;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.tl-carousel-btn:hover { background: rgba(0,0,0,0.7); }
+.tl-carousel-prev { left: 10px; }
+.tl-carousel-next { right: 10px; }
+.tl-carousel-dots {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+.tl-carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.45);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.tl-carousel-dot.active { background: #fff; }
 
 /* --- Responsive --- */
 @media screen and (max-width: 768px) {

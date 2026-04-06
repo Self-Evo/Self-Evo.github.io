@@ -205,19 +205,23 @@ function vec4Lerp(a, b, p) {
 }
 
 function rainbowColor(t) {
-  // t in [0,1]: hue sweeps red(0°) → orange → yellow → green → blue → purple(270°)
-  const h = t * 270;
-  const s = 0.45, l = 0.55;
-  const c = (1 - Math.abs(2*l - 1)) * s;
-  const x = c * (1 - Math.abs((h / 60) % 2 - 1));
-  const m = l - c/2;
-  let r, g, b;
-  if      (h <  60) { r=c; g=x; b=0; }
-  else if (h < 120) { r=x; g=c; b=0; }
-  else if (h < 180) { r=0; g=c; b=x; }
-  else if (h < 240) { r=0; g=x; b=c; }
-  else              { r=x; g=0; b=c; }
-  return [r+m, g+m, b+m, 1.0];
+  // Tech gradient: electric purple → indigo → blue → cyan (Linear/Figma aesthetic)
+  const stops = [
+    [0.529, 0.176, 0.918],  // #872de9 electric purple
+    [0.400, 0.200, 0.937],  // #6633ef indigo-purple
+    [0.282, 0.282, 0.945],  // #4848f1 indigo
+    [0.200, 0.400, 0.933],  // #3366ee blue
+    [0.149, 0.537, 0.898],  // #2689e5 sky blue
+    [0.118, 0.671, 0.839],  // #1eabd6 steel cyan
+    [0.098, 0.788, 0.765],  // #19c9c3 teal
+    [0.118, 0.878, 0.698],  // #1ee0b2 mint cyan
+  ];
+  const n = stops.length - 1;
+  const s = Math.min(t * n, n - 1e-6);
+  const i = Math.floor(s);
+  const f = s - i;
+  const a = stops[i], b = stops[i + 1];
+  return [a[0] + (b[0]-a[0])*f, a[1] + (b[1]-a[1])*f, a[2] + (b[2]-a[2])*f, 1.0];
 }
 
 function matRx(t) {

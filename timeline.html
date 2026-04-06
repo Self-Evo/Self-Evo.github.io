@@ -140,12 +140,12 @@
   ];
 
   const TL_SCENES = [
-    { name: 'wild-5207050-uhd_3840_2160_25fps',   label: 'Wild: Clip 4', camera: { distance: 3.51, rx: 0.4461, ry: 0.0088, ty: 1.053 },          state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
-    { name: 'davis-kid-football',                  label: 'Kid Football', camera: { distance: 0.275, rx: 0.4699, ry: 0.01652, ty: -0.18825 },      state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
-    { name: 'wild-6539141-hd_1920_1080_25fps2',    label: 'Wild: Clip 7', camera: { distance: 0.535, rx: 0.3296, ry: 0.4632, ty: -0.2408 },        state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
-    { name: 'wild-penguin',                        label: 'Wild: Penguin',                                                                          state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
-    { name: 'wild-tom1',                           label: 'Wild: Tom',    camera: { distance: 0.367, tx: -0.3681, ty: -0.1805 },                    state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
-    { name: 'wild2-corgi-snow-2',                  label: 'Corgi Snow',   camera: { rx: 0.3291, ry: -0.0085, ty: -0.18 },                          state: { every_nth: 1, other_frusta: true, other_points: 'points' } },
+    { name: 'wild-5207050-uhd_3840_2160_25fps',   label: 'Wild: Clip 4', camera: { distance: 3.51, rx: 0.4461, ry: 0.0088, ty: 1.053 },          state: { every_nth: 1, other_frusta: true, other_points: 'points', playing: false } },
+    { name: 'davis-kid-football',                  label: 'Kid Football', camera: { distance: 0.275, rx: 0.4699, ry: 0.01652, ty: -0.18825 },      state: { every_nth: 1, other_frusta: true, other_points: 'points', playing: false } },
+    { name: 'wild-6539141-hd_1920_1080_25fps2',    label: 'Wild: Clip 7', camera: { distance: 0.535, rx: 0.3296, ry: 0.4632, ty: -0.2408 },        state: { every_nth: 1, other_frusta: true, other_points: 'points', playing: false } },
+    { name: 'wild-penguin',                        label: 'Wild: Penguin',                                                                          state: { every_nth: 1, other_frusta: true, other_points: 'points', playing: false } },
+    { name: 'wild-tom1',                           label: 'Wild: Tom',    camera: { distance: 0.367, tx: -0.3681, ty: -0.1805 },                    state: { every_nth: 1, other_frusta: true, other_points: 'points', playing: false } },
+    { name: 'wild2-corgi-snow-2',                  label: 'Corgi Snow',   camera: { rx: 0.3291, ry: -0.0085, ty: -0.18 },                          state: { every_nth: 1, other_frusta: true, other_points: 'points', playing: false } },
   ];
 
   const PLAY_MS = 800;
@@ -183,6 +183,7 @@
       if (url && img) img.src = url;
     });
 
+    loadInputFrames(tlScene.name);
     loadVersion(0, tlScene.camera, tlScene.state);
     syncButtons(tlScene.state);
   }
@@ -229,8 +230,54 @@
         el.classList.toggle('active', el.dataset.scene === scene.name);
       });
     stopPlay();
+    loadInputFrames(scene.name);
     loadVersion(0, scene.camera, scene.state).then(startPlay);
     syncButtons(scene.state);
+  }
+
+  // --- Input frame cycling (same as main page, loads from selfevo packed) ---
+  var inputUrls = [];
+  var inputFrame = 0;
+  var inputTimer = null;
+  var inputLoadedScene = null;
+
+  function loadInputFrames(sceneName) {
+    if (inputLoadedScene === sceneName) return;
+    inputLoadedScene = sceneName;
+    if (inputTimer) { clearTimeout(inputTimer); inputTimer = null; }
+    inputUrls.forEach(function(u) { URL.revokeObjectURL(u); });
+    inputUrls = [];
+
+    var packedUrl = 'static/packed/selfevo/' + sceneName + '.packed';
+    fetch(packedUrl).then(function(r) { return r.arrayBuffer(); }).then(function(buf) {
+      var view = new DataView(buf);
+      var prefixSize = view.getUint32(0, true);
+      var indexJson = new TextDecoder().decode(new Uint8Array(buf, 8, prefixSize - 8));
+      var index = JSON.parse(indexJson);
+      var blobStart = prefixSize;
+      var urls = [];
+      for (var i = 1; ; i++) {
+        var key = 'rgb_' + String(i).padStart(5, '0') + '.png';
+        if (!index[key]) break;
+        var offsets = index[key];
+        var blob = new Blob([new Uint8Array(buf, blobStart + offsets[0], offsets[1] - offsets[0])], { type: 'image/png' });
+        urls.push(URL.createObjectURL(blob));
+      }
+      inputUrls = urls;
+      inputFrame = 0;
+      var img = document.getElementById('tl-input-frame');
+      if (urls.length > 0 && img) img.src = urls[0];
+      if (urls.length > 1) {
+        function stepInput() {
+          inputFrame = (inputFrame + 1) % inputUrls.length;
+          var img = document.getElementById('tl-input-frame');
+          if (img) img.src = inputUrls[inputFrame];
+          var delay = (inputFrame === inputUrls.length - 1) ? 1000 : 100;
+          inputTimer = setTimeout(stepInput, delay);
+        }
+        stepInput();
+      }
+    });
   }
 
   async function loadVersion(idx, camOverride, stateOverride) {
@@ -288,9 +335,12 @@
     if (!tlPlaying) return;
     tlPlayTimer = setTimeout(function() {
       if (!tlPlaying) return;
-      const next = tlIdx + 1;
-      if (next >= VERSIONS.length) { stopPlay(); return; }
-      goTo(next);
+      const next = (tlIdx + 1) % VERSIONS.length;
+      if (next === 0) {
+        loadVersion(0, tlScene.camera, tlScene.state);
+      } else {
+        goTo(next);
+      }
       schedulePreload(next);
       step();
     }, PLAY_MS);

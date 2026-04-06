@@ -306,11 +306,13 @@ def pack_from_config(config_path: str, output_dir: str, target_width: int = 512,
                     print(f"[{section_name}] SKIP {version}/{name} — cache not found at {npz_path}")
 
 
-def generate_thumbnail(npz_path: str, output_path: str, target_width: int = 200, target_height: int = 140):
-    """Extract first frame as a JPEG thumbnail."""
+def generate_thumbnail(npz_path: str, output_path: str, target_width: int = 200, target_height: int = 140, frame_index: int = 0):
+    """Extract a frame as a JPEG thumbnail. Use frame_index=-1 for middle frame."""
     cache = np.load(npz_path, allow_pickle=True)
     images = cache["images"]  # (S, 3, H, W)
-    img = np.transpose(images[0], (1, 2, 0))  # (H, W, 3)
+    if frame_index == -1:
+        frame_index = len(images) // 2
+    img = np.transpose(images[frame_index], (1, 2, 0))  # (H, W, 3)
     if img.max() <= 1.0:
         img = (img * 255).clip(0, 255).astype(np.uint8)
     else:
