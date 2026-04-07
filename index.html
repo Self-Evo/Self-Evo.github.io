@@ -245,45 +245,45 @@
           <button class="tl-carousel-btn tl-carousel-prev" id="tl-carousel-prev">&#8249;</button>
           <div class="tl-carousel-track" id="tl-carousel-track">
             <div class="tl-carousel-slide" data-packed="static/packed/selfevo/wild-tom1.packed">
-              <div class="tl-slide-label">Wild: Tom</div>
+
               <div class="tl-input-wrap"><div class="viewer-label" style="background:#555;color:#fff;display:inline-block;margin-bottom:4px">Input</div><br><img class="tl-input-img" alt="Input"></div>
               <video muted playsinline loop preload="metadata">
-                <source src="static/videos/time/tom.mov" type="video/mp4">
+                <source src="static/videos/time/new/tom.mov" type="video/mp4">
               </video>
             </div>
             <div class="tl-carousel-slide" data-packed="static/packed/selfevo/wild-5207050-uhd_3840_2160_25fps.packed">
-              <div class="tl-slide-label">Wild: Clip 4</div>
+
               <div class="tl-input-wrap"><div class="viewer-label" style="background:#555;color:#fff;display:inline-block;margin-bottom:4px">Input</div><br><img class="tl-input-img" alt="Input"></div>
-              <video muted playsinline loop preload="metadata">
-                <source src="static/videos/time/Clip4.mov" type="video/mp4">
+              <video muted playsinline loop preload="metadata" data-speed="2">
+                <source src="static/videos/time/new/clip4.mov" type="video/mp4">
               </video>
             </div>
             <div class="tl-carousel-slide" data-packed="static/packed/selfevo/wild-6539141-hd_1920_1080_25fps2.packed">
-              <div class="tl-slide-label">Wild: Clip 7</div>
+
               <div class="tl-input-wrap"><div class="viewer-label" style="background:#555;color:#fff;display:inline-block;margin-bottom:4px">Input</div><br><img class="tl-input-img" alt="Input"></div>
               <video muted playsinline loop preload="metadata">
-                <source src="static/videos/time/clip7.mov" type="video/mp4">
+                <source src="static/videos/time/new/clip7.mov" type="video/mp4">
               </video>
             </div>
             <div class="tl-carousel-slide" data-packed="static/packed/selfevo/wild-penguin.packed">
-              <div class="tl-slide-label">Wild: Penguin</div>
+
               <div class="tl-input-wrap"><div class="viewer-label" style="background:#555;color:#fff;display:inline-block;margin-bottom:4px">Input</div><br><img class="tl-input-img" alt="Input"></div>
               <video muted playsinline loop preload="metadata">
-                <source src="static/videos/time/penguin.mov" type="video/mp4">
+                <source src="static/videos/time/new/penguin.mov" type="video/mp4">
               </video>
             </div>
             <div class="tl-carousel-slide" data-packed="static/packed/selfevo/davis-kid-football.packed">
-              <div class="tl-slide-label">Kid Football</div>
+
               <div class="tl-input-wrap"><div class="viewer-label" style="background:#555;color:#fff;display:inline-block;margin-bottom:4px">Input</div><br><img class="tl-input-img" alt="Input"></div>
               <video muted playsinline loop preload="metadata">
-                <source src="static/videos/time/kid-football.mov" type="video/mp4">
+                <source src="static/videos/time/new/kid-football.mov" type="video/mp4">
               </video>
             </div>
             <div class="tl-carousel-slide" data-packed="static/packed/selfevo/wild2-corgi-snow-2.packed">
-              <div class="tl-slide-label">Corgi Snow</div>
+
               <div class="tl-input-wrap"><div class="viewer-label" style="background:#555;color:#fff;display:inline-block;margin-bottom:4px">Input</div><br><img class="tl-input-img" alt="Input"></div>
               <video muted playsinline loop preload="metadata">
-                <source src="static/videos/time/corgi-snow.mov" type="video/mp4">
+                <source src="static/videos/time/new/corgi-snow.mov" type="video/mp4">
               </video>
             </div>
           </div>
@@ -618,20 +618,20 @@
 <script>
 const SCENE_CONFIG = {
   adaptation: [
-    { name: "toystory-start", label: "Toy Story: Start", movie: 1 },
-    { name: "toystory2-clip14", label: "Toy Story 2: Clip 14", movie: 1 },
-    { name: "toystory2-clip17", label: "Toy Story 2: Clip 17", movie: 1 },
-    { name: "zhenhuan-dance2", label: "Zhenhuan: Dance", movie: 2 },
-    { name: "zhenhuan-street3", label: "Zhenhuan: Street", movie: 2 },
-    { name: "zhenhuan-1", label: "Zhenhuan: 1", movie: 2 },
-    { name: "zhenhuan-2", label: "Zhenhuan: 2", movie: 2 },
-    { name: "dragon-fly2", label: "Dragon: Fly", movie: 3 },
-    { name: "dragon-meet3", label: "Dragon: Meet", movie: 3 },
-    { name: "dragon-battle2", label: "Dragon: Battle", movie: 3 },
+    { name: "toystory-start", label: "Toy Story: Start", movie: 1, state: { frustum_size: 0.06 } },
+    { name: "toystory2-clip14", label: "Toy Story 2: Clip 14", movie: 1, state: { frustum_size: 0.06 } },
+    { name: "toystory2-clip17", label: "Toy Story 2: Clip 17", movie: 1, state: { frustum_size: 0.06 } },
+    { name: "zhenhuan-dance2", label: "Zhenhuan: Dance", movie: 2, state: { frustum_size: 0.06 } },
+    { name: "zhenhuan-street3", label: "Zhenhuan: Street", movie: 2, state: { frustum_size: 0.06 } },
+    { name: "zhenhuan-1", label: "Zhenhuan: 1", movie: 2, state: { frustum_size: 0.06 } },
+    { name: "zhenhuan-2", label: "Zhenhuan: 2", movie: 2, state: { frustum_size: 0.06 } },
+    { name: "dragon-fly2", label: "Dragon: Fly", movie: 3, state: { frustum_size: 0.06 } },
+    { name: "dragon-meet3", label: "Dragon: Meet", movie: 3, state: { frustum_size: 0.06 } },
+    { name: "dragon-battle2", label: "Dragon: Battle", movie: 3, state: { frustum_size: 0.06 } },
   ],
   generalization: [
     // wild
-    { name: "davis-kid-football", label: "Kid Football", camera: { distance: 0.275, rx: 0.4699, ry: 0.01652, ty: -0.18825 }, state: { every_nth: 1, other_frusta: true } },
+    { name: "davis-kid-football", label: "Kid Football", camera: { distance: 0.275, rx: 0.19005, ry: 0.02104, ty: -0.02325 }, state: { every_nth: 1, other_frusta: true } },
     { name: "wild-15416627_3840_2160_30fps", label: "Wild: Clip 1", camera: { distance: 0.885, rx: 0.2597, ry: 0.0678 }, state: { every_nth: 1, other_points: "points" } },
     { name: "wild-5207050-uhd_3840_2160_25fps", label: "Wild: Clip 4", camera: { distance: 3.51, rx: 0.4461, ry: 0.0088, ty: 1.053 }, cameraPre: { distance: 0.723, rx: 0.4461, ry: 0.0088, ty: -0.20595 }, state: { every_nth: 1, other_frusta: true, other_points: "points" } },
     { name: "wild-6539141-hd_1920_1080_25fps2", label: "Wild: Clip 7", camera: { distance: 0.535, rx: 0.3296, ry: 0.4632, ty: -0.2408 }, state: { every_nth: 1, other_frusta: true } },
@@ -731,12 +731,41 @@ const SCENE_CONFIG = {
 
   function goTo(idx) {
     stopInputAnim(current);
-    current = ((idx % slides.length) + slides.length) % slides.length;
-    track.style.transform = 'translateX(-' + (current * 100) + '%)';
+    if (idx < 0 || idx >= slides.length) {
+      // Wrap: clone target slide, place it adjacent, animate one step, then clean up
+      var target = ((idx % slides.length) + slides.length) % slides.length;
+      var clone = slides[target].cloneNode(true);
+      clone.style.position = 'relative';
+      if (idx < 0) {
+        track.insertBefore(clone, track.firstChild);
+        track.style.transition = 'none';
+        track.style.transform = 'translateX(-' + ((current + 1) * 100) + '%)';
+        track.offsetHeight;
+        track.style.transition = '';
+        track.style.transform = 'translateX(-' + (current * 100) + '%)';
+      } else {
+        track.appendChild(clone);
+        track.style.transform = 'translateX(-' + (slides.length * 100) + '%)';
+      }
+      var onDone = function() {
+        track.removeEventListener('transitionend', onDone);
+        clone.remove();
+        current = target;
+        track.style.transition = 'none';
+        track.style.transform = 'translateX(-' + (current * 100) + '%)';
+        track.offsetHeight;
+        track.style.transition = '';
+      };
+      track.addEventListener('transitionend', onDone);
+      current = target;
+    } else {
+      current = idx;
+      track.style.transform = 'translateX(-' + (current * 100) + '%)';
+    }
     slides.forEach(function(s, i) {
       var v = s.querySelector('video');
       if (!v) return;
-      if (i === current) { v.currentTime = 0; v.play(); }
+      if (i === current) { v.playbackRate = parseFloat(v.dataset.speed || 2); v.currentTime = 0; v.play(); }
       else { v.pause(); }
     });
     dotsContainer.querySelectorAll('.tl-carousel-dot').forEach(function(d, i) {
@@ -1765,8 +1794,6 @@ Chart.register({
         g.fillText(l, tx + 7, ty + 14 + li * 14);
       });
       // Highlight bar
-      g.strokeStyle = 'rgba(255,255,255,0.7)'; g.lineWidth = 2;
-      g.strokeRect(bX(i)-1, yOf(Math.max(pre,imp)), bW+2, BOT - yOf(Math.max(pre,imp)));
     }
 
     function renderFinal() {
@@ -1840,8 +1867,9 @@ Chart.register({
               g.setLineDash([]);
             }
             if (p >= 3) {
+              const alpha = p === 3 ? easeOut(t) : 1;
               const pct = (diff / pretrained[i] * 100).toFixed(1);
-              g.fillStyle='#1e3a8a'; g.font='bold 7.5px Inter,sans-serif';
+              g.fillStyle='rgba(30,58,138,'+alpha+')'; g.font='bold 7.5px Inter,sans-serif';
               g.textAlign='center'; g.fillText('\u2212'+pct+'%', x+bW/2, yOf(pre)-3);
             }
           } else {
@@ -1856,8 +1884,9 @@ Chart.register({
               g.setLineDash([]);
             }
             if (p >= 3) {
+              const alpha = p === 3 ? easeOut(t) : 1;
               const pct = (diff / pretrained[i] * 100).toFixed(1);
-              g.fillStyle='#1e3a8a'; g.font='bold 7.5px Inter,sans-serif';
+              g.fillStyle='rgba(30,58,138,'+alpha+')'; g.font='bold 7.5px Inter,sans-serif';
               g.textAlign='center'; g.fillText('+'+pct+'%', x+bW/2, yOf(imp)-3);
             }
           }
@@ -2057,8 +2086,6 @@ Chart.register({
         g.font = li === 0 ? 'bold 9px Inter,sans-serif' : '9px Inter,sans-serif';
         g.fillText(l, tx + 7, ty + 14 + li * 14);
       });
-      g.strokeStyle = 'rgba(255,255,255,0.7)'; g.lineWidth = 2;
-      g.strokeRect(bX(i)-1, yOf(Math.max(pre,imp)), bW+2, BOT - yOf(Math.max(pre,imp)));
     }
 
     function renderFinal() {
@@ -2114,9 +2141,12 @@ Chart.register({
               g.setLineDash([]);
             }
             if (p >= 3) {
+              const alpha = p === 3 ? easeOut(t) : 1;
               const pct = (diff / pretrained[i] * 100).toFixed(1);
+              g.globalAlpha = alpha;
               g.fillStyle=lblColors[i]; g.font='bold 7.5px Inter,sans-serif';
               g.textAlign='center'; g.fillText('\u2212'+pct+'%', x+bW/2, yOf(pre)-3);
+              g.globalAlpha = 1;
             }
           } else {
             // Higher-better: gray fixed, colored cap grows upward
@@ -2130,9 +2160,12 @@ Chart.register({
               g.setLineDash([]);
             }
             if (p >= 3) {
+              const alpha = p === 3 ? easeOut(t) : 1;
               const pct = (diff / pretrained[i] * 100).toFixed(1);
+              g.globalAlpha = alpha;
               g.fillStyle=lblColors[i]; g.font='bold 7.5px Inter,sans-serif';
               g.textAlign='center'; g.fillText('+'+pct+'%', x+bW/2, yOf(imp)-3);
+              g.globalAlpha = 1;
             }
           }
 
