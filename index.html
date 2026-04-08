@@ -346,7 +346,7 @@
     <!-- Self-Improvement Results -->
     <div class="exp-block">
       <h3 class="exp-heading">Self-Improvement Results</h3>
-      <p class="exp-desc">SelfEvo (VGGT) consistently outperforms pretrained VGGT across all eight benchmarks — including new-domain and unseen domain settings — without using any labeled data.</p>
+      <p class="exp-desc">SelfEvo (VGGT) consistently outperforms pretrained VGGT across all eight benchmarks — including new-domain, original domain, and unseen domain settings — without using any labeled data.</p>
       <div class="columns">
         <div class="column">
           <p class="chart-subtitle">Depth — Abs Rel ↓</p>
@@ -1240,12 +1240,13 @@ Chart.register({
   const DEPTH_LABELS = ['OmniGeo','OmniVideo','Sintel','Bonn','KITTI','DROID','HOI4D'];
   const DEPTH_BANDS  = [
     { s:0, e:1, color:'rgba(34,160,100,0.07)',  label:'new-domain' },
-    { s:2, e:6, color:'rgba(200,150,50,0.07)',  label:'unseen domain' },
+    { s:2, e:4, color:'rgba(200,150,50,0.07)',  label:'original domain' },
+    { s:5, e:6, color:'rgba(150,80,200,0.07)',  label:'unseen domain' },
   ];
   const CAM_LABELS = ['OmniGeo','OmniVideo','RealEstate10K'];
   const CAM_BANDS  = [
     { s:0, e:1, color:'rgba(34,160,100,0.07)', label:'new-domain' },
-    { s:2, e:2, color:'rgba(200,150,50,0.07)', label:'unseen domain' },
+    { s:2, e:2, color:'rgba(200,150,50,0.07)', label:'original domain' },
   ];
 
   // ── Synced animation registry ─────────────────────────────────────
@@ -1661,11 +1662,12 @@ Chart.register({
 
   const DEPTH_BANDS = [
     {s:0,e:1,color:'rgba(34,160,100,0.07)', label:'new-domain'},
-    {s:2,e:6,color:'rgba(200,150,50,0.07)',  label:'unseen domain'},
+    {s:2,e:4,color:'rgba(200,150,50,0.07)',  label:'original domain'},
+    {s:5,e:6,color:'rgba(150,80,200,0.07)',  label:'unseen domain'},
   ];
   const CAM_BANDS = [
     {s:0,e:1,color:'rgba(34,160,100,0.07)', label:'new-domain'},
-    {s:2,e:2,color:'rgba(200,150,50,0.07)', label:'unseen domain'},
+    {s:2,e:2,color:'rgba(200,150,50,0.07)', label:'original domain'},
   ];
 
   // ── Animation timeline ─────────────────────────────────────────────
