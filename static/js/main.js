@@ -224,8 +224,8 @@ function setupLazyInit(sectionId, initFn) {
 }
 
 // --- Initialize on page load ---
-window.addEventListener('load', () => {
-  // Generalization is near the top — init immediately
+document.addEventListener('DOMContentLoaded', () => {
+  // Generalization is near the top — init immediately (don't wait for full page load)
   initSection('generalization',
     'gen-pre-canvas', 'gen-pre-loading', 'gen-pre-glfailed',
     'gen-evo-canvas', 'gen-evo-loading', 'gen-evo-glfailed',
