@@ -52,7 +52,7 @@
             <span class="author-block"><a href="https://rehg.org/" target="_blank">James M. Rehg</a><sup>1</sup>,&nbsp;</span>
             <span class="author-block"><a href="https://people.eecs.berkeley.edu/~kanazawa/" target="_blank">Angjoo Kanazawa</a><sup>5</sup>,&nbsp;</span>
             <span class="author-block"><a href="https://havenfeng.github.io/" target="_blank">Haiwen Feng</a><sup>2,5†</sup>,&nbsp;</span>
-            <span class="author-block"><a href="https://qianqianwang68.github.io/" target="_blank">Qianqian Wang</a><sup>3†</sup></span>
+            <span class="author-block"><a href="https://qianqianwang68.github.io/" target="_blank">Qianqian Wang</a><sup>2,3†</sup></span>
           </div>
           <div class="is-size-6 publication-authors" style="margin-top:0.5rem;color:#666">
             <span class="author-block"><sup>1</sup>UIUC&nbsp;&nbsp;</span>
@@ -109,7 +109,7 @@
       <div class="columns is-centered">
         <div class="column is-full">
           <div class="tldr-banner">
-            <strong>TL;DR</strong>: SelfEvo improves multi-view reconstruction models via <strong>self-distillation</strong> &mdash; <strong>no</strong> annotations needed, with gains up to 36.5% on depth and 20.1% on camera estimation.
+            <strong>TL;DR</strong>: SelfEvo improves multi-view reconstruction models via <strong>self-distillation</strong> &mdash; <strong><em>without any annotations (depth, camera, pointmap, etc.)!</em></strong> With gains up to 36.5% on depth and 20.1% on camera.
           </div>
         </div>
       </div>
@@ -126,7 +126,7 @@
       <div class="column is-three-fifths">
         <h2 class="title is-3">Interactive Results</h2>
         <p class="subtitle is-6" style="margin-bottom:1.5rem">
-          Trained on OmniWorldGame data without annotation, tested on in-the-wild videos.<br>
+          Trained on game videos only without annotation, tested on in-the-wild videos.<br>
           The improvement transfers beyond the adaptation domain!
         </p>
       </div>
@@ -464,6 +464,14 @@
     <div class="exp-block">
       <h4 class="exp-heading">Training Recipe</h4>
       <p class="exp-desc">Freeze-C (★) occupies the best corner in both plots. Freeze-A is a clear outlier on camera (bottom-left), confirming backbone adaptation is critical for pose learning. Freezing the camera decoder anchors pose quality while the backbone and depth decoder continue to improve.</p>
+      <div class="recipe-legend">
+        <span class="recipe-legend-item"><code>freeze-A</code> freeze aggregator</span>
+        <span class="recipe-legend-item"><code>freeze-C</code> freeze camera head</span>
+        <span class="recipe-legend-item"><code>freeze-D</code> freeze depth head</span>
+        <span class="recipe-legend-item"><code>freeze-C&amp;D</code> freeze both heads</span>
+        <span class="recipe-legend-item"><code>train-all</code> update all modules</span>
+        <span class="recipe-legend-item" style="font-weight:600">★ <code>freeze-C</code> = our default</span>
+      </div>
       <div class="columns">
         <div class="column">
           <p class="chart-subtitle">Depth ↖</p>
@@ -570,15 +578,15 @@
   <div class="container is-max-desktop content">
     <div class="columns is-centered">
       <div class="column is-four-fifths">
-        <h2 class="title is-3 has-text-centered">Limitations</h2>
-        <p>Our pipeline relies on sufficient camera motion for context asymmetry via frame dropping, limiting effectiveness on static-camera videos. The framework also requires the base model to have non-trivial predictive ability on the training data, as it cannot bootstrap from severely degraded predictions — it is best viewed as a post-training refinement rather than training from scratch. Extended training may lead to model collapse, though we observe stable performance in practice; sustaining improvement over longer horizons remains an open problem.</p>
+        <h2 class="title is-3 has-text-centered">Future Work</h2>
+        <p>Our framework is most effective in settings with sufficient camera motion, where frame dropping provides a strong context asymmetry signal. When the camera remains static, it is difficult to create asymmetry through frame dropping alone. Future work could extend frame-level selection to the token level by selectively dropping tokens for greater flexibility. Additionally, as with other self-improving frameworks, the absence of ground-truth supervision means extended training may risk model collapse. In practice, however, we generally observe stable performance without significant degradation. Understanding how to sustain improvement over longer training horizons remains an important direction for future work.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ==================== ACKNOWLEDGEMENTS ==================== -->
-<section class="section">
+<!-- <section class="section">
   <div class="container is-max-desktop content">
     <div class="columns is-centered">
       <div class="column is-four-fifths">
@@ -587,7 +595,7 @@
       </div>
     </div>
   </div>
-</section>
+</section> -->
 
 <!-- ==================== BIBTEX ==================== -->
 <section class="section" id="bibtex">
