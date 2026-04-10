@@ -75,7 +75,7 @@
           <div class="column has-text-centered">
             <div class="publication-links">
               <span class="link-block">
-                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                <a href="https://arxiv.org/abs/2604.08532" class="external-link button is-normal is-rounded is-dark">
                   <span class="icon"><i class="ai ai-arxiv"></i></span>
                   <span>arXiv</span>
                 </a>
@@ -111,7 +111,7 @@
   <div class="container is-max-desktop">
     <div class="hero-body" style="padding-top:0">
       <div class="columns is-centered">
-        <div class="column is-full">
+        <div class="column" style="max-width:80%">
           <div class="tldr-banner">
             <strong>TL;DR</strong>: SelfEvo applies <strong>self-distillation</strong> to improve multi-view reconstruction <strong>without any annotations</strong>, yielding gains of up to 36.5% on depth and 20.1% on camera estimation.
           </div>
@@ -359,7 +359,7 @@
     <!-- Generality -->
     <div class="exp-block">
       <h3 class="exp-heading">Generality Across Models &amp; Domains</h3>
-      <p class="exp-desc">The gains are not tied to a specific model or dataset. SelfEvo improves both VGGT and π³ when self-improved on DROID and BEDLAM2.0, with no annotations used during training, only during evaluation. Gray bars show the pretrained baseline; colored bars show SelfEvo's improvement. <span style="display:inline-flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:rgba(59,130,246,0.88);display:inline-block"></span>VGGT</span>&nbsp;&nbsp;<span style="display:inline-flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:rgba(217,119,6,0.88);display:inline-block"></span>π³</span></p>
+      <p class="exp-desc">The gains are not tied to a specific model or dataset. SelfEvo improves both VGGT and π³ when self-improved on DROID and BEDLAM2.0, with no annotations used during training, only during evaluation. <span style="display:inline-flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:rgba(59,130,246,0.88);display:inline-block"></span>VGGT</span>&nbsp;&nbsp;<span style="display:inline-flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:rgba(217,119,6,0.88);display:inline-block"></span>π³</span></p>
       <div class="columns">
         <div class="column">
           <p class="chart-subtitle">Depth — Abs Rel ↓</p>
@@ -390,13 +390,13 @@
       <h2 class="title is-3">Analysis</h2>
     </div>
     <div style="margin-bottom:1.5rem">
-      <p class="exp-desc">We ablate four design axes on Omniworld-Game. Each subsection shows two scatter plots — depth (scale) and camera. ★ denotes our default choice.</p>
+      <p class="exp-desc">We present four ablations of our design choices on the Omniworld-Game dataset, with each subsection showing two scatter plots for depth and camera estimation. ★ denotes our default choice.</p>
     </div>
 
     <!-- §5.1 Asymmetry Mechanism -->
     <div class="exp-block">
       <h4 class="exp-heading">Asymmetry Mechanism</h4>
-      <p class="exp-desc">Frame dropping (★) lands in the optimal region in every case. Spatiotemporal context asymmetry forces the student to reconstruct geometry from fewer views, creating a far stronger signal than appearance perturbations.</p>
+      <p class="exp-desc">Frame dropping (★) achieves the best performance, surpassing photometric perturbations (aug-stu, aug-all) and frame cropping. Dropping frames creates a strong spatiotemporal context asymmetry, leading to more effective training signals.</p>
       <div class="columns">
         <div class="column">
           <p class="chart-subtitle">Depth ↖</p>
@@ -416,7 +416,7 @@
     <!-- §5.2 Frame Selection Strategy -->
     <div class="exp-block">
       <h4 class="exp-heading">Frame Selection Strategy</h4>
-      <p class="exp-desc">Random sampling (★) reaches the optimal corner in both plots. Attention-guided selection offers no benefit — any diverse subset creates sufficient reconstruction challenge.</p>
+      <p class="exp-desc">We study three frame dropping strategies: random sampling, attention-based sampling with high attention scores (keep top), and attention-based sampling with low attention scores (keep bottom). Random sampling (★) achieves the best performance on both depth and camera estimation.</p>
       <div class="columns">
         <div class="column">
           <p class="chart-subtitle">Depth ↖</p>
@@ -436,7 +436,7 @@
     <!-- §5.3 Online vs Offline Teacher -->
     <div class="exp-block">
       <h4 class="exp-heading">Online vs. Offline Teacher</h4>
-      <p class="exp-desc">Online EMA (★) shows a large shift toward the optimal corner in both plots. A fixed teacher becomes stale as the student evolves; the co-evolving EMA continuously corrects pseudo-label errors throughout training.</p>
+      <p class="exp-desc">Online EMA (★) shows the largest shift toward the optimal corner in both plots. Unlike a fixed teacher, which grows stale as the student evolves, keeping the teacher and student co-evolving allows continuous improvement.</p>
       <div class="columns">
         <div class="column">
           <p class="chart-subtitle">Depth ↖</p>
@@ -463,7 +463,7 @@
         <span class="recipe-legend-item"><code>freeze-D</code> freeze depth head</span>
         <span class="recipe-legend-item"><code>freeze-C&amp;D</code> freeze both heads</span>
         <span class="recipe-legend-item"><code>train-all</code> update all modules</span>
-        <span class="recipe-legend-item" style="font-weight:600">★ <code>freeze-C</code> = our default</span>
+        <!-- <span class="recipe-legend-item" style="font-weight:600">★ <code>freeze-C</code> = our default</span> -->
       </div>
       <div class="columns">
         <div class="column">
@@ -490,10 +490,10 @@
 <section class="section section-alt" id="adaptation">
   <div class="container is-max-widescreen">
     <div class="columns is-centered has-text-centered">
-      <div class="column is-three-fifths">
-        <h2 class="title is-3">What if we train even on one movie video?</h2>
+      <div class="column is-four-fifths">
+        <h2 class="title is-3" style="margin-bottom:2.5rem">Just for Fun: What If We Train on a Single Movie?</h2>
         <p class="subtitle is-6" style="margin-bottom:1.5rem">
-          (Just for fun!)
+           SelfEvo also improves in this data-constrained, test-time adaptation setting.
           <!-- <span style="font-size:0.85em;color:#888;display:block;margin-top:0.3rem">(Just for fun!)</span> -->
         </p>
       </div>
@@ -594,12 +594,17 @@
 <section class="section" id="bibtex">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
-    <pre><code>@article{selfevo2026,
-  title     = {{SelfEvo}: Self-Improving 4D Perception via Self-Distillation},
-  author    = {Anonymous},
-  journal   = {arXiv preprint},
-  year      = {2026}
-}</code></pre>
+    <pre><code>
+@misc{huang2026selfimproving4dperceptionselfdistillation,
+      title={Self-Improving 4D Perception via Self-Distillation}, 
+      author={Nan Huang and Pengcheng Yu and Weijia Zeng and James M. Rehg and Angjoo Kanazawa and Haiwen Feng and Qianqian Wang},
+      year={2026},
+      eprint={2604.08532},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2604.08532}, 
+}
+</code></pre>
   </div>
 </section>
 
