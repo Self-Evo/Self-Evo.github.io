@@ -113,7 +113,7 @@
       <div class="columns is-centered">
         <div class="column is-full">
           <div class="tldr-banner">
-            <strong>TL;DR</strong>: SelfEvo improves multi-view reconstruction models via <strong>self-distillation</strong> &mdash; <strong><em>without any annotations (depth, camera, pointmap, etc.)!</em></strong> With gains up to 36.5% on depth and 20.1% on camera.
+            <strong>TL;DR</strong>: SelfEvo applies <strong>self-distillation</strong> to improve multi-view reconstruction <strong>without any annotations</strong>, yielding gains of up to 36.5% on depth and 20.1% on camera estimation.
           </div>
         </div>
       </div>
@@ -126,16 +126,6 @@
 <!-- ==================== GENERALIZATION RESULTS ==================== -->
 <section class="section" id="generalization">
   <div class="container is-max-widescreen">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-three-fifths">
-        <h2 class="title is-3">Interactive Results</h2>
-        <p class="subtitle is-6" style="margin-bottom:1.5rem">
-          Trained on game videos only without annotation, tested on in-the-wild videos.<br>
-          The improvement transfers beyond the adaptation domain!
-        </p>
-      </div>
-    </div>
-
     <!-- Input frame on top -->
     <div class="columns is-centered">
       <div class="column is-one-third has-text-centered">
@@ -234,7 +224,7 @@
   <div class="container is-max-widescreen">
     <div class="columns is-centered has-text-centered">
       <div class="column is-three-fifths">
-        <h2 class="title is-3">How Does the Model Evolve?</h2>
+        <h2 class="title is-3" style="margin-bottom:2.5rem">How Does the Model Evolve?</h2>
         <p class="subtitle is-6" style="margin-bottom:1.5rem">
           Watch how 3D reconstruction quality improves across SelfEvo training iterations.<br>
           The same scene — from pretrained all the way to iteration 650.
