@@ -506,6 +506,7 @@
           <button class="movie-btn active" data-movie="1" onclick="selectAdaptMovie(1, this)">Movie 1</button>
           <button class="movie-btn" data-movie="2" onclick="selectAdaptMovie(2, this)">Movie 2</button>
           <button class="movie-btn" data-movie="3" onclick="selectAdaptMovie(3, this)">Movie 3</button>
+          <button class="movie-btn" data-movie="4" onclick="selectAdaptMovie(4, this)">Movie 4</button>
         </div>
       </div>
     </div>
@@ -634,6 +635,10 @@ const SCENE_CONFIG = {
     { name: "dragon-fly2", label: "Dragon: Fly", movie: 3, state: { frustum_size: 0.06 } },
     { name: "dragon-meet3", label: "Dragon: Meet", movie: 3, state: { frustum_size: 0.06 } },
     { name: "dragon-battle2", label: "Dragon: Battle", movie: 3, state: { frustum_size: 0.06 } },
+    { name: "movie4v2-2_ori-v2", label: "Movie 4: 2-v2b", movie: 4, state: { frustum_size: 0.06 } },
+    { name: "movie4-2_ori-v1", label: "Movie 4: 2-v1", movie: 4, state: { frustum_size: 0.06 } },
+    { name: "movie4-3_ori-v1", label: "Movie 4: 3-v1", movie: 4, state: { frustum_size: 0.06 } },
+    { name: "movie4-2_ori-v5", label: "Movie 4: 2-v5", movie: 4, state: { frustum_size: 0.06 } },
   ],
   generalization: [
     // wild
@@ -643,7 +648,7 @@ const SCENE_CONFIG = {
     { name: "wild-6539141-hd_1920_1080_25fps2", label: "Wild: Clip 7", camera: { distance: 0.535, rx: 0.3296, ry: 0.4632, ty: -0.2408 }, state: { every_nth: 1, other_frusta: true } },
     { name: "wild-clip_05", label: "Wild: Clip 9", camera: { distance: 1.185 } },
     { name: "wild-penguin", label: "Wild: Penguin", state: { every_nth: 1, other_frusta: true, other_points: "points" } },
-    { name: "wild-sport", label: "Wild: Sport", camera: { distance: 0.393, rx: 0.2768, ry: 0.085, ty: -0.16405 }, state: { every_nth: 1, other_points: "points" } },
+    { name: "wild-sport", label: "Wild: Sport", camera: { distance: 0.393, rx: 0.2768, ry: 0.085, ty: -0.16405 }, state: { every_nth: 3, other_points: "points" } },
     { name: "wild-dive", label: "Wild: Dive", state: { every_nth: 1, other_frusta: true, other_points: "points" } },
     { name: "wild-tom1", label: "Wild: Tom", camera: { distance: 0.367, tx: -0.3681, ty: -0.1805 }, cameraPre: { distance: 0.630, rx: 0.39491, ry: -0.40698, tx: -0.3681, ty: 0.08770 }, state: { every_nth: 1, other_points: "points" } },
     { name: "history-1", label: "History", camera: { distance: 0.447, rx: 0.5095, ry: 0.0037, ty: -0.2012 } },
