@@ -321,7 +321,7 @@ const defaultState = {
   z_clamp: 0.02,
   show_back_facing: false,
   every_nth: 10,
-  reveal: false,
+  reveal: true,
   other_offset: 0,
   other_frusta: false,
   other_image: 'empty',
@@ -703,7 +703,7 @@ function createViewer(config) {
     const h = cam.zoom * cameraInternal.aspect_ratio;
     const px = cameraInternal.xfrac - 1;
     const perspective = [w,0,px,0, 0,-h,0,0, 0,0,a,b, 0,0,1,0];
-    const target = [-cam.tx, -cam.ty, -cam.forward];
+    const forward = [0, 0, -cam.forward];
     const follow_position = matT([-pose[0][3], -pose[1][3], -pose[2][3]]);
     let follow_rotation;
     if (cam.follow_rotation) {
@@ -718,8 +718,9 @@ function createViewer(config) {
     return matCompose(
       perspective,
       matT([0, cam.elevation * cam.distance, cam.distance]),
+      matT([-cam.tx, -cam.ty, 0]),
       matRx(cam.rx), matRy(cam.ry),
-      matT(target),
+      matT(forward),
       follow_rotation,
       follow_position);
   }
@@ -750,7 +751,9 @@ function createViewer(config) {
   function* otherFrames(data) {
     const step = state.every_nth || 1;
     const limit = state.reveal ? state.frame : data.poses.length;
-    for (let i = state.other_offset; i < limit; i += step) {
+    const window = state.reveal_window || 0; // 0 = no limit
+    const start = (state.reveal && window > 0) ? Math.max(state.other_offset, state.frame - window * step) : state.other_offset;
+    for (let i = start; i < limit; i += step) {
       let fade = 1.0;
       if (state.reveal && i > state.frame - step) fade = (state.frame - i) / step;
       yield [i, fade];
@@ -974,6 +977,7 @@ function createViewer(config) {
 
   // --- Animation ---
   function update() {
+    if (frameFollower) return; // frame is driven by syncFrame() from another viewer
     const time = Date.now();
     // Hold on the last frame briefly before looping back to frame 0
     if (loop_pause_until > 0) {
@@ -1072,7 +1076,7 @@ function createViewer(config) {
 
     canvasEl.addEventListener('wheel', (e) => {
       const delta = e.deltaY || -e.wheelDeltaY;
-      camera.distance = Math.max(0, Math.min(10, camera.distance + delta * 0.001));
+      camera.distance = Math.max(-2, Math.min(10, camera.distance + delta * 0.001));
       dirty = true;
       if (cameraChangeCallback) cameraChangeCallback(camera);
       e.preventDefault();
@@ -1179,6 +1183,8 @@ function createViewer(config) {
   function syncCamera(cam) { Object.assign(camera, cam); dirty = true; }
   function onPlaybackChange(cb) { playbackChangeCallback = cb; }
   function syncPlayback(playing) { state.playing = playing; }
+  let frameFollower = false;
+  function syncFrame(frame) { frameFollower = true; if (state.frame !== frame) { state.frame = frame; frame_time = Date.now(); dirty = true; } }
 
   function getFrameUrl(i) {
     // Use current version data if available, then any loaded version (input frames are the same across versions)
@@ -1231,6 +1237,9 @@ function createViewer(config) {
     syncCamera,
     onPlaybackChange,
     syncPlayback,
+    syncFrame,
+    forceDraw() { dirty = true; draw(); },
+    getFrameCount() { const d = getData(); return d && d.poses ? d.poses.length : 0; },
     onFrameChange,
     getFrameUrl,
     getCameraParams,
